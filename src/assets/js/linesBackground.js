@@ -25,11 +25,8 @@ class PatternBackground {
       scale: this.scale,
       create: opts.create
     });
-    this.patternsX = Math.round(this.width / this.pattern.width);
-    if (this.patternsX < 2) {
-      this.patternsX = 2;
-    }
-    this.patternsY = Math.round(this.height / this.pattern.height);
+    this.patternsX = Math.round(this.width / this.pattern.width) + 2;
+    this.patternsY = Math.round(this.height / this.pattern.height) + 2;
   }
 
   render() {
@@ -45,10 +42,9 @@ class PatternBackground {
   }
   update() {
     this.canvas.width = this.width;
-    this.patternsX = Math.round(this.width / this.pattern.width);
-    if (this.patternsX < 2) {
-      this.patternsX = 2;
-    }
+    this.canvas.height = this.height;
+    this.patternsX = Math.round(this.width / this.pattern.width) + 2;
+    this.patternsY = Math.round(this.height / this.pattern.height) + 2;
     this.render();
   }
 }
@@ -66,67 +62,57 @@ class Background {
     this.bufferCanvas.height = this.windowHeight;
     this.scale = opts.scale;
 
-    this.margin = this.windowWidth / 2;
+    this.margin = this.windowWidth;
     this.bufferWidth = this.windowWidth + this.margin;
     this.bufferHeight = document.body.clientHeight;
+
+    // Parallax Speeds
+    this.lX = opts.linesSpeedX;
+    this.lY = opts.linesSpeedY;
+    this.uDX = opts.upperDotsSpeedX;
+    this.uDY = opts.upperDotsSpeedY;
+    this.dDX = opts.downDotsSpeedX;
+    this.dDY = opts.downDotsSpeedY;
 
     this.linesBackground = new PatternBackground({
       width: this.bufferWidth,
       height: this.bufferHeight,
       scale: this.scale,
       create: function create() {
-        this.context.lineWidth = 2;
-        this.context.strokeStyle = "rgb(43, 43, 43, 0.2)";
-        this.context.lineCap = "square";
+        const drawLine = (x1, y1, x2, y2) => {
+          this.context.moveTo(this.scale * x1, this.scale * y1);
+          this.context.lineTo(this.scale * x2, this.scale * y2);
+        };
 
+        this.context.lineWidth = opts.hardLinesWidth;
+        this.context.strokeStyle = opts.hardLinesStrokeStyle;
+        this.context.lineCap = "square";
         this.context.beginPath();
-        this.context.moveTo(this.scale * 200, this.scale * 0);
-        this.context.lineTo(this.scale * 300, this.scale * 100);
-        //
-        this.context.moveTo(this.scale * 100, this.scale * 0);
-        this.context.lineTo(this.scale * 300, this.scale * 200);
-        //
-        this.context.moveTo(this.scale * 0, this.scale * 0);
-        this.context.lineTo(this.scale * 300, this.scale * 300);
-        this.context.lineTo(this.scale * 200, this.scale * 400);
-        this.context.lineTo(this.scale * 0, this.scale * 200);
-        //
-        this.context.moveTo(this.scale * 0, this.scale * 100);
-        this.context.lineTo(this.scale * 300, this.scale * 400);
-        //
-        this.context.moveTo(this.scale * 0, this.scale * 300);
-        this.context.lineTo(this.scale * 100, this.scale * 400);
-        //
-        this.context.moveTo(this.scale * 200, this.scale * 0);
-        this.context.lineTo(this.scale * 100, this.scale * 100);
-        //
-        this.context.moveTo(this.scale * 300, this.scale * 100);
-        this.context.lineTo(this.scale * 0, this.scale * 400);
-        //
-        this.context.moveTo(this.scale * 300, this.scale * 300);
-        this.context.lineTo(this.scale * 200, this.scale * 400);
+        drawLine(200, 0, 300, 100);
+        drawLine(100, 0, 300, 200);
+        drawLine(0, 0, 300, 300);
+        drawLine(300, 300, 200, 400);
+        drawLine(200, 400, 0, 200);
+        drawLine(0, 100, 300, 400);
+        drawLine(0, 300, 100, 400);
+        drawLine(200, 0, 100, 100);
+        drawLine(300, 100, 0, 400);
+        drawLine(300, 300, 200, 400);
         this.context.stroke();
 
         // Горизонтальные и вертикальные
         this.context.beginPath();
-        this.context.lineWidth = 1;
-        this.context.strokeStyle = "rgb(43, 43, 43, 0.2)";
-        this.context.moveTo(this.scale * 200, this.scale * 0);
-        this.context.lineTo(this.scale * 200, this.scale * 400);
-        this.context.lineTo(this.scale * 300, this.scale * 400);
-        this.context.lineTo(this.scale * 300, this.scale * 0);
-        this.context.lineTo(this.scale * 200, this.scale * 0);
-        //
-        this.context.moveTo(this.scale * 200, this.scale * 100);
-        this.context.lineTo(this.scale * 100, this.scale * 100);
-        this.context.lineTo(this.scale * 100, this.scale * 300);
-        this.context.lineTo(this.scale * 200, this.scale * 300);
-        //
-        this.context.moveTo(this.scale * 100, this.scale * 200);
-        this.context.lineTo(this.scale * 0, this.scale * 200);
-        //
-        this.context.moveTo(this.scale * 0, this.scale * 0);
-        this.context.lineTo(this.scale * 0, this.scale * 400);
+        this.context.lineWidth = opts.lightLinesWidth;
+        this.context.strokeStyle = opts.lightLinesStrokeStyle;
+        drawLine(200, 0, 200, 400);
+        drawLine(200, 400, 300, 400);
+        drawLine(300, 400, 300, 0);
+        drawLine(300, 0, 200, 0);
+        drawLine(200, 100, 100, 100);
+        drawLine(100, 100, 100, 300);
+        drawLine(100, 300, 200, 300);
+        drawLine(100, 200, 0, 200);
+        drawLine(0, 0, 0, 400);
         this.context.stroke();
       },
       patternWidth: 300,
@@ -137,62 +123,78 @@ class Background {
       height: this.bufferHeight,
       scale: this.scale,
       create: function create() {
-        this.context.beginPath();
-        this.context.fillStyle = "rgb(255, 255, 255, 0.5)";
-        this.context.moveTo(2 * this.scale, 0);
-        this.context.lineTo(0, 0);
-        this.context.lineTo(0, 2 * this.scale);
-        this.context.arc(0, 0, 2 * this.scale, Math.PI / 2, 2 * Math.PI, true); // IV
-        // x, y, radius, startAngle, endAngle, counterclockwise
-        this.context.fill();
+        const r = opts.dotRadius;
+        const drawDotPiece = (
+          x0,
+          y0,
+          x1,
+          y1,
+          x2,
+          y2,
+          x3,
+          y3,
+          dotRadius,
+          startAngle,
+          endAngle
+        ) => {
+          this.context.beginPath();
+          this.context.fillStyle = opts.upperDotsFill;
+          this.context.moveTo(x0 * this.scale, y0 * this.scale);
+          this.context.lineTo(x1 * this.scale, y1 * this.scale);
+          this.context.lineTo(x2 * this.scale, y2 * this.scale);
+          this.context.arc(
+            x3 * this.scale,
+            y3 * this.scale,
+            dotRadius * this.scale,
+            startAngle,
+            endAngle,
+            true
+          );
+          // x, y, radius, startAngle, endAngle, counterclockwise
+          this.context.fill();
+        };
 
-        this.context.beginPath();
-        this.context.fillStyle = "rgb(255, 255, 255, 0.6)";
-        this.context.moveTo(98 * this.scale, 100 * this.scale);
-        this.context.lineTo(100 * this.scale, 100 * this.scale);
-        this.context.lineTo(100 * this.scale, 98 * this.scale);
-        this.context.arc(
-          100 * this.scale,
-          100 * this.scale,
-          2 * this.scale,
+        drawDotPiece(0, 0, 0, 0, 0, r, 0, 0, r, Math.PI / 2, 2 * Math.PI); // IV
+        drawDotPiece(
+          100 - r,
+          100,
+          100,
+          100,
+          100,
+          100 - r,
+          100,
+          100,
+          r,
           (3 * Math.PI) / 2,
-          Math.PI,
-          true
+          Math.PI
         ); // II
-        // x, y, radius, startAngle, endAngle, counterclockwise
-        this.context.fill();
-
-        this.context.beginPath();
-        this.context.fillStyle = "rgb(255, 255, 255, 0.6)";
-        this.context.moveTo(98 * this.scale, 0);
-        this.context.lineTo(100 * this.scale, 0 * this.scale);
-        this.context.lineTo(100 * this.scale, 2 * this.scale);
-        this.context.arc(
-          100 * this.scale,
+        drawDotPiece(
+          100 - r,
           0,
-          2 * this.scale,
+          100,
+          0,
+          100,
+          r,
+          100,
+          0,
+          r,
           Math.PI,
-          Math.PI / 2,
-          true
+          Math.PI / 2
         ); // III
-        // x, y, radius, startAngle, endAngle, counterclockwise
-        this.context.fill();
-
-        this.context.beginPath();
-        this.context.fillStyle = "rgb(255, 255, 255, 0.6)";
-        this.context.moveTo(0, 98 * this.scale);
-        this.context.lineTo(0, 100 * this.scale);
-        this.context.lineTo(2 * this.scale, 100 * this.scale);
-        this.context.arc(
+        drawDotPiece(
           0,
-          100 * this.scale,
-          2 * this.scale,
+          100 - r,
           0,
-          (3 * Math.PI) / 2,
-          true
+          100,
+          r,
+          100,
+          0,
+          100,
+          r,
+          0,
+          (3 * Math.PI) / 2
         ); // I
         // x, y, radius, startAngle, endAngle, counterclockwise
-        this.context.fill();
       },
       patternWidth: 100,
       patternHeight: 100
@@ -203,62 +205,77 @@ class Background {
       height: this.bufferHeight,
       scale: this.scale,
       create: function create() {
-        this.context.beginPath();
-        this.context.fillStyle = "rgb(255, 255, 255, 0.4)";
-        this.context.moveTo(2 * this.scale, 0);
-        this.context.lineTo(0, 0);
-        this.context.lineTo(0, 2 * this.scale);
-        this.context.arc(0, 0, 2 * this.scale, Math.PI / 2, 2 * Math.PI, true); // IV
-        // x, y, radius, startAngle, endAngle, counterclockwise
-        this.context.fill();
+        const r = opts.dotRadius;
+        const drawDotPiece = (
+          x0,
+          y0,
+          x1,
+          y1,
+          x2,
+          y2,
+          x3,
+          y3,
+          dotRadius,
+          startAngle,
+          endAngle
+        ) => {
+          this.context.beginPath();
+          this.context.fillStyle = opts.downDotsFill;
+          this.context.moveTo(x0 * this.scale, y0 * this.scale);
+          this.context.lineTo(x1 * this.scale, y1 * this.scale);
+          this.context.lineTo(x2 * this.scale, y2 * this.scale);
+          this.context.arc(
+            x3 * this.scale,
+            y3 * this.scale,
+            dotRadius * this.scale,
+            startAngle,
+            endAngle,
+            true
+          );
+          // x, y, radius, startAngle, endAngle, counterclockwise
+          this.context.fill();
+        };
 
-        this.context.beginPath();
-        this.context.fillStyle = "rgb(255, 255, 255, 0.4)";
-        this.context.moveTo(98 * this.scale, 100 * this.scale);
-        this.context.lineTo(100 * this.scale, 100 * this.scale);
-        this.context.lineTo(100 * this.scale, 98 * this.scale);
-        this.context.arc(
-          100 * this.scale,
-          100 * this.scale,
-          2 * this.scale,
+        drawDotPiece(0, 0, 0, 0, 0, r, 0, 0, r, Math.PI / 2, 2 * Math.PI); // IV
+        drawDotPiece(
+          100 - r,
+          100,
+          100,
+          100,
+          100,
+          100 - r,
+          100,
+          100,
+          r,
           (3 * Math.PI) / 2,
-          Math.PI,
-          true
+          Math.PI
         ); // II
-        // x, y, radius, startAngle, endAngle, counterclockwise
-        this.context.fill();
-
-        this.context.beginPath();
-        this.context.fillStyle = "rgb(255, 255, 255, 0.4)";
-        this.context.moveTo(98 * this.scale, 0);
-        this.context.lineTo(100 * this.scale, 0 * this.scale);
-        this.context.lineTo(100 * this.scale, 2 * this.scale);
-        this.context.arc(
-          100 * this.scale,
+        drawDotPiece(
+          100 - r,
           0,
-          2 * this.scale,
+          100,
+          0,
+          100,
+          r,
+          100,
+          0,
+          r,
           Math.PI,
-          Math.PI / 2,
-          true
+          Math.PI / 2
         ); // III
-        // x, y, radius, startAngle, endAngle, counterclockwise
-        this.context.fill();
-
-        this.context.beginPath();
-        this.context.fillStyle = "rgb(255, 255, 255, 0.4)";
-        this.context.moveTo(0, 98 * this.scale);
-        this.context.lineTo(0, 100 * this.scale);
-        this.context.lineTo(2 * this.scale, 100 * this.scale);
-        this.context.arc(
+        drawDotPiece(
           0,
-          100 * this.scale,
-          2 * this.scale,
+          100 - r,
           0,
-          (3 * Math.PI) / 2,
-          true
+          100,
+          r,
+          100,
+          0,
+          100,
+          r,
+          0,
+          (3 * Math.PI) / 2
         ); // I
-        // x, y, radius, startAngle, endAngle, counterclockwise
-        this.context.fill();
       },
       patternWidth: 100,
       patternHeight: 100
@@ -278,9 +295,11 @@ class Background {
     this.bufferCanvas.width = this.windowWidth;
     this.bufferCanvas.height = this.windowHeight;
 
-    this.margin = this.windowWidth / 2;
+    this.margin = this.windowWidth;
     this.downDotsBackground.width = this.dotsBackground.width = this.linesBackground.width = this.bufferWidth =
       this.windowWidth + this.margin;
+    this.downDotsBackground.height = this.dotsBackground.height = this.linesBackground.height = this.bufferHeight =
+      document.body.clientHeight;
     this.linesBackground.update();
     this.dotsBackground.update();
     this.downDotsBackground.update();
@@ -312,19 +331,19 @@ class Background {
       if (Math.abs(this.pageY - this.currentY) < 1) {
         this.currentY = this.pageY;
       }
-      const linesX = this.currentX / 20;
-      const linesY = this.currentY / 4;
-      const upperDotsX = this.currentX / 10;
-      const upperDotsY = this.currentY / 2;
-      const downDotsX = this.currentX / 25;
-      const downDotsY = this.currentY / 5;
+      const linesX = this.currentX * this.lX;
+      const linesY = this.currentY * this.lY;
+      const upperDotsX = this.currentX * this.uDX;
+      const upperDotsY = this.currentY * this.dDY;
+      const downDotsX = this.currentX * this.dDX;
+      const downDotsY = this.currentY * this.dDY;
 
       this.bufferContext.fillStyle = "#0d0a14";
       this.bufferContext.clearRect(0, 0, this.windowWidth, this.windowHeight);
       this.bufferContext.fillRect(0, 0, this.windowWidth, this.windowHeight);
       this.bufferContext.drawImage(
         this.downDotsBackground.canvas,
-        this.margin / 2 + downDotsX,
+        this.margin + downDotsX,
         downDotsY,
         this.windowWidth,
         this.windowHeight,
@@ -335,7 +354,7 @@ class Background {
       );
       this.bufferContext.drawImage(
         this.linesBackground.canvas,
-        this.margin / 2 + linesX,
+        this.margin + linesX,
         linesY,
         this.windowWidth,
         this.windowHeight,
@@ -346,7 +365,7 @@ class Background {
       );
       this.bufferContext.drawImage(
         this.dotsBackground.canvas,
-        this.margin / 2 + upperDotsX,
+        this.margin + upperDotsX,
         upperDotsY,
         this.windowWidth,
         this.windowHeight,
