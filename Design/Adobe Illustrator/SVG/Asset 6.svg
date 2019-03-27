@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 173.55 231.4">
+  <title>Asset 6</title>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="Pattern_Complete" data-name="Pattern Complete">
+      <g id="Толстые_Линии" data-name="Толстые Линии">
+        <line x1="0.71" y1="172.84" x2="57.85" y2="229.99" fill="none" stroke="#231f20" stroke-miterlimit="10" stroke-width="2"/>
+        <polyline points="0.71 1.41 172.14 172.84 114.99 229.99 0.71 115.7" fill="none" stroke="#231f20" stroke-miterlimit="10" stroke-width="2"/>
+        <line x1="0.71" y1="58.56" x2="172.14" y2="229.99" fill="none" stroke="#231f20" stroke-miterlimit="10" stroke-width="2"/>
+        <line x1="57.85" y1="1.41" x2="172.14" y2="115.7" fill="none" stroke="#231f20" stroke-miterlimit="10" stroke-width="2"/>
+        <polyline points="57.85 58.56 114.99 1.41 172.14 58.56 0.71 229.99" fill="none" stroke="#231f20" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+      <g id="Тонкие_линии" data-name="Тонкие линии">
+        <line x1="57.85" y1="115.7" x2="0.71" y2="115.7" fill="none" stroke="#231f20" stroke-miterlimit="10"/>
+        <polyline points="172.14 1.41 172.14 229.99 114.99 229.99 114.99 1.41" fill="none" stroke="#231f20" stroke-linecap="square" stroke-miterlimit="10"/>
+        <line x1="172.14" y1="115.7" x2="114.99" y2="115.7" fill="none" stroke="#231f20" stroke-linecap="square" stroke-miterlimit="10"/>
+        <polyline points="114.99 58.56 57.85 58.56 57.85 172.84 114.99 172.84" fill="none" stroke="#231f20" stroke-linecap="square" stroke-miterlimit="10"/>
+      </g>
+    </g>
+  </g>
+</svg>
