@@ -1,6 +1,61 @@
 body[data-page='index'] {
-  background-color: $secondary-color;
-  background-image:  url('../img/Components/Pattern/Image.png');
   // background-image:  url('../img/bg_mobile.jpg');
   height: 3050px;
+  background-color: $secondary-color;
+  background-image: url('../img/Components/Pattern/Image.png');
+}
+
+canvas {
+  position: absolute;
+}
+
+content {
+  position: absolute;
+}
+
+p {
+  position: absolute;
+  width: 500px;
+  margin: 0;
+  color: #f5f4ea;
+  font-weight: 400;
+  font-size: 18px;
+  font-family: 'SF Pro Text';
+  line-height: 18px;
+  text-align: left;
+}
+
+a {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  color: #f5f4ea;
+  font-weight: 600;
+  font-size: 9px;
+  font-family: 'SF Pro Text';
+  line-height: 100px;
+  text-align: center;
+}
+
+h1 {
+  position: absolute;
+  margin: 0;
+  color: #f5f4ea;
+  font-weight: 400;
+  font-size: 40px;
+  font-family: 'SF Pro Display';
+  line-height: 48px;
+  text-align: left;
+}
+
+h2 {
+  position: absolute;
+  width: 500px;
+  margin: 0;
+  color: #f5f4ea;
+  font-weight: 400;
+  font-size: 31px;
+  font-family: 'SF Pro Text';
+  line-height: 37px;
+  text-align: left;
 }

@@ -1,124 +1,126 @@
-class LineRhombus {
-  constructor(opts) {
-    this.canvas = document.createElement("canvas");
-    this.w = this.canvas.width = opts.width;
-    this.h = this.canvas.height = opts.height;
-    this.context = this.canvas.getContext("2d");
+/* eslint-disable no-param-reassign */
+/* global document, window, Image */
 
-    this.render();
-  }
-  update(opts) {
-    this.w = this.canvas.width = opts.width;
-    this.h = this.canvas.height = opts.height;
-    this.render();
-  }
-  render() {
-    this.context.clearRect(0, 0, this.w, this.h);
-    this.context.beginPath();
-    this.context.strokeStyle = "red";
-    this.context.moveTo(this.w / 2, 0);
-    this.context.lineTo(this.w, this.h / 2);
-    this.context.lineTo(this.w / 2, this.h);
-    this.context.lineTo(0, this.h / 2);
-    this.context.lineTo(this.w / 2, 0);
-    this.context.stroke();
-  }
+function renderLineRhombus(canvas, w, h, dx, dy) {
+  const context = canvas.getContext('2d');
+
+  context.strokeStyle = 'white';
+  context.lineWidth = 2;
+
+  // context.lineWidth в XY для того, чтобы стыки линий не выходили за canvas
+  context.moveTo(dx + w / 2, dy + context.lineWidth);
+  context.lineTo(dx + w - context.lineWidth, dy + h / 2);
+  context.lineTo(dx + w / 2, dy + h - context.lineWidth);
+  context.lineTo(dx + context.lineWidth, dy + h / 2);
+  context.lineTo(dx + w / 2, dy + context.lineWidth);
+  context.stroke();
+}
+function renderSideLines(canvas, w, h, dx, dy) {
+  const context = canvas.getContext('2d');
+
+  context.strokeStyle = 'white';
+  context.lineWidth = 2;
+
+  // context.lineWidth в XY для того, чтобы стыки линий не выходили за canvas
+  context.moveTo(dx + 0 + w / 10, dy + h / 2);
+  context.lineTo(dx + w / 2, dy + h / 10);
+  context.moveTo(dx + w / 2, dy + h - h / 10);
+  context.lineTo(dx + w - w / 10, dy + h / 2);
+  context.stroke();
+}
+function renderFillImage(canvas, pattern) {
+  const context = canvas.getContext('2d');
+
+  context.fillStyle = pattern;
+  context.fill();
 }
 
-class FillRhombus {
-  constructor(opts) {
-    window.FillRhombus = this;
-    this.canvas = document.createElement("canvas");
-    this.w = this.canvas.width = opts.width;
-    this.h = this.canvas.height = opts.height;
-    this.context = this.canvas.getContext("2d");
+function renderImage(canvas, image) {
+  const context = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
 
-    this.image = opts.image;
-    this.context.drawImage(this.image, 0, 0, this.w, this.h);
-    this.pattern = this.context.createPattern(this.canvas, "repeat");
-    this.render();
+  let destinationWidth;
+  let destinationHeight;
+
+  if (image.width > image.height) {
+    destinationWidth = (w * 3.3) / 6;
+    destinationHeight = (image.height * destinationWidth) / image.width;
+  } else if (image.height > image.width) {
+    destinationHeight = (h * 3.3) / 6;
+    destinationWidth = (image.width * destinationHeight) / image.height;
+  } else if (image.height === image.width) {
+    // eslint-disable-next-line no-multi-assign
+    destinationHeight = destinationWidth = (w * 3.3) / 6;
   }
 
-  update(opts) {
-    this.w = this.canvas.width = opts.width;
-    this.h = this.canvas.height = opts.height;
+  context.drawImage(
+    image,
+    (w - destinationWidth) / 2,
+    (h - destinationHeight) / 2,
+    destinationWidth,
+    destinationHeight
+  );
+}
+
+function getPattern(canvas, image, w, h) {
+  const context = canvas.getContext('2d');
+
+  context.drawImage(image, 0, 0, w, h);
+  const pattern = context.createPattern(canvas, 'repeat');
+  context.clearRect(0, 0, w, h);
+
+  return pattern;
+}
+
+class WorkRhombus {
+  constructor(opts) {
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = 284;
+    this.canvas.height = 400;
+
+    // Картинка обязательно 1х1
+    this.image = opts.image;
+    this.imagePattern = getPattern(this.canvas, this.image, 284, 284);
+
+    // this.upperImage = opts.upperImage;
+    // this.downImage = opts.downImage;
+
     this.render();
   }
 
   render() {
-    this.context.clearRect(0, 0, this.w, this.h);
-    this.context.beginPath();
+    this.canvas.getContext('2d').beginPath();
+    renderLineRhombus(this.canvas, 284, 284, 0, 0);
+    renderFillImage(this.canvas, this.imagePattern);
 
-    this.context.strokeStyle = "red";
-    this.context.lineWidth = 2;
-    this.context.fillStyle = this.pattern;
-
-    this.context.moveTo(this.w / 2, 0);
-    this.context.lineTo(this.w, this.h / 2);
-    this.context.lineTo(this.w / 2, this.h);
-    this.context.lineTo(0, this.h / 2);
-    this.context.lineTo(this.w / 2, 0);
-
-    this.context.fill();
-    this.context.stroke();
+    renderLineRhombus(this.canvas, 100, 100, 92, 300);
+    renderSideLines(this.canvas, 100, 100, 92, 300);
   }
 }
 
 class LogoRhombus {
   constructor(opts) {
-    this.canvas = document.createElement("canvas");
-    this.w = this.canvas.width = opts.width;
-    this.h = this.canvas.height = opts.height;
-    this.context = this.canvas.getContext("2d");
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = 284;
+    this.canvas.height = 284;
+
     this.logoImage = opts.logoImage;
-    this.rhombus = new LineRhombus({ width: this.w, height: this.h });
-    this.listen();
+    this.render();
   }
-  listen() {
-    this.logoImage.addEventListener("load", () => {
-      this.render();
-    });
-  }
+
   render() {
-    const maxSide =
-      this.logoImage.width > this.logoImage.height ? "width" : "height";
-    let dw, dh, dscale;
-    switch (maxSide) {
-      case "width":
-        dw = (this.w * 3.4) / 6;
-        dscale = dw / this.logoImage.width;
-        dh = this.logoImage.height * dscale;
-        break;
-      case "height":
-        dh = (this.h * 3.4) / 6;
-        dscale = dh / this.logoImage.height;
-        dw = this.logoImage.width * dscale;
-        break;
-    }
-    console.log(dh, dw);
-    this.context.clearRect(0, 0, this.w, this.h);
-    this.context.drawImage(this.rhombus.canvas, 0, 0);
-    this.context.drawImage(
-      this.logoImage,
-      this.w / 2 - dw / 2,
-      this.h / 2 - dh / 2,
-      dw,
-      dh
-    );
-    // тестинг
-    document
-      .querySelector("canvas")
-      .getContext("2d")
-      .drawImage(this.canvas, 0, 0);
+    renderLineRhombus(this.canvas, 284, 284, 0, 0);
+    renderImage(this.canvas, this.logoImage);
   }
 }
 
 class ShowRhombus {
   constructor(opts) {
-    this.canvas = document.createElement("canvas");
+    this.canvas = document.createElement('canvas');
     this.w = this.canvas.width = opts.width;
     this.h = this.canvas.height = opts.height;
-    this.context = this.canvas.getContext("2d");
+    this.context = this.canvas.getContext('2d');
 
     this.image = opts.image;
     this.rhombus = new LineRhombus({ width: this.w, height: this.h });
@@ -127,31 +129,86 @@ class ShowRhombus {
 
 class FirstBlock {
   constructor(opts) {
-    this.canvas = document.createElement("canvas");
-    this.w = this.canvas.width = window.innerWidth;
-    this.h = this.canvas.height = window.innerHeight;
-    this.context = this.canvas.getContext("2d");
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = 1024;
+    this.canvas.height = 812;
+    this.context = this.canvas.getContext('2d');
+  }
 
-    this.line = "line"; // отсутпы по 50пх
-    this.rhobmus = "rhombus";
-    this.text = "text";
+  init(that) {
+    this.prepareImages(that);
+  }
+
+  prepareImages(that) {
+    this.logoImage = new Image();
+    this.logoImage.src =
+      'https://pp.userapi.com/c845019/v845019801/1de1e1/hVOnZUfaJSU.jpg';
+    this.logoImage.onload = () => {
+      this.rhombus = new LogoRhombus({ logoImage: this.logoImage });
+      this.render();
+      that.ready();
+    };
+  }
+
+  render() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.drawImage(this.rhombus.canvas, 142, 194);
   }
 }
 
-class ProjectBlock {
+class WorkBlock {
   constructor(opts) {
-    this.projects = opts.projects;
-    // project = {title: 'title', image: 'image'}
+    window.workblock = this;
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = 1024;
+    this.canvas.height = 716;
+    this.context = this.canvas.getContext('2d');
+
+    this.index = opts.index;
+
+    this.imagesSrc = opts.images;
+    this.images = [1];
+  }
+
+  init(that) {
+    this.prepareImages(that);
+  }
+
+  prepareImages(that) {
+    for (let i = 0; i < this.imagesSrc.length; i += 1) {
+      const image = new Image();
+      image.src = this.imagesSrc[i];
+      this.images.push(image);
+    }
+
+    for (let i = 1; i < this.images.length; i += 1) {
+      this.images[i].onload = () => {
+        this.images[0] += 1;
+        if (this.images[0] === this.images.length) {
+          this.workRhombus = new WorkRhombus({ image: this.images[1] });
+          this.render();
+          that.ready();
+        }
+      };
+    }
+  }
+
+  render() {
+    // this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    if (this.index % 2 === 0) {
+      this.context.drawImage(this.workRhombus.canvas, 458, 316);
+    } else {
+      this.context.drawImage(this.workRhombus.canvas, 142, 316);
+    }
   }
 }
 
 class ShowBlock {
   constructor(opts) {
-    this.marginY = opts.marginY;
+    this.marginY = 512;
     this.shows = opts.shows;
-    // shows = [{image, date, href}, {image, date, href}]
-    this.canvas = document.createElement("canvas");
-    this.w = this.canvas.width = opts.width;
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = 1024;
 
     this.prepareLines(this.initLines());
     window.showBlock = this;
@@ -194,16 +251,85 @@ class ShowBlock {
     }
   }
 
-  render(){
-    for(let i = 0; i < this.lines.length; i++){
-      for(let j = 0; j < this.lines[i]; j++){
-        
-      }
+  render() {
+    for (let i = 0; i < this.lines.length; i++) {
+      for (let j = 0; j < this.lines[i]; j++) {}
     }
   }
 }
 
-export default ShowBlock;
+class Blocks {
+  constructor() {
+    window.blocks = this;
+    this.canvas = document.querySelector('canvas.blocks');
+    this.canvas.width = 1024;
+    this.canvas.height = 10000;
+    this.context = this.canvas.getContext('2d');
+
+    this.blocks = [
+      1,
+      new FirstBlock(),
+      new WorkBlock({
+        index: 1,
+        images: [
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg'
+        ]
+      }),
+      new WorkBlock({
+        index: 2,
+        images: [
+          'https://cs11.pikabu.ru/post_img/big/2018/04/26/11/152476593216002878.jpg'
+        ]
+      }),
+      new WorkBlock({
+        index: 3,
+        images: [
+          'https://i.pinimg.com/originals/b8/21/dd/b821dde8be37d2b0dded5dc90c3d2bfa.jpg'
+        ]
+      }),
+      new WorkBlock({
+        index: 4,
+        images: [
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg'
+        ]
+      })
+    ];
+    this.prepareBlocks();
+  }
+
+  prepareBlocks() {
+    for (let i = 1; i < this.blocks.length; i += 1) {
+      this.blocks[i].init(this);
+    }
+  }
+
+  ready() {
+    this.blocks[0] += 1;
+    if (this.blocks[0] === this.blocks.length) {
+      this.render();
+    }
+  }
+
+  render() {
+    let y = 0;
+    //  х - центровка
+    let x = 0;
+
+    if (window.innerWidth > 1024) {
+      x = (window.innerWidth - 1024) / 2;
+    }
+    document.querySelector(
+      '.content'
+    ).style.transform = `translate(${x}px, 0px)`;
+
+    for (let i = 1; i < this.blocks.length; i += 1) {
+      this.context.drawImage(this.blocks[i].canvas, x, y);
+      y += this.blocks[i].canvas.height;
+    }
+  }
+}
+
+export default Blocks;
 // пересечкние линий - начало градиентов
 // выполненные работы скролл к центру ромба. Если у блока есть градиент, то лучше к пересечению линий
 
