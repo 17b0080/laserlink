@@ -1,10 +1,12 @@
+/* globals window, document */
+
 class Pattern {
   constructor(opts) {
-    this.canvas = document.createElement("canvas");
+    this.canvas = document.createElement('canvas');
     this.scale = opts.scale;
     this.width = this.canvas.width = this.scale * opts.width;
     this.height = this.canvas.height = this.scale * opts.height;
-    this.context = this.canvas.getContext("2d");
+    this.context = this.canvas.getContext('2d');
 
     this.create = opts.create;
     this.create();
@@ -13,10 +15,10 @@ class Pattern {
 
 class PatternBackground {
   constructor(opts) {
-    this.canvas = document.createElement("canvas");
+    this.canvas = document.createElement('canvas');
     this.width = this.canvas.width = opts.width;
     this.height = this.canvas.height = opts.height;
-    this.context = this.canvas.getContext("2d");
+    this.context = this.canvas.getContext('2d');
 
     this.scale = opts.scale;
     this.pattern = new Pattern({
@@ -30,8 +32,8 @@ class PatternBackground {
   }
 
   render() {
-    for (let x = 0; x < this.patternsX; x++) {
-      for (let y = 0; y < this.patternsY; y++) {
+    for (let x = 0; x < this.patternsX; x += 1) {
+      for (let y = 0; y < this.patternsY; y += 1) {
         this.context.drawImage(
           this.pattern.canvas,
           this.pattern.width * x,
@@ -40,6 +42,7 @@ class PatternBackground {
       }
     }
   }
+
   update() {
     this.canvas.width = this.width;
     this.canvas.height = this.height;
@@ -51,13 +54,13 @@ class PatternBackground {
 
 class Background {
   constructor(opts) {
-    this.canvas = document.querySelector("canvas.background");
-    this.context = this.canvas.getContext("2d");
+    this.canvas = document.querySelector('canvas.background');
+    this.context = this.canvas.getContext('2d');
     this.windowWidth = this.canvas.width = window.innerWidth;
     this.windowHeight = this.canvas.height = window.innerHeight;
 
-    this.bufferCanvas = document.createElement("canvas");
-    this.bufferContext = this.bufferCanvas.getContext("2d");
+    this.bufferCanvas = document.createElement('canvas');
+    this.bufferContext = this.bufferCanvas.getContext('2d');
     this.bufferCanvas.width = this.windowWidth;
     this.bufferCanvas.height = this.windowHeight;
     this.scale = opts.scale;
@@ -86,7 +89,7 @@ class Background {
 
         this.context.lineWidth = opts.hardLinesWidth;
         this.context.strokeStyle = opts.hardLinesStrokeStyle;
-        this.context.lineCap = "square";
+        this.context.lineCap = 'square';
         this.context.beginPath();
         drawLine(200, 0, 300, 100);
         drawLine(100, 0, 300, 200);
@@ -305,24 +308,31 @@ class Background {
     this.downDotsBackground.update();
     this.render(true);
   }
+
   handleScroll() {
     this.pageY = window.pageYOffset;
     if (this.pageY < 0) {
       this.pageY = 0;
     }
   }
+
   handleMouseMove(e) {
     this.clientX = e.clientX - this.margin;
   }
+
   listen() {
     // Добавим обработчики ивентов при изменении каких-либо параметров
-    window.addEventListener("resize", this.handleWindowResize.bind(this));
-    window.addEventListener("scroll", this.handleScroll.bind(this));
-    window.addEventListener("mousemove", this.handleMouseMove.bind(this));
+    window.addEventListener('resize', this.handleWindowResize.bind(this));
+    window.addEventListener('scroll', this.handleScroll.bind(this));
+    window.addEventListener('mousemove', this.handleMouseMove.bind(this));
   }
 
   render(bool = false) {
-    if (this.currentX != this.clientX || this.currentY != this.pageY || bool) {
+    if (
+      this.currentX !== this.clientX ||
+      this.currentY !== this.pageY ||
+      bool
+    ) {
       this.currentX += (this.clientX - this.currentX) / 10;
       this.currentY += (this.pageY - this.currentY) / 5;
       if (Math.abs(this.clientX - this.currentX) < 1) {
@@ -338,7 +348,7 @@ class Background {
       const downDotsX = this.currentX * this.dDX;
       const downDotsY = this.currentY * this.dDY;
 
-      this.bufferContext.fillStyle = "#0d0a14";
+      this.bufferContext.fillStyle = '#0d0a14';
       this.bufferContext.clearRect(0, 0, this.windowWidth, this.windowHeight);
       this.bufferContext.fillRect(0, 0, this.windowWidth, this.windowHeight);
       this.bufferContext.drawImage(
