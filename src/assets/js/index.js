@@ -1,6 +1,13 @@
 /* eslint-disable no-param-reassign */
 /* global document, window, Image */
 
+/**
+ * 1000px       - ширина канваса
+ * 10 процентов - ширина отступа
+ * 32 процента  - ширина ромба
+ * 16 процентов - ширина линии
+ */
+
 function renderLineRhombus(canvas, w, h, dx, dy) {
   const context = canvas.getContext('2d');
 
@@ -75,13 +82,19 @@ function getPattern(canvas, image, w, h) {
 
 class WorkRhombus {
   constructor(opts) {
+    this.scale = opts.scale;
     this.canvas = document.createElement('canvas');
-    this.canvas.width = 284;
-    this.canvas.height = 400;
+    this.canvas.width = 320 * this.scale;
+    this.canvas.height = 510 * this.scale;
 
     // Картинка обязательно 1х1
     this.image = opts.image;
-    this.imagePattern = getPattern(this.canvas, this.image, 284, 284);
+    this.imagePattern = getPattern(
+      this.canvas,
+      this.image,
+      this.canvas.width,
+      this.canvas.width
+    );
 
     // this.upperImage = opts.upperImage;
     // this.downImage = opts.downImage;
@@ -91,47 +104,49 @@ class WorkRhombus {
 
   render() {
     this.canvas.getContext('2d').beginPath();
-    renderLineRhombus(this.canvas, 284, 284, 0, 0);
+    renderLineRhombus(this.canvas, this.canvas.width, this.canvas.width, 0, 0);
     renderFillImage(this.canvas, this.imagePattern);
 
-    renderLineRhombus(this.canvas, 100, 100, 92, 300);
-    renderSideLines(this.canvas, 100, 100, 92, 300);
+    renderLineRhombus(
+      this.canvas,
+      160 * this.scale,
+      160 * this.scale,
+      80 * this.scale,
+      350 * this.scale
+    );
+    renderSideLines(
+      this.canvas,
+      160 * this.scale,
+      160 * this.scale,
+      80 * this.scale,
+      350 * this.scale
+    );
   }
 }
 
 class LogoRhombus {
   constructor(opts) {
+    this.scale = opts.scale;
     this.canvas = document.createElement('canvas');
-    this.canvas.width = 284;
-    this.canvas.height = 284;
+    this.canvas.width = 320 * this.scale;
+    this.canvas.height = 320 * this.scale;
 
     this.logoImage = opts.logoImage;
     this.render();
   }
 
   render() {
-    renderLineRhombus(this.canvas, 284, 284, 0, 0);
+    renderLineRhombus(this.canvas, this.canvas.width, this.canvas.height, 0, 0);
     renderImage(this.canvas, this.logoImage);
-  }
-}
-
-class ShowRhombus {
-  constructor(opts) {
-    this.canvas = document.createElement('canvas');
-    this.w = this.canvas.width = opts.width;
-    this.h = this.canvas.height = opts.height;
-    this.context = this.canvas.getContext('2d');
-
-    this.image = opts.image;
-    this.rhombus = new LineRhombus({ width: this.w, height: this.h });
   }
 }
 
 class FirstBlock {
   constructor(opts) {
+    this.scale = opts.scale;
     this.canvas = document.createElement('canvas');
-    this.canvas.width = 1024;
-    this.canvas.height = 812;
+    this.canvas.width = 1000 * this.scale;
+    this.canvas.height = 828 * this.scale;
     this.context = this.canvas.getContext('2d');
   }
 
@@ -144,7 +159,10 @@ class FirstBlock {
     this.logoImage.src =
       'https://pp.userapi.com/c845019/v845019801/1de1e1/hVOnZUfaJSU.jpg';
     this.logoImage.onload = () => {
-      this.rhombus = new LogoRhombus({ logoImage: this.logoImage });
+      this.rhombus = new LogoRhombus({
+        logoImage: this.logoImage,
+        scale: this.scale
+      });
       this.render();
       that.ready();
     };
@@ -152,16 +170,20 @@ class FirstBlock {
 
   render() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.context.drawImage(this.rhombus.canvas, 142, 194);
+    this.context.drawImage(
+      this.rhombus.canvas,
+      100 * this.scale,
+      100 * this.scale
+    );
   }
 }
 
 class WorkBlock {
   constructor(opts) {
-    window.workblock = this;
+    this.scale = opts.scale;
     this.canvas = document.createElement('canvas');
-    this.canvas.width = 1024;
-    this.canvas.height = 716;
+    this.canvas.width = 1000 * this.scale;
+    this.canvas.height = 990 * this.scale;
     this.context = this.canvas.getContext('2d');
 
     this.index = opts.index;
@@ -185,7 +207,10 @@ class WorkBlock {
       this.images[i].onload = () => {
         this.images[0] += 1;
         if (this.images[0] === this.images.length) {
-          this.workRhombus = new WorkRhombus({ image: this.images[1] });
+          this.workRhombus = new WorkRhombus({
+            image: this.images[1],
+            scale: this.scale
+          });
           this.render();
           that.ready();
         }
@@ -194,104 +219,60 @@ class WorkBlock {
   }
 
   render() {
-    // this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     if (this.index % 2 === 0) {
-      this.context.drawImage(this.workRhombus.canvas, 458, 316);
+      this.context.drawImage(
+        this.workRhombus.canvas,
+        580 * this.scale,
+        240 * this.scale
+      );
     } else {
-      this.context.drawImage(this.workRhombus.canvas, 142, 316);
-    }
-  }
-}
-
-class ShowBlock {
-  constructor(opts) {
-    this.marginY = 512;
-    this.shows = opts.shows;
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = 1024;
-
-    this.prepareLines(this.initLines());
-    window.showBlock = this;
-    this.h = this.canvas.height = opts.height;
-  }
-
-  initLines() {
-    let lines = [];
-    for (let i = 0, j = 0, c = 0; i < this.shows.length; i++) {
-      if (j == 0) {
-        lines.push([]);
-      }
-      if (c % 2 == 0) {
-        lines[c].push(this.shows[i]);
-        j++;
-        if (j == 4) {
-          j = 0;
-          c++;
-        }
-      } else {
-        lines[c].push(this.shows[i]);
-        j++;
-        if (j == 3) {
-          j = 0;
-          c++;
-        }
-      }
-    }
-    return lines;
-  }
-  prepareLines(lines) {
-    this.lines = [];
-    for (let i = 0; i < lines.length; i++) {
-      this.lines.push({
-        shows: lines[i],
-        margin:
-          1024 - 219 * lines[i].length - (29.6 * (lines[i].length - 1)) / 2,
-        spaceBetweenLines: 29.6
-      });
-    }
-  }
-
-  render() {
-    for (let i = 0; i < this.lines.length; i++) {
-      for (let j = 0; j < this.lines[i]; j++) {}
+      this.context.drawImage(
+        this.workRhombus.canvas,
+        100 * this.scale,
+        240 * this.scale
+      );
     }
   }
 }
 
 class Blocks {
-  constructor() {
-    window.blocks = this;
+  constructor(opts) {
+    this.scale = opts.scale;
     this.canvas = document.querySelector('canvas.blocks');
-    this.canvas.width = 1024;
+    this.canvas.width = 1000 * this.scale;
     this.canvas.height = 10000;
     this.context = this.canvas.getContext('2d');
 
     this.blocks = [
       1,
-      new FirstBlock(),
+      new FirstBlock({ scale: this.scale }),
       new WorkBlock({
         index: 1,
         images: [
           'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg'
-        ]
+        ],
+        scale: this.scale
       }),
       new WorkBlock({
         index: 2,
         images: [
           'https://cs11.pikabu.ru/post_img/big/2018/04/26/11/152476593216002878.jpg'
-        ]
+        ],
+        scale: this.scale
       }),
       new WorkBlock({
         index: 3,
         images: [
           'https://i.pinimg.com/originals/b8/21/dd/b821dde8be37d2b0dded5dc90c3d2bfa.jpg'
-        ]
+        ],
+        scale: this.scale
       }),
       new WorkBlock({
         index: 4,
         images: [
           'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg'
-        ]
+        ],
+        scale: this.scale
       })
     ];
     this.prepareBlocks();
@@ -312,18 +293,9 @@ class Blocks {
 
   render() {
     let y = 0;
-    //  х - центровка
-    let x = 0;
-
-    if (window.innerWidth > 1024) {
-      x = (window.innerWidth - 1024) / 2;
-    }
-    document.querySelector(
-      '.content'
-    ).style.transform = `translate(${x}px, 0px)`;
 
     for (let i = 1; i < this.blocks.length; i += 1) {
-      this.context.drawImage(this.blocks[i].canvas, x, y);
+      this.context.drawImage(this.blocks[i].canvas, 0, y);
       y += this.blocks[i].canvas.height;
     }
   }

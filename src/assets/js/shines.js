@@ -28,8 +28,7 @@ class Line {
 
 class Lines {
   constructor(opts) {
-    window.Lines = this;
-
+    this.scale = opts.scale;
     this.canvas = document.querySelector('canvas.shines');
     this.canvas.width = 1024;
     // this.canvas.height = window.innerHeight;
@@ -43,29 +42,79 @@ class Lines {
 
     this.scroll = window.scrollY + window.innerHeight / 2;
 
-
-    // 196 по y
+    // 160 по x || y;    580>x>420
+    const spacing = 60;
     this.lines = [
-      new Line({ dots: [{ x: 478, y: 0 }, { x: 314, y: 164 }] }),
       new Line({
-        dots: [{ x: 344, y: 538 }, { x: 540, y: 734 }]
-      }),
-      // Начало работ y += 520
-      new Line({
-        dots: [{ x: 540, y: 872 }, { x: 344, y: 1068 }]
+        dots: [
+          { x: 360 * this.scale, y: 0 },
+          { x: (260 + spacing) * this.scale, y: (100 - spacing) * this.scale }
+        ]
       }),
       new Line({
-        dots: [{ x: 344, y: 1588 }, { x: 540, y: 1784 }]
+        dots: [
+          { x: (260 + spacing) * this.scale, y: (420 + spacing) * this.scale },
+          { x: 500 * this.scale, y: 660 * this.scale }
+        ]
+      }),
+      // Начало работ y += 510
+      new Line({
+        dots: [
+          { x: 500 * this.scale, y: (660 + 48 + 60 + 60) * this.scale }, // y = 828
+          {
+            x: (260 + spacing) * this.scale,
+            y: (828 + 240 - spacing) * this.scale
+          }
+        ]
       }),
       new Line({
-        dots: [{ x: 540, y: 2304 }, { x: 344, y: 2500 }]
+        dots: [
+          {
+            x: (260 + spacing) * this.scale,
+            y: (1068 + 510 + spacing) * this.scale
+          },
+          {
+            x: (740 - spacing) * this.scale,
+            y: (1068 + 510 + 480 - spacing) * this.scale
+          }
+        ]
       }),
       new Line({
-        dots: [{ x: 344, y: 3020 }, { x: 540, y: 3216 }]
+        dots: [
+          {
+            x: (740 - spacing) * this.scale,
+            y: (2058 + 510 + spacing) * this.scale
+          },
+          {
+            x: (260 + spacing) * this.scale,
+            y: (2568 + 480 - spacing) * this.scale
+          }
+        ]
       }),
       new Line({
-        dots: [{ x: 540, y: 3736 }, { x: 148, y: 4128 }]
+        dots: [
+          {
+            x: (260 + spacing) * this.scale,
+            y: (3048 + 510 + spacing) * this.scale
+          },
+          {
+            x: (740 - spacing) * this.scale,
+            y: (3558 + 480 - spacing) * this.scale
+          }
+        ]
       }),
+      new Line({
+        dots: [
+          {
+            x: (740 - spacing) * this.scale,
+            y: (3558 + 480 + 510 + spacing) * this.scale
+          },
+          {
+            x: (260 + spacing) * this.scale,
+            y: (3558 + 480 + 510 + 480 - spacing) * this.scale
+          }
+        ]
+      })
     ];
 
     this.preparePattern();

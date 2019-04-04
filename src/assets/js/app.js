@@ -6,6 +6,8 @@ import Project from './project';
 // import FillRhombus from "./index";
 import Blocks from './index';
 import Lines from './shines';
+
+import test from './text.js';
 // if (!window.requestAnimationFrame) {
 //   window.requestAnimationFrame = (function() {
 //     return (
@@ -85,9 +87,24 @@ import Lines from './shines';
 // //   logoImage: logoImage
 // // });
 
-const blocks = new Blocks();
-const lines = new Lines();
-
+/**
+ * 32 процента на ромбы
+ * 10 процентов на отступы
+ * максимальная ширина ромба - 370px => макс ширина области 1156.25
+ * 650пх - десктоп
+ */
+const maxScale = 1156.25 / 1000;
+const minScale = 650 / 1000;
+let scale = window.innerWidth / 1000;
+if (scale > maxScale) {
+  scale = maxScale;
+}
+if (scale < minScale) {
+  scale = minScale;
+}
+const blocks = new Blocks({ scale: scale });
+const lines = new Lines({ scale: scale });
+test(scale);
 // document.querySelector('body').style.background = 'white';
 // const fillRhombus = new FillRhombus({
 //   width: 258,
