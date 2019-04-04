@@ -35,6 +35,19 @@ function renderSideLines(canvas, w, h, dx, dy) {
   context.lineTo(dx + w - w / 10, dy + h / 2);
   context.stroke();
 }
+function renderSideLinesWork(canvas, w, h) {
+  const context = canvas.getContext('2d');
+
+  context.strokeStyle = 'red';
+  context.lineWidth = 2;
+  const dy = h / 20;
+
+  context.moveTo(w / 2 - dy + 10, dy);
+  context.lineTo(w / 2 + dy - 10, dy);
+  context.moveTo(w / 2 - dy + 10, dy + 25);
+  context.lineTo(w / 2 + dy - 10, dy + 25);
+  context.stroke();
+}
 function renderFillImage(canvas, pattern) {
   const context = canvas.getContext('2d');
 
@@ -80,6 +93,23 @@ function getPattern(canvas, image, w, h) {
   return pattern;
 }
 
+class LogoRhombus {
+  constructor(opts) {
+    this.scale = opts.scale;
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = 320 * this.scale;
+    this.canvas.height = 320 * this.scale;
+
+    this.logoImage = opts.logoImage;
+    this.render();
+  }
+
+  render() {
+    renderLineRhombus(this.canvas, this.canvas.width, this.canvas.height, 0, 0);
+    renderImage(this.canvas, this.logoImage);
+  }
+}
+
 class WorkRhombus {
   constructor(opts) {
     this.scale = opts.scale;
@@ -106,7 +136,10 @@ class WorkRhombus {
     this.canvas.getContext('2d').beginPath();
     renderLineRhombus(this.canvas, this.canvas.width, this.canvas.width, 0, 0);
     renderFillImage(this.canvas, this.imagePattern);
+    this.canvas.getContext('2d').beginPath();
+    renderSideLinesWork(this.canvas, this.canvas.width, this.canvas.height);
 
+    this.canvas.getContext('2d').beginPath();
     renderLineRhombus(
       this.canvas,
       160 * this.scale,
@@ -124,20 +157,28 @@ class WorkRhombus {
   }
 }
 
-class LogoRhombus {
+class ShowRhombus {
   constructor(opts) {
     this.scale = opts.scale;
     this.canvas = document.createElement('canvas');
-    this.canvas.width = 320 * this.scale;
-    this.canvas.height = 320 * this.scale;
+    this.canvas.width = 212.5 * this.scale;
+    this.canvas.height = this.canvas.width;
 
-    this.logoImage = opts.logoImage;
+    this.image = opts.image;
+    this.imagePattern = getPattern(
+      this.canvas,
+      this.image,
+      this.canvas.width,
+      this.canvas.height
+    );
+
     this.render();
   }
 
   render() {
-    renderLineRhombus(this.canvas, this.canvas.width, this.canvas.height, 0, 0);
-    renderImage(this.canvas, this.logoImage);
+    this.canvas.getContext('2d').beginPath();
+    renderLineRhombus(this.canvas, this.canvas.width, this.canvas.width, 0, 0);
+    renderFillImage(this.canvas, this.imagePattern);
   }
 }
 
@@ -208,7 +249,7 @@ class WorkBlock {
         this.images[0] += 1;
         if (this.images[0] === this.images.length) {
           this.workRhombus = new WorkRhombus({
-            image: this.images[1],
+            image: this.images[i],
             scale: this.scale
           });
           this.render();
@@ -231,6 +272,102 @@ class WorkBlock {
         100 * this.scale,
         240 * this.scale
       );
+    }
+  }
+}
+
+class ShowBlock {
+  constructor(opts) {
+    window.showBlock = this;
+    this.scale = opts.scale;
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = 1000 * this.scale;
+    // this.canvas.height = 990 * this.scale;
+    this.context = this.canvas.getContext('2d');
+
+    this.imagesSrc = opts.images;
+    this.images = [1];
+    this.text = opts.text;
+
+    this.rhombuses = [];
+    this.lines = [];
+  }
+
+  init(that) {
+    this.prepareImages(that);
+  }
+
+  createLines() {
+    this.lines.push([]);
+    for (let i = 0, j = 0, k = 0; i < this.rhombuses.length; i += 1) {
+      if (j % 2 === 0 && k === 4) {
+        this.lines.push([]);
+        j += 1;
+        k = 0;
+      }
+      if (j % 2 !== 0 && k === 3) {
+        this.lines.push([]);
+        j += 1;
+        k = 0;
+      }
+      this.lines[j].push(this.rhombuses[i]);
+
+      k += 1;
+    }
+
+    this.canvas.height =
+      this.rhombuses[0].rhombus.canvas.height * this.lines.length +
+      60 * (this.lines.length - 1) * this.scale;
+  }
+
+  createRhombuses() {
+    for (let i = 1; i < this.images.length; i += 1) {
+      this.rhombuses.push({
+        rhombus: new ShowRhombus({ image: this.images[i], scale: this.scale }),
+        text: 'test'
+      });
+    }
+  }
+
+  prepareImages(that) {
+    for (let i = 0; i < this.imagesSrc.length; i += 1) {
+      const image = new Image();
+      image.src = this.imagesSrc[i];
+      this.images.push(image);
+    }
+
+    for (let i = 1; i < this.images.length; i += 1) {
+      this.images[i].onload = () => {
+        this.images[0] += 1;
+        if (this.images[0] === this.images.length) {
+          this.createRhombuses();
+          this.createLines();
+          this.render();
+          that.ready();
+        }
+      };
+    }
+  }
+
+  render() {
+    for (let i = 0; i < this.lines.length; i += 1) {
+      const marginX =
+        (this.canvas.width -
+          this.lines[i].length * this.rhombuses[0].rhombus.canvas.width -
+          (this.lines[i].length - 1) * 30 * this.scale) /
+        2;
+      const marginY =
+        i * (60 * this.scale + this.rhombuses[0].rhombus.canvas.height);
+      for (let j = 0; j < this.lines[i].length; j += 1) {
+        this.canvas
+          .getContext('2d')
+          .drawImage(
+            this.lines[i][j].rhombus.canvas,
+            marginX +
+              j * (this.lines[i][j].rhombus.canvas.width + 30 * this.scale),
+            marginY
+          );
+      }
     }
   }
 }
@@ -273,6 +410,36 @@ class Blocks {
           'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg'
         ],
         scale: this.scale
+      }),
+      new ShowBlock({
+        images: [
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg',
+          'https://i.pinimg.com/originals/cb/13/16/cb13165145b7dcc4c3900f82b4ba365b.jpg'
+        ],
+        text: [
+          'test',
+          'test',
+          'test',
+          'test',
+          'test',
+          'test',
+          'test',
+          'test',
+          'test',
+          'test',
+          'test'
+        ],
+        scale: this.scale
       })
     ];
     this.prepareBlocks();
@@ -295,6 +462,9 @@ class Blocks {
     let y = 0;
 
     for (let i = 1; i < this.blocks.length; i += 1) {
+      if (i === 6) {
+        y += 240;
+      }
       this.context.drawImage(this.blocks[i].canvas, 0, y);
       y += this.blocks[i].canvas.height;
     }
