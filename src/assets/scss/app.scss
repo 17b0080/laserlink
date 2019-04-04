@@ -4,6 +4,8 @@
 @import 'foundation';
 @import 'motion-ui';
 
+@include add-foundation-colors;
+
 // Global styles
 @include foundation-global-styles;
 @include foundation-forms;
@@ -23,6 +25,7 @@
 // @include foundation-slider;
 // @include foundation-switch;
 // @include foundation-table;
+
 // Basic components
 // @include foundation-badge;
 // @include foundation-breadcrumbs;
@@ -66,3 +69,4 @@
 //Global
 @import 'global/menu';
 @import 'global/index';
+@import 'components/gradients';
