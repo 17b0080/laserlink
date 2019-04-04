@@ -28,7 +28,10 @@ class Line {
 
 class Lines {
   constructor(opts) {
+    window.lines = this;
     this.scale = opts.scale;
+    this.showBlockHeight = opts.showBlockHeight;
+
     this.canvas = document.querySelector('canvas.shines');
     this.canvas.width = 1024;
     // this.canvas.height = window.innerHeight;
@@ -114,12 +117,37 @@ class Lines {
             y: (3558 + 130 + 480 + 510 + 480 - spacing) * this.scale
           }
         ]
+      }),
+      // После работ
+      new Line({
+        dots: [
+          {
+            x: (500 + spacing) * this.scale,
+            y: (5158 + this.showBlockHeight + spacing) * this.scale
+          },
+          {
+            x: (740 - spacing) * this.scale,
+            y: (5158 + 240 + this.showBlockHeight - spacing) * this.scale
+          }
+        ]
+      }),
+      new Line({
+        dots: [
+          {
+            x: (740 - spacing) * this.scale,
+            y: (5398 + 60 + this.showBlockHeight + spacing) * this.scale
+          },
+          {
+            x: (130 + spacing) * this.scale,
+            y: (5518 + 550 + this.showBlockHeight - spacing) * this.scale
+          }
+        ]
       })
     ];
 
     this.preparePattern();
     this.render();
-    this.listen();
+    // this.listen();
   }
 
   preparePattern() {

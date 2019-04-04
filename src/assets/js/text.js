@@ -1,5 +1,5 @@
 /* globals document */
-function test(scale) {
+function test(scale, showBlockHeight) {
   const firstBlockY = 828 * scale;
   const spacingTillWorkRhombusHalf = 400 * scale;
   const spacingFromWorkRhombusStartToEnd = 590 * scale;
@@ -15,11 +15,14 @@ function test(scale) {
   // Перед Шоу Текст
   const showH2 = document.querySelector('h2#show');
   const showP = document.querySelector('p#show');
+  // Партнёры
+  const partnersH2 = document.querySelector('h2#partners');
+  const partnersP = document.querySelector('p#partners');
+
   // Применение стилей
   h1.style.transform = `translate(${154 * scale}px,${720 * scale}px)`;
   pFirst.style.transform = `translate(${420 * scale}px,${(260 + 31 + 60) *
     scale}px)`;
-  console.log(scale);
   for (let i = 0; i < h2Work.length; i += 1) {
     let x = 420 * scale;
     let aX = 180 * scale;
@@ -46,6 +49,13 @@ function test(scale) {
     990 * 4) *
     scale}px)`;
   showP.style.transform = `translate(${(420 + 100) * scale}px,${(828 +
+    990 * 4 +
+    60) *
+    scale}px)`;
+  partnersH2.style.transform = `translate(${(420 + 100) * scale}px,${(828 +
+    990 * 4) *
+    scale}px)`;
+  partnersP.style.transform = `translate(${(420 + 100) * scale}px,${(828 +
     990 * 4 +
     60) *
     scale}px)`;

@@ -102,9 +102,27 @@ if (scale > maxScale) {
 if (scale < minScale) {
   scale = minScale;
 }
+
+
 const blocks = new Blocks({ scale: scale });
-const lines = new Lines({ scale: scale });
 test(scale);
+
+
+
+class App{
+  constructor(opts){
+    this.blocksCavnas = document.querySelector('canvas.blocks');
+    this.blocksCavnas.width = window.innerWidth;
+    this.blocksCavnas.height = window.innerHeight;
+
+    this.shinesCanvas = document.querySelector('canvas.shines');
+    this.shinesCanvas.width = window.innerWidth;
+    this.shinesCanvas.height = window.innerHeight;
+
+    this.backgroundCanvas = document.querySelector('canvas.background');
+
+  }
+}
 // document.querySelector('body').style.background = 'white';
 // const fillRhombus = new FillRhombus({
 //   width: 258,
