@@ -463,7 +463,7 @@ class Blocks {
 
     for (let i = 1; i < this.blocks.length; i += 1) {
       if (i === 6) {
-        y += 240;
+        y += 420;
       }
       this.context.drawImage(this.blocks[i].canvas, 0, y);
       y += this.blocks[i].canvas.height;

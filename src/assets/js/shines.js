@@ -110,8 +110,8 @@ class Lines {
             y: (3558 + 480 + 510 + spacing) * this.scale
           },
           {
-            x: (260 + spacing) * this.scale,
-            y: (3558 + 480 + 510 + 480 - spacing) * this.scale
+            x: (260 - 130 + spacing) * this.scale,
+            y: (3558 + 130 + 480 + 510 + 480 - spacing) * this.scale
           }
         ]
       })
