@@ -7,6 +7,7 @@
  * 32 процента  - ширина ромба
  * 16 процентов - ширина линии
  */
+import Lines from './shines';
 
 function renderLineRhombus(canvas, w, h, dx, dy) {
   const context = canvas.getContext('2d');
@@ -278,11 +279,9 @@ class WorkBlock {
 
 class ShowBlock {
   constructor(opts) {
-    window.showBlock = this;
     this.scale = opts.scale;
     this.canvas = document.createElement('canvas');
     this.canvas.width = 1000 * this.scale;
-    // this.canvas.height = 990 * this.scale;
     this.context = this.canvas.getContext('2d');
 
     this.imagesSrc = opts.images;
@@ -375,6 +374,7 @@ class ShowBlock {
 class Blocks {
   constructor(opts) {
     this.scale = opts.scale;
+
     this.canvas = document.querySelector('canvas.blocks');
     this.canvas.width = 1000 * this.scale;
     this.canvas.height = 10000;
@@ -443,6 +443,12 @@ class Blocks {
       })
     ];
     this.prepareBlocks();
+
+    window.openWork = this.openWork.bind(this);
+  }
+
+  openWork(id) {
+    console.log(this.blocks[id]);
   }
 
   prepareBlocks() {
@@ -463,11 +469,16 @@ class Blocks {
 
     for (let i = 1; i < this.blocks.length; i += 1) {
       if (i === 6) {
-        y += 420;
+        y += 380 * this.scale;
       }
       this.context.drawImage(this.blocks[i].canvas, 0, y);
       y += this.blocks[i].canvas.height;
     }
+
+    this.lines = new Lines({
+      scale: this.scale,
+      showBlockHeight: this.blocks[6].canvas.height
+    });
   }
 }
 
