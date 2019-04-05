@@ -28,25 +28,15 @@ class Line {
 
 class Lines {
   constructor(opts) {
-    window.lines = this;
     this.scale = opts.scale;
-    this.showBlockHeight = opts.showBlockHeight;
+    this.parent = opts.parent;
 
-    this.canvas = document.querySelector('canvas.shines');
-    this.canvas.width = 1024;
-    // this.canvas.height = window.innerHeight;
-    this.canvas.height = 10000;
-    this.context = this.canvas.getContext('2d');
-
-    this.bufferCanvas = document.createElement('canvas');
-    this.bufferCanvas.width = 1024;
-    this.bufferCanvas.height = 10000;
-    this.bufferContext = this.bufferCanvas.getContext('2d');
-
-    this.scroll = window.scrollY + window.innerHeight / 2;
-
-    // 160 по x || y;    580>x>420
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = this.innerWidth;
+    this.showBlockHeight = this.parent.blocks.blocks[6].canvas.height;
     const spacing = 60;
+    this.canvas.height = (6068 + this.showBlockHeight - spacing) * this.scale;
+
     this.lines = [
       new Line({
         dots: [
@@ -145,44 +135,16 @@ class Lines {
       })
     ];
 
-    this.preparePattern();
     this.render();
-    // this.listen();
-  }
-
-  preparePattern() {
-    for (let i = 0; i < this.lines.length; i += 1) {
-      this.bufferContext.drawImage(
-        this.lines[i].canvas,
-        0,
-        this.lines[i].dots[0].y
-      );
-    }
-  }
-
-  listen() {
-    document.addEventListener('scroll', () => {
-      this.scroll = window.scrollY + window.innerHeight / 2;
-      this.render();
-    });
   }
 
   render() {
-    this.context.clearRect(0, 0, 1024, 10000);
-
-    // this.context.drawImage(this.bufferCanvas, 0, 0);
-    // this.context.drawImage(
-    //   this.bufferCanvas,
-    //   0,
-    //   0,
-    //   1024,
-    //   this.scroll,
-    //   0,
-    //   0,
-    //   1024,
-    //   this.scroll
-    // );
-    this.context.drawImage(this.bufferCanvas, 0, 0);
+    for (let i = 0; i < this.lines.length; i += 1) {
+      this.canvas
+        .getContext('2d')
+        .drawImage(this.lines[i].canvas, 0, this.lines[i].dots[0].y);
+    }
+    this.parent.ready();
   }
 }
 

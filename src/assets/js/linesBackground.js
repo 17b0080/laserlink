@@ -32,6 +32,7 @@ class PatternBackground {
   }
 
   render() {
+    console.log('render pattern');
     for (let x = 0; x < this.patternsX; x += 1) {
       for (let y = 0; y < this.patternsY; y += 1) {
         this.context.drawImage(
@@ -54,20 +55,12 @@ class PatternBackground {
 
 class Background {
   constructor(opts) {
-    this.canvas = document.querySelector('canvas.background');
+    window.background = this;
+    this.canvas = document.createElement('canvas');
     this.context = this.canvas.getContext('2d');
-    this.windowWidth = this.canvas.width = window.innerWidth;
-    this.windowHeight = this.canvas.height = window.innerHeight;
-
-    this.bufferCanvas = document.createElement('canvas');
-    this.bufferContext = this.bufferCanvas.getContext('2d');
-    this.bufferCanvas.width = this.windowWidth;
-    this.bufferCanvas.height = this.windowHeight;
+    this.canvas.width = 2 * window.innerWidth;
+    this.canvas.height = document.body.clientHeight;
     this.scale = opts.scale;
-
-    this.margin = this.windowWidth;
-    this.bufferWidth = this.windowWidth + this.margin;
-    this.bufferHeight = document.body.clientHeight;
 
     // Parallax Speeds
     this.lX = opts.linesSpeedX;
@@ -78,8 +71,8 @@ class Background {
     this.dDY = opts.downDotsSpeedY;
 
     this.linesBackground = new PatternBackground({
-      width: this.bufferWidth,
-      height: this.bufferHeight,
+      width: this.canvas.width,
+      height: this.canvas.height,
       scale: this.scale,
       create: function create() {
         const drawLine = (x1, y1, x2, y2) => {
@@ -122,8 +115,8 @@ class Background {
       patternHeight: 400
     });
     this.dotsBackground = new PatternBackground({
-      width: this.bufferWidth,
-      height: this.bufferHeight,
+      width: this.canvas.width,
+      height: this.canvas.height,
       scale: this.scale,
       create: function create() {
         const r = opts.dotRadius;
@@ -204,8 +197,8 @@ class Background {
     });
 
     this.downDotsBackground = new PatternBackground({
-      width: this.bufferWidth,
-      height: this.bufferHeight,
+      width: this.canvas.width,
+      height: this.canvas.height,
       scale: this.scale,
       create: function create() {
         const r = opts.dotRadius;
@@ -289,103 +282,63 @@ class Background {
     this.clientX = 0;
     this.pageY = window.pageYOffset;
     this.currentY = this.pageY;
+
+    this.init();
+    opts.parent.ready();
   }
 
-  handleWindowResize() {
-    this.windowWidth = this.canvas.width = window.innerWidth;
-    this.windowHeight = this.canvas.height = window.innerHeight;
-
-    this.bufferCanvas.width = this.windowWidth;
-    this.bufferCanvas.height = this.windowHeight;
-
-    this.margin = this.windowWidth;
-    this.downDotsBackground.width = this.dotsBackground.width = this.linesBackground.width = this.bufferWidth =
-      this.windowWidth + this.margin;
-    this.downDotsBackground.height = this.dotsBackground.height = this.linesBackground.height = this.bufferHeight =
-      document.body.clientHeight;
-    this.linesBackground.update();
-    this.dotsBackground.update();
-    this.downDotsBackground.update();
-    this.render(true);
+  init() {
+    this.linesBackground.render();
+    this.dotsBackground.render();
+    this.downDotsBackground.render();
+    this.render();
   }
 
-  handleScroll() {
-    this.pageY = window.pageYOffset;
-    if (this.pageY < 0) {
-      this.pageY = 0;
-    }
-  }
+  render() {
+    const linesX = this.currentX * this.lX;
+    const linesY = this.currentY * this.lY;
+    const upperDotsX = this.currentX * this.uDX;
+    const upperDotsY = this.currentY * this.uDY;
+    const downDotsX = this.currentX * this.dDX;
+    const downDotsY = this.currentY * this.dDY;
 
-  handleMouseMove(e) {
-    this.clientX = e.clientX - this.margin;
-  }
+    this.context.fillStyle = '#0d0a14';
+    this.context.clearRect(0, 0, this.canvas.width / 2, window.innerHeight);
+    this.context.fillRect(0, 0, this.canvas.width / 2, window.innerHeight);
 
-  listen() {
-    // Добавим обработчики ивентов при изменении каких-либо параметров
-    window.addEventListener('resize', this.handleWindowResize.bind(this));
-    window.addEventListener('scroll', this.handleScroll.bind(this));
-    window.addEventListener('mousemove', this.handleMouseMove.bind(this));
-  }
-
-  render(bool = false) {
-    if (
-      this.currentX !== this.clientX ||
-      this.currentY !== this.pageY ||
-      bool
-    ) {
-      this.currentX += (this.clientX - this.currentX) / 10;
-      this.currentY += (this.pageY - this.currentY) / 5;
-      if (Math.abs(this.clientX - this.currentX) < 1) {
-        this.currentX = this.clientX;
-      }
-      if (Math.abs(this.pageY - this.currentY) < 1) {
-        this.currentY = this.pageY;
-      }
-      const linesX = this.currentX * this.lX;
-      const linesY = this.currentY * this.lY;
-      const upperDotsX = this.currentX * this.uDX;
-      const upperDotsY = this.currentY * this.dDY;
-      const downDotsX = this.currentX * this.dDX;
-      const downDotsY = this.currentY * this.dDY;
-
-      this.bufferContext.fillStyle = '#0d0a14';
-      this.bufferContext.clearRect(0, 0, this.windowWidth, this.windowHeight);
-      this.bufferContext.fillRect(0, 0, this.windowWidth, this.windowHeight);
-      this.bufferContext.drawImage(
-        this.downDotsBackground.canvas,
-        this.margin + downDotsX,
-        downDotsY,
-        this.windowWidth,
-        this.windowHeight,
-        0,
-        0,
-        this.windowWidth,
-        this.windowHeight
-      );
-      this.bufferContext.drawImage(
-        this.linesBackground.canvas,
-        this.margin + linesX,
-        linesY,
-        this.windowWidth,
-        this.windowHeight,
-        0,
-        0,
-        this.windowWidth,
-        this.windowHeight
-      );
-      this.bufferContext.drawImage(
-        this.dotsBackground.canvas,
-        this.margin + upperDotsX,
-        upperDotsY,
-        this.windowWidth,
-        this.windowHeight,
-        0,
-        0,
-        this.windowWidth,
-        this.windowHeight
-      );
-      this.context.drawImage(this.bufferCanvas, 0, 0);
-    }
+    this.context.drawImage(
+      this.downDotsBackground.canvas,
+      this.canvas.width / 2 + downDotsX,
+      downDotsY,
+      this.canvas.width / 2,
+      window.innerHeight,
+      0,
+      0,
+      this.canvas.width / 2,
+      window.innerHeight
+    );
+    this.context.drawImage(
+      this.linesBackground.canvas,
+      this.canvas.width / 2 + linesX,
+      linesY,
+      this.canvas.width / 2,
+      window.innerHeight,
+      0,
+      0,
+      this.canvas.width / 2,
+      window.innerHeight
+    );
+    this.context.drawImage(
+      this.dotsBackground.canvas,
+      this.canvas.width / 2 + upperDotsX,
+      upperDotsY,
+      this.canvas.width / 2,
+      window.innerHeight,
+      0,
+      0,
+      this.canvas.width / 2,
+      window.innerHeight
+    );
   }
 }
 
