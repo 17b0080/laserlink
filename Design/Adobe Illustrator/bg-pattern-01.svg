@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700">
-  <title>bg-pattern</title>
-  <g id="Layer_1" data-name="Layer 1">
-    <polygon points="318.5 -0.5 493.5 174.5 315.44 350 143.5 174.5 318.5 -0.5" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2"/>
-    <path d="M318.5-.5v0Z" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2"/>
-    <path d="M143.5,174.5h0Z" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2"/>
-    <path d="M143.5-.5l350,350Z" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="2"/>
-  </g>
-</svg>
