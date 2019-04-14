@@ -66,7 +66,21 @@
 // @include motion-ui-transitions;
 // @include motion-ui-animations;
 
+//Functions
+@import 'functions/fonts';
+@import 'functions/zindex';
+
 //Global
+@import 'global/header';
 @import 'global/menu';
 @import 'global/index';
+@import 'global/content-wrapper';
+@import 'global/fullscreen-overlay';
+@import 'global/hamburger-menu';
+
+//Components
 @import 'components/gradients';
+@import 'components/logo';
+@import 'components/hero-text';
+@import 'components/projects';
+@import 'components/content-placeholder';

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .gradients  {
   
 }
@@ -9,4 +10,39 @@
   height: rem-calc(500);
   background-image: url('../img/Gradients/gradient4-full.png');
   background-size: cover;
+=======
+.gradient {
+  position: absolute;
+  top: rem-calc(40);
+  right: 0;
+  z-index: z('background');
+  width: 100%;
+  height: 100%;
+
+  &__top {
+    float: right;
+    width: rem-calc(400);
+    height: rem-calc(400);
+    background-image: url('../img/Gradients/gradient4-full.png');
+    background-size: cover;
+
+    @include breakpoint(medium) {
+      width: rem-calc(600);
+      height: rem-calc(600);
+    }
+  }
+
+  &__left {
+    float: left;
+    width: rem-calc(400);
+    height: rem-calc(40);
+    margin-top: rem-calc(100);
+    background: red;
+
+    @include breakpoint(medium) {
+      width: rem-calc(600);
+      height: rem-calc(600);
+    }
+  }
+>>>>>>> fdbce31e95e3f9e91d3fef60e95240f3f310790b
 }
