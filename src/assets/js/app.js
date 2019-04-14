@@ -42,23 +42,57 @@ class App {
     this.clientY = window.pageYOffset;
     this.currentY = this.clientY;
 
-    this.showImages = [
-      'https://pp.userapi.com/c852236/v852236114/f6a19/_8HOc7JZMIo.jpg',
-      'https://pp.userapi.com/c852236/v852236114/f6a19/_8HOc7JZMIo.jpg',
-      'https://pp.userapi.com/c852236/v852236114/f6a19/_8HOc7JZMIo.jpg',
-      'https://pp.userapi.com/c852236/v852236114/f6a19/_8HOc7JZMIo.jpg',
-      'https://pp.userapi.com/c852236/v852236114/f6a19/_8HOc7JZMIo.jpg',
-      'https://pp.userapi.com/c852236/v852236114/f6a19/_8HOc7JZMIo.jpg',
-      'https://pp.userapi.com/c852236/v852236114/f6a19/_8HOc7JZMIo.jpg',
-      'https://pp.userapi.com/c852236/v852236114/f6a19/_8HOc7JZMIo.jpg',
-      'https://pp.userapi.com/c852236/v852236114/f6a19/_8HOc7JZMIo.jpg'
+    this.logoImageSrc = 'http://localhost:8000/assets/img/logoImage.png';
+
+    this.hoverImageSrc = 'http://localhost:8000/assets/img/hover.png';
+
+    this.workImagesSrc = [
+      [
+        'http://localhost:8000/assets/img/works/01.png',
+        'http://localhost:8000/assets/img/works/main01.png',
+        'http://localhost:8000/assets/img/works/cube31px.png'
+      ],
+      [
+        'http://localhost:8000/assets/img/works/02.png',
+        'http://localhost:8000/assets/img/works/main02.png',
+        'http://localhost:8000/assets/img/works/stars31px.png'
+      ],
+      [
+        'http://localhost:8000/assets/img/works/03.png',
+        'http://localhost:8000/assets/img/works/main03.png',
+        'http://localhost:8000/assets/img/works/dancer31px.png'
+      ],
+      [
+        'http://localhost:8000/assets/img/works/04.png',
+        'http://localhost:8000/assets/img/works/main04.png',
+        'http://localhost:8000/assets/img/works/laser31px.png'
+      ]
     ];
 
-    this.partnerImages = [
+    this.showImagesSrc = [
+      'http://localhost:8000/assets/img/works/main01.png',
+      'http://localhost:8000/assets/img/works/main01.png',
+      'http://localhost:8000/assets/img/works/main01.png',
+      'http://localhost:8000/assets/img/works/main01.png',
+      'http://localhost:8000/assets/img/works/main01.png',
+      'http://localhost:8000/assets/img/works/main01.png'
+    ];
+
+    this.showMoreHoverSrc =
+      'http://localhost:8000/assets/img/showRhombusHoverMore.png';
+
+    this.partnerImagesSrc = [
       'https://ih0.redbubble.net/image.523026213.1540/stf,small,600x600.jpg',
       'https://ih0.redbubble.net/image.523026213.1540/stf,small,600x600.jpg'
     ];
 
+    this.productImagesSrc = [
+      'http://localhost:8000/assets/img/productImage.png',
+      'http://localhost:8000/assets/img/productImage.png',
+      'http://localhost:8000/assets/img/productImage.png',
+      'http://localhost:8000/assets/img/productImage.png',
+      'http://localhost:8000/assets/img/productImage.png'
+    ];
     this.init();
   }
 
@@ -83,8 +117,7 @@ class App {
    */
 
   handleResize() {
-    // Остановка анимации
-
+    console.log('handle resize');
     // Пересчёт размеров
     this.windowWidth = window.innerWidth;
     this.windowHeight = window.innerHeight;
@@ -118,7 +151,6 @@ class App {
   }
 
   ready() {
-    console.log('ready');
     this.readyState += 1;
     if (this.readyState === 1) {
       this.gradients = new Gradients({ parent: this });
@@ -136,8 +168,19 @@ class App {
     this.background = new Background({ parent: this });
     this.blocks = new Blocks({
       parent: this,
-      showImages: this.showImages,
-      partnerImages: this.partnerImages
+      logoImageSrc: this.logoImageSrc,
+
+      hoverImageSrc: this.hoverImageSrc,
+
+      workImagesSrc: this.workImagesSrc,
+
+      showImagesSrc: this.showImagesSrc,
+
+      showMoreHoverSrc: this.showMoreHoverSrc,
+
+      partnerImagesSrc: this.partnerImagesSrc,
+
+      productImagesSrc: this.productImagesSrc
     });
   }
 
@@ -163,29 +206,31 @@ class App {
 
     this.counter += 1;
     // даун до 30 фпс
-    if (this.counter === 2 && this.windowWidth > 640) {
+    if (this.counter === 1) {
       this.counter = 0;
-      let blockRendered = false;
-      let gradientRendered = false;
-      if (
-        this.clientX !== this.currentX ||
-        this.clientY !== this.currentY ||
-        boolean
-      ) {
-        this.updateXY();
-        // this.background.render();
-        this.blocks.render();
-        this.gradients.render();
-        this.lines.render();
-        this.text.render();
-        blockRendered = true;
-        gradientRendered = true;
-      }
-      if (this.blocks.request && !blockRendered) {
-        this.blocks.render();
-      }
-      if (this.gradients.request && !gradientRendered) {
-        this.gradients.render();
+      if (this.windowWidth > 640) {
+        let blockRendered = false;
+        let gradientRendered = false;
+        if (
+          this.clientX !== this.currentX ||
+          this.clientY !== this.currentY ||
+          boolean
+        ) {
+          this.updateXY();
+          // this.background.render();
+          this.blocks.render();
+          this.gradients.render();
+          this.lines.render();
+          this.text.render();
+          blockRendered = true;
+          gradientRendered = true;
+        }
+        if (this.blocks.request && !blockRendered) {
+          this.blocks.render();
+        }
+        if (this.gradients.request && !gradientRendered) {
+          this.gradients.render();
+        }
       }
     }
   }

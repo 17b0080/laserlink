@@ -14,25 +14,21 @@ class Lines {
     this.canvas.width = this.windowWidth;
     this.canvas.height = this.windowHeight / 2;
 
-    this.partnersHeight = this.parent.blocks.partnersHeight;
-    this.showsHeight = this.parent.blocks.showsHeight;
-    this.afterShowsHeight = 4593 + this.showsHeight;
-
-    this.showAndPartnersY = this.partnersHeight + this.afterShowsHeight + 873;
+    this.showLinesHeight = this.parent.blocks.showLines.height;
 
     this.lines = [
       { x0: 498, y0: -18, x1: 312, y1: 168 },
       { x0: 296, y0: 583, x1: 542, y1: 829 },
       { x0: 529, y0: 945, x1: 335, y1: 1139 },
       { x0: 414, y0: 1677, x1: 694, y1: 1957 },
-      { x0: 716, y0: 2486, x1: 346, y1: 2766 },
+      { x0: 626, y0: 2486, x1: 346, y1: 2766 },
       { x0: 420, y0: 3317, x1: 700, y1: 3597 },
       { x0: 601, y0: 4146, x1: 254, y1: 4493 },
       {
         x0: 855,
-        y0: this.afterShowsHeight + 295,
+        y0: 4593 + this.showLinesHeight + 295,
         x1: 325,
-        y1: this.afterShowsHeight + 815
+        y1: 4593 + this.showLinesHeight + 295 + 530
       },
       {
         x0: 530 + 325,

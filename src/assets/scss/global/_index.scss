@@ -6,11 +6,17 @@
 // }
 body {
   height: 10000px;
+  margin: 0;
+  padding: 0;
 }
 
 .background {
   @include breakpoint(small) {
     display: none;
+  }
+
+  @include breakpoint(medium) {
+    display: block;
   }
 
   position: fixed;
@@ -33,6 +39,10 @@ body {
 .content {
   @include breakpoint(small) {
     display: none;
+  }
+
+  @include breakpoint(medium) {
+    display: block;
   }
 
   position: fixed;
