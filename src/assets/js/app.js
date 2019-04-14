@@ -163,7 +163,7 @@ class App {
 
     this.counter += 1;
     // даун до 30 фпс
-    if (this.counter === 1) {
+    if (this.counter === 2 && this.windowWidth > 640) {
       this.counter = 0;
       let blockRendered = false;
       let gradientRendered = false;
