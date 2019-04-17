@@ -1,9 +1,4 @@
-$z-indexes: (
-  'fullscreen-overlay',
-  'hamburger-menu',
-  'menu-mobile',
-  'background'
-);
+$z-indexes: ('header', 'background');
 
 @function z($name) {
   @if index($z-indexes, $name) {

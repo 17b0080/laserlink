@@ -1,23 +1,12 @@
 .menu {
-  // position: absolute;
-  // bottom: 0;
-  // left: 50%;
-  // z-index: 2;
-  // width: rem-calc(200);
-  // height: rem-calc(450);
-  // margin-top: rem-calc(270);
-}
-
-.menu-mobile {
   @include menu-base;
   @include menu-direction(vertical);
   @include absolute-center;
 
-  z-index: z('menu-mobile');
+  z-index: z('header') + 1;
   display: flex;
-  display: none;
   justify-content: space-between;
-  width: rem-calc(300);
+  width: rem-calc(210);
   height: rem-calc(400);
   font-weight: 300;
   text-transform: uppercase;
