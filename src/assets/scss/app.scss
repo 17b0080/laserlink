@@ -71,12 +71,12 @@
 @import 'functions/zindex';
 
 //Global
-// @import 'global/header';
+@import 'global/header';
 @import 'global/menu';
 @import 'global/index';
 // @import 'global/content-wrapper';
 // @import 'global/fullscreen-overlay';
-// @import 'global/hamburger-menu';
+@import 'components/hamburger-menu';
 
 //Components
 @import 'components/gradients';
