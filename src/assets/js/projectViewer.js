@@ -17,7 +17,7 @@ class ProjectRhombus {
     this.height = 990;
     this.halfHeight = 445;
 
-    this.time = 10000;
+    this.time = 500;
     this.currentFrame = 0;
     this.frames = Math.round(this.time / 16.6); // 16.6ms на кадр при 60 кадрах/с
     this.speed = this.halfWidth / this.frames;
@@ -42,13 +42,14 @@ class ProjectRhombus {
 
     this.dirtDots = { x: 0, y: 0, w: 0, y0: 0 };
 
+    this.request = false;
     this.open = false;
     this.opened = false;
     this.closed = true;
   }
 
   updateXY() {
-    this.currentX = this.parent.currentX / 10;
+    this.currentX = this.parent.currentX;
   }
 
   updateDots() {
@@ -121,18 +122,23 @@ class ProjectRhombus {
 
   render() {
     this.clearDirt();
+    console.log(this.open, this.closed);
 
     if (this.open && !this.opened) {
       this.nextOpenFrame();
     }
     if (!this.open && !this.closed) {
+      console.log('next close frame');
       this.nextCloseFrame();
     }
 
-    if (this.opened || this.closed) {
+    if (this.opened) {
       this.updateDots();
-      this.drawFrame();
     }
+
+    this.drawFrame();
+
+    this.request = (this.open && !this.opened) || (!this.open && !this.closed);
   }
 }
 
@@ -140,40 +146,18 @@ class ProjectViewer {
   constructor(opts) {
     this.parent = opts.parent;
 
-    this.canvas = document.querySelector('canvas.project__canvas');
-    this.canvas.width = this.windowWidth;
-    this.canvas.height = this.windowHeight;
-    this.context = this.canvas.getContext('2d');
-
     this.windowWidth = this.parent.windowWidth;
     this.halfWindowWidth = this.parent.halfWindowWidth;
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
+    this.canvas = document.querySelector('canvas.background__project');
+    this.canvas.width = this.windowWidth;
+    this.canvas.height = this.windowHeight;
+    this.context = this.canvas.getContext('2d');
+
     this.currentX = this.parent.currentX;
-
-    this.open = false;
-
-    this.data = [
-      {
-        type: 'video',
-        text: 'ну какой-то текст',
-        header: 'ну какой-то хеадер',
-        video: 'ну ссылка'
-      },
-      {
-        type: 'gif',
-        text: 'ну какой-то текст 2',
-        header: 'ну какой-то хеадер 2',
-        gif: 'ну ссылка2'
-      },
-      {
-        type: 'img',
-        text: 'ну какой-то текст 3',
-        header: 'ну какой-то хеадер 3',
-        img: 'ну ссылка 3'
-      }
-    ];
+    this.data = this.parent.projectData;
     /**
      * data = [
      * {type: 'video', text: 'ну какой-то текст', header: 'ну какой-то хеадер', video: 'ну ссылка'},
@@ -185,25 +169,35 @@ class ProjectViewer {
      */
 
     this.rhombus = new ProjectRhombus({ parent: this });
+
+    this.request = false;
   }
 
-  load(type) {
-    if (type === 'video') {
-      console.log('video');
-    } else if (type === 'gif') {
-      console.log('gif');
-    } else if (type === 'img') {
-      console.log('img');
-    }
+  updateXY() {
+    this.currentX = this.parent.currentX / 20;
+    this.rhombus.updateXY();
   }
 
-  openProject(index) {
-    this.load(this.data[index].type);
+  open(index) {
+    this.rhombus.open = true;
+    this.rhombus.closed = false;
+    console.log(
+      `Opening: ${index}, line: ${Math.round(index / 4)}, item: ${index % 4}`
+    );
+    this.render();
+  }
+
+  close() {
+    this.rhombus.open = false;
+    this.rhombus.opened = false;
+    this.render();
   }
 
   render() {
     this.rhombus.render();
+
+    this.request = this.rhombus.request;
   }
 }
 
-export default ProjectRhombus;
+export default ProjectViewer;

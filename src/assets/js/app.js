@@ -4,7 +4,7 @@ import Blocks from './blocks';
 import Lines from './lines';
 import Text from './text';
 import Gradients from './gradients';
-import ProjectRhombus from './projectViewer';
+import ProjectViewer from './projectViewer';
 
 // Кросс-браузерная анимация
 if (!window.requestAnimationFrame) {
@@ -50,53 +50,28 @@ class App {
 
     this.hoverImageSrc = 'http://localhost:8000/assets/img/hover.png';
 
-    this.workImagesSrc = [
-      [
-        'http://localhost:8000/assets/img/works/01.png',
-        'http://localhost:8000/assets/img/works/main01.png',
-        'http://localhost:8000/assets/img/works/cube31px.png'
-      ],
-      [
-        'http://localhost:8000/assets/img/works/02.png',
-        'http://localhost:8000/assets/img/works/main02.png',
-        'http://localhost:8000/assets/img/works/stars31px.png'
-      ],
-      [
-        'http://localhost:8000/assets/img/works/03.png',
-        'http://localhost:8000/assets/img/works/main03.png',
-        'http://localhost:8000/assets/img/works/dancer31px.png'
-      ],
-      [
-        'http://localhost:8000/assets/img/works/04.png',
-        'http://localhost:8000/assets/img/works/main04.png',
-        'http://localhost:8000/assets/img/works/laser31px.png'
-      ]
-    ];
+    this.workImagesSrc = JSON.parse(
+      document.querySelector('.js-work-images').getAttribute('data-src')
+    );
 
-    this.showImagesSrc = [
-      'http://localhost:8000/assets/img/works/main01.png',
-      'http://localhost:8000/assets/img/works/main01.png',
-      'http://localhost:8000/assets/img/works/main01.png',
-      'http://localhost:8000/assets/img/works/main01.png',
-      'http://localhost:8000/assets/img/works/main01.png',
-      'http://localhost:8000/assets/img/works/main01.png'
-    ];
+    this.showImagesSrc = JSON.parse(
+      document.querySelector('.js-show-images').getAttribute('data-src')
+    );
 
     this.showMoreHoverSrc =
       'http://localhost:8000/assets/img/showRhombusHoverMore.png';
 
-    this.partnerImagesSrc = [
-      'https://ih0.redbubble.net/image.523026213.1540/stf,small,600x600.jpg',
-      'https://ih0.redbubble.net/image.523026213.1540/stf,small,600x600.jpg'
-    ];
+    this.partnerImagesSrc = JSON.parse(
+      document.querySelector('.js-partner-images').getAttribute('data-src')
+    );
 
-    this.productImagesSrc = [
-      'http://localhost:8000/assets/img/productImage.png',
-      'http://localhost:8000/assets/img/productImage.png',
-      'http://localhost:8000/assets/img/productImage.png',
-      'http://localhost:8000/assets/img/productImage.png',
-      'http://localhost:8000/assets/img/productImage.png'
-    ];
+    this.productImagesSrc = JSON.parse(
+      document.querySelector('.js-product-images').getAttribute('data-src')
+    );
+
+    this.projectData = JSON.parse(
+      document.querySelector('.js-project-data').getAttribute('data')
+    );
     this.init();
   }
 
@@ -157,7 +132,7 @@ class App {
   ready() {
     this.readyState += 1;
     if (this.readyState === 1) {
-      this.projectViewer = new ProjectRhombus({ parent: this });
+      this.projectViewer = new ProjectViewer({ parent: this });
       this.gradients = new Gradients({ parent: this });
       this.lines = new Lines({ parent: this });
       this.text = new Text({ parent: this });
@@ -216,36 +191,41 @@ class App {
     if (this.counter === 1) {
       this.counter = 0;
       if (this.windowWidth > 640) {
+        let projectRequest = this.projectViewer.request;
         let blockRendered = false;
         let gradientRendered = false;
-        if (
-          this.clientX !== this.currentX ||
-          this.clientY !== this.currentY ||
-          boolean
-        ) {
-          this.updateXY();
-          // this.background.render();
-          this.blocks.render();
-          this.gradients.render();
-          this.lines.render();
-          this.text.render();
-          blockRendered = true;
-          gradientRendered = true;
-        }
-        if (this.blocks.request && !blockRendered) {
-          this.blocks.render();
-        }
-        if (this.gradients.request && !gradientRendered) {
-          this.gradients.render();
+        if (!projectRequest) {
+          if (
+            this.clientX !== this.currentX ||
+            this.clientY !== this.currentY ||
+            boolean
+          ) {
+            this.updateXY();
+            // this.background.render();
+            this.blocks.render();
+            this.gradients.render();
+            this.lines.render();
+            this.text.render();
+            blockRendered = true;
+            gradientRendered = true;
+          }
+          if (this.blocks.request && !blockRendered) {
+            this.blocks.render();
+          }
+          if (this.gradients.request && !gradientRendered) {
+            this.gradients.render();
+          }
+        }  {
+          if (
+            this.clientX !== this.currentX ||
+            this.clientY !== this.currentY ||
+            boolean
+          ) {
+            this.updateXY();
+            this.projectViewer.render();
+          }
         }
       }
-      // if (
-      //   this.clientX !== this.currentX ||
-      //   (this.projectViewer.open && !this.projectViewer.opened)
-      // ) {
-      //   this.updateXY();
-      //   this.projectViewer.render();
-      // }
     }
   }
 }

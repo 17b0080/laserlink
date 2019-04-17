@@ -169,6 +169,9 @@ class Text {
     );
 
     for (let i = 0; i < 4; i += 1) {
+      this.workBlocks[i].a.onclick = () => {
+        this.parent.projectViewer.open(i);
+      };
       this.workBlocks[i].a.style.width = `${128 * this.scale}px`;
       this.workBlocks[i].a.style.height = `${128 * this.scale}px`;
       this.workBlocks[i].a.style.lineHeight = `${128 * this.scale}px`;
@@ -200,6 +203,9 @@ class Text {
         x + (220 + 36) * k * this.scale,
         y
       );
+      this.showRhombuses[i].a.onclick = () => {
+        this.parent.projectViewer.open(i);
+      };
       this.showRhombuses[i].a.style.width = `${220 * this.scale}px`;
       this.showRhombuses[i].a.style.height = `${220 * this.scale}px`;
       this.showRhombuses[i].a.style.lineHeight = `${220 * this.scale}px`;
