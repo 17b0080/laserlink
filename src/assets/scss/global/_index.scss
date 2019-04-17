@@ -1,13 +1,10 @@
-// body[data-page='index'] {
-//   // background-image:  url('../img/bg_mobile.jpg');
-//   height: 3050px;
-//   // background-color: $secondary-color;
-//   background-image: url('../img/Components/Pattern/Image.png');
-// }
-body {
-  height: 10000px;
-  margin: 0;
-  padding: 0;
+body[data-page='index'] {
+  height: 10050px;
+  background-image: url('../img/Components/Pattern/Image.png');
+
+  @include breakpoint(large) {
+    background-image: none;
+  }
 }
 
 .background {
