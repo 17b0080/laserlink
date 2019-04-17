@@ -4,5 +4,7 @@
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: z('fullscreen-overlay');
   background: rgba(13, 10, 20, 0.8);
+  // background: blue;
 }
