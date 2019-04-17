@@ -2,7 +2,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  z-index: z(absolute);
+  z-index: z('hamburger-menu');
   width: rem-calc(44);
   height: rem-calc(44);
 
@@ -15,7 +15,7 @@
   position: absolute;
   top: rem-calc(13);
   right: rem-calc(15);
-  z-index: z(absolute);
+  z-index: z('hamburger-menu');
   width: $hamburger-bar-width;
   height: $hamburger-bar-height + $hamburger-bar-spacing * 2;
 
