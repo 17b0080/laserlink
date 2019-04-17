@@ -78,12 +78,20 @@ class Blocks {
     this.works[index].side.hovered = false;
   }
 
-  handleMouseOverShow(index) {
-    this.showLines.hover(index);
+  handleMouseOverShow(line, item) {
+    this.showLines.showBlocks[line].rhombuses[item].hovered = true;
   }
 
-  handleMouseOutShow(index) {
-    this.showLines.unhover(index);
+  handleMouseOutShow(line, item) {
+    this.showLines.showBlocks[line].rhombuses[item].hovered = false;
+  }
+
+  handleMouseOverProduct(line, item) {
+    this.productLines.productBlocks[line].rhombuses[item].hovered = true;
+  }
+
+  handleMouseOutProduct(line, item) {
+    this.productLines.productBlocks[line].rhombuses[item].hovered = false;
   }
 
   init() {
@@ -154,6 +162,7 @@ class Blocks {
     // Шоу
     this.showLines = new ShowLines({
       parent: this,
+      gradientIndex: 3,
       dy: 4593,
       rhombusWidth: 220,
       rhombusHeight: 220,
@@ -164,6 +173,7 @@ class Blocks {
 
     this.partnerLines = new PartnerLines({
       parent: this,
+      gradientIndex: 4,
       dy: 4593 + this.showLines.height + 872,
       rhombusWidth: 220,
       rhombusHeight: 220,
@@ -174,6 +184,7 @@ class Blocks {
 
     this.productLines = new ProductLines({
       parent: this,
+      gradientIndex: 5,
       dy: 4593 + this.showLines.height + 872 + this.partnerLines.height + 912,
       rhombusWidth: 283,
       rhombusHeight: 283,

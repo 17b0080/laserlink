@@ -4,17 +4,50 @@ function getShowRhombuses(that) {
 
   const a = document.querySelectorAll('.js-show-block__rhombus__button');
   const p = document.querySelectorAll('.js-show-block__rhombus__text');
-  for (let i = 0; i < a.lenght; i += 1) {
+  for (let i = 0; i < a.length; i += 1) {
+    let line = 0;
+    let item = 0;
+    if (i !== 0) {
+      line = Math.floor(i / 4);
+      item = i % 4;
+    }
+
     a[i].onmouseover = () => {
-      that.parent.blocks.handleMouseOutShow(i);
+      that.parent.blocks.handleMouseOverShow(line, item);
     };
     a[i].onmouseout = () => {
-      that.parent.blocks.handleMouseOverShow(i);
+      that.parent.blocks.handleMouseOutShow(line, item);
     };
     showText.push({ p: p[i], a: a[i] });
   }
 
   return showText;
+}
+
+function getProductRhombuses(that) {
+  const productRhombuses = [];
+
+  const p = document.querySelectorAll('.js-product-block__rhombus__text');
+  const a = document.querySelectorAll('.js-product-block__rhombus__button');
+
+  for (let i = 0; i < a.length; i += 1) {
+    let line = 0;
+    let item = 0;
+    if (i !== 0) {
+      line = Math.floor(i / 3);
+      item = i % 3;
+    }
+
+    a[i].onmouseover = () => {
+      that.parent.blocks.handleMouseOverProduct(line, item);
+    };
+    a[i].onmouseout = () => {
+      that.parent.blocks.handleMouseOutProduct(line, item);
+    };
+    productRhombuses.push({ p: p[i], a: a[i] });
+  }
+
+  return productRhombuses;
 }
 
 function getWorkText() {
@@ -42,6 +75,13 @@ class Text {
     this.parent = opts.parent;
     this.scale = this.parent.scale;
     this.spacing = this.parent.spacing;
+    this.showLines = this.parent.blocks.showLines;
+    this.partnerLines = this.parent.blocks.partnerLines;
+    this.productLines = this.parent.blocks.productLines;
+
+    this.showLinesHeight = this.showLines.height;
+    this.partnerLinesHeight = this.partnerLines.height;
+    this.productLinesHeight = this.productLines.height;
 
     this.content = document.querySelector('div.content');
 
@@ -58,6 +98,7 @@ class Text {
     };
 
     this.showRhombuses = getShowRhombuses(this);
+    this.productRhombuses = getProductRhombuses(this);
 
     this.Partners = {
       h: document.querySelector('.js-partners-block__sub-header'),
@@ -141,8 +182,56 @@ class Text {
         j += 1;
         k = 0;
       }
-      this.showRhombuses[i].p = ;
-      this.showRhombuses[i].a = ;
+      const dx = this.showLines.showBlocks[j].dx;
+      const dy = this.showLines.showBlocks[j].dy;
+      const x = dx * this.scale;
+      const y = dy * this.scale;
+      changeTranslate(
+        this.showRhombuses[i].p,
+        x + (220 + 36) * k * this.scale,
+        y + 220 * this.scale
+      );
+      this.showRhombuses[i].p.style.width = `${220 * this.scale}px`;
+      this.showRhombuses[i].p.style.lineHeight = `${47 * this.scale}px`;
+      this.showRhombuses[i].p.style.height = `${47 * this.scale}px`;
+
+      changeTranslate(
+        this.showRhombuses[i].a,
+        x + (220 + 36) * k * this.scale,
+        y
+      );
+      this.showRhombuses[i].a.style.width = `${220 * this.scale}px`;
+      this.showRhombuses[i].a.style.height = `${220 * this.scale}px`;
+      this.showRhombuses[i].a.style.lineHeight = `${220 * this.scale}px`;
+      k += 1;
+    }
+
+    for (let i = 0, k = 0, j = 0; i < this.productRhombuses.length; i += 1) {
+      if (k === 3) {
+        j += 1;
+        k = 0;
+      }
+      const dx = this.productLines.productBlocks[j].dx;
+      const dy = this.productLines.productBlocks[j].dy;
+      const x = dx * this.scale;
+      const y = dy * this.scale;
+      changeTranslate(
+        this.productRhombuses[i].p,
+        x + (283 + 50) * k * this.scale,
+        y + 283 * this.scale
+      );
+      this.productRhombuses[i].p.style.width = `${283 * this.scale}px`;
+      this.productRhombuses[i].p.style.lineHeight = `${71 * this.scale}px`;
+      this.productRhombuses[i].p.style.height = `${71 * this.scale}px`;
+
+      changeTranslate(
+        this.productRhombuses[i].a,
+        x + (283 + 50) * k * this.scale,
+        y
+      );
+      this.productRhombuses[i].a.style.width = `${283 * this.scale}px`;
+      this.productRhombuses[i].a.style.height = `${283 * this.scale}px`;
+      this.productRhombuses[i].a.style.lineHeight = `${283 * this.scale}px`;
       k += 1;
     }
   }

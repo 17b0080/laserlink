@@ -4,6 +4,7 @@ import Blocks from './blocks';
 import Lines from './lines';
 import Text from './text';
 import Gradients from './gradients';
+import ProjectRhombus from './projectViewer';
 
 // Кросс-браузерная анимация
 if (!window.requestAnimationFrame) {
@@ -22,6 +23,9 @@ class App {
     // Выделение памяти под переменные
     this.windowWidth = window.innerWidth;
     this.windowHeight = window.innerHeight;
+    this.halfWindowWidth = this.windowWidth / 2;
+    this.halfWindowHeight = this.windowHeight / 2;
+
     this.clientHeight = document.body.clientHeight;
 
     // Скалирование
@@ -153,6 +157,7 @@ class App {
   ready() {
     this.readyState += 1;
     if (this.readyState === 1) {
+      this.projectViewer = new ProjectRhombus({ parent: this });
       this.gradients = new Gradients({ parent: this });
       this.lines = new Lines({ parent: this });
       this.text = new Text({ parent: this });
@@ -199,6 +204,8 @@ class App {
     this.gradients.updateXY();
     this.lines.updateXY();
     this.text.updateXY();
+
+    this.projectViewer.updateXY();
   }
 
   render(boolean = false) {
@@ -232,6 +239,13 @@ class App {
           this.gradients.render();
         }
       }
+      // if (
+      //   this.clientX !== this.currentX ||
+      //   (this.projectViewer.open && !this.projectViewer.opened)
+      // ) {
+      //   this.updateXY();
+      //   this.projectViewer.render();
+      // }
     }
   }
 }

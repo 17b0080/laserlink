@@ -1004,7 +1004,6 @@ class WorkBlock {
 
 class ShowRhombus {
   constructor(opts) {
-    window.showrh = this;
     this.parent = opts.parent;
     this.scale = this.parent.scale;
     this.context = this.parent.context;
@@ -1154,10 +1153,14 @@ class ShowRhombus {
 
     if (this.hovered && this.imageReady && !this.showMoreReady) {
       this.showMoreAlpha += 0.05;
+      this.imageAlpha -= 0.05;
       if (this.showMoreAlpha > 1) this.showMoreAlpha = 1;
+      if (this.imageAlpha < 0) this.imageAlpha = 0;
     } else if (!this.hovered && this.imageReady && this.showMoreAlpha !== 0) {
       this.showMoreAlpha -= 0.05;
+      this.imageAlpha += 0.05;
       if (this.showMoreAlpha < 0) this.showMoreAlpha = 0;
+      if (this.imageAlpha > 1) this.imageAlpha = 1;
     }
   }
 
@@ -1397,7 +1400,15 @@ class ShowBlock {
     this.calculateDirt();
     if (!this.onWindow && this.cleared === false) this.clearDirt();
 
-    this.request = this.rhombuses[0].checkRequest();
+    this.request = this.checkRequest();
+  }
+
+  checkRequest() {
+    let request = false;
+    for (let i = 0; i < this.rhombuses.length; i += 1) {
+      request = request || this.rhombuses[i].checkRequest();
+    }
+    return request;
   }
 
   clearDirt() {
@@ -1417,6 +1428,7 @@ class ShowBlock {
         this.y + this.scaledHeight < this.windowHeight + 4)
     ) {
       this.onWindow = true;
+      window.trigger(this.gradientIndex);
     } else {
       this.onWindow = false;
     }
@@ -1432,6 +1444,7 @@ class ShowLines {
     this.scale = this.parent.scale;
     this.currentX = this.parent.currentX;
     this.currentY = this.parent.currentY;
+    this.gradientIndex = opts.gradientIndex;
 
     this.dy = opts.dy;
 
@@ -1519,6 +1532,7 @@ class ShowLines {
         new ShowBlock({
           parent: this.parent,
           context: this.context,
+          gradientIndex: this.gradientIndex,
           rhombusHeight: this.rhombusHeight,
           rhombusWidth: this.rhombusWidth,
           textHeight: this.textHeight,
@@ -1535,9 +1549,6 @@ class ShowLines {
     for (let i = 0; i < this.showBlocks.length; i += 1) {
       this.showBlocks[i].render();
     }
-    this.context.moveTo(1024 - 18, 0);
-    this.context.lineTo(1024 - 18, this.windowHeight);
-    this.context.stroke();
     this.request = this.checkRequest();
   }
 }
@@ -1548,7 +1559,6 @@ class PartnerRhombus {
     this.parent = opts.parent;
     this.scale = this.parent.scale;
     this.context = this.parent.context;
-
     // Смещение оси координат для удобства
     this.x = opts.dx; // скалированная (*)
     this.y = opts.dy; // скалированная (*)
@@ -1811,7 +1821,6 @@ class PartnerBlock {
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.scale = this.parent.scale;
-
     this.windowWidth = this.parent.windowWidth;
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
@@ -1948,6 +1957,7 @@ class PartnerBlock {
         this.y + this.scaledHeight < this.windowHeight + 4)
     ) {
       this.onWindow = true;
+      window.trigger(this.gradientIndex);
     } else {
       this.onWindow = false;
     }
@@ -1957,6 +1967,7 @@ class PartnerBlock {
 class PartnerLines {
   constructor(opts) {
     window.PartnerLines = this;
+    this.gradientIndex = opts.gradientIndex;
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.spacing = this.parent.spacing;
@@ -2049,6 +2060,7 @@ class PartnerLines {
       partnerBlocks.push(
         new PartnerBlock({
           parent: this.parent,
+          gradientIndex: this.gradientIndex,
           context: this.context,
           rhombusHeight: this.rhombusHeight,
           rhombusWidth: this.rhombusWidth,
@@ -2235,9 +2247,13 @@ class ProductRhombus {
 
     if (this.hovered && this.imageReady && !this.showMoreReady) {
       this.showMoreAlpha += 0.05;
+      this.imageAlpha -= 0.05;
       if (this.showMoreAlpha > 1) this.showMoreAlpha = 1;
+      if (this.imageAlpha < 0) this.imageAlpha = 0;
     } else if (!this.hovered && this.imageReady && this.showMoreAlpha !== 0) {
       this.showMoreAlpha -= 0.05;
+      this.imageAlpha += 0.05;
+      if (this.imageAlpha > 1) this.imageAlpha = 1;
       if (this.showMoreAlpha < 0) this.showMoreAlpha = 0;
     }
   }
@@ -2345,6 +2361,7 @@ class ProductRhombus {
 
   checkRequest() {
     let request = false;
+    // console.log(this.showMoreAlpha);
     if (
       (this.upCounter !== 0 && !this.ready) ||
       (this.ready && !this.imageReady) ||
@@ -2479,7 +2496,15 @@ class ProductBlock {
     this.calculateDirt();
     if (!this.onWindow && this.cleared === false) this.clearDirt();
 
-    this.request = this.rhombuses[0].checkRequest();
+    this.request = this.checkRequest();
+  }
+
+  checkRequest() {
+    let request = false;
+    for (let i = 0; i < this.rhombuses.length; i += 1) {
+      request = request || this.rhombuses[i].checkRequest();
+    }
+    return request;
   }
 
   clearDirt() {
@@ -2499,6 +2524,7 @@ class ProductBlock {
         this.y + this.scaledHeight < this.windowHeight + 4)
     ) {
       this.onWindow = true;
+      window.trigger(this.gradientIndex);
     } else {
       this.onWindow = false;
     }
@@ -2514,6 +2540,8 @@ class ProductLines {
     this.scale = this.parent.scale;
     this.currentX = this.parent.currentX;
     this.currentY = this.parent.currentY;
+
+    this.gradientIndex = opts.gradientIndex;
 
     this.dy = opts.dy;
 
@@ -2600,6 +2628,7 @@ class ProductLines {
         (this.linesWithImages[i].length - 1) * this.spaceBetweenRhombuses;
       productBlocks.push(
         new ProductBlock({
+          gradientIndex: this.gradientIndex,
           parent: this.parent,
           context: this.context,
           rhombusHeight: this.rhombusHeight,

@@ -15,6 +15,7 @@ class Lines {
     this.canvas.height = this.windowHeight / 2;
 
     this.showLinesHeight = this.parent.blocks.showLines.height;
+    this.partnerLinesHeight = this.parent.blocks.partnerLines.height;
 
     this.lines = [
       { x0: 498, y0: -18, x1: 312, y1: 168 },
@@ -32,9 +33,9 @@ class Lines {
       },
       {
         x0: 530 + 325,
-        y0: this.showAndPartnersY + 257,
+        y0: 4593 + this.showLinesHeight + 872 + this.partnerLinesHeight + 260,
         x1: 325,
-        y1: this.showAndPartnersY + 257 + 530
+        y1: 5725 + this.showLinesHeight + this.partnerLinesHeight + 530
       }
     ];
   }

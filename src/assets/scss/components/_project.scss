@@ -1,0 +1,32 @@
+.project {
+  position: fixed;
+  display: hidden;
+
+  &_opened {
+    display: block;
+  }
+
+  &__button {
+  }
+
+  &__sitename {
+  }
+
+  &__content {
+    &__arrows {
+    }
+
+    &_text-wrapper {
+      .text-wrapper {
+        &__header {
+        }
+
+        &__text {
+        }
+
+        &__collaboraion {
+        }
+      }
+    }
+  }
+}
