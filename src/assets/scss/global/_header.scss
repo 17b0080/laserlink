@@ -1,0 +1,17 @@
+.header {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: rem-calc(44);
+  font-weight: 300;
+  font-size: 18px;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.8);
+
+  &__label {
+    margin-right: rem-calc(50);
+    // text-align: center;
+  }
+}
