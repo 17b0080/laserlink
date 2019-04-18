@@ -34,7 +34,7 @@
   .hamburger {
     width: $hamburger-bar-width;
     height: $hamburger-bar-height;
-    background: $white;
+    background: $primary-color;
     border-radius: $hamburger-border-radius;
   }
 
@@ -50,7 +50,7 @@
 
     &--animated::after {
       top: 0 !important;
-      background-color: black;
+      background-color: $primary-color;
       transform: rotate(-45deg);
       transition:
         top 300ms cubic-bezier(0.23, 1, 0.32, 1),
@@ -59,7 +59,7 @@
 
     &--animated::before {
       bottom: 0 !important;
-      background-color: black;
+      background-color: $primary-color;
       transform: rotate(45deg);
       transition:
         bottom 300ms cubic-bezier(0.23, 1, 0.32, 1),
