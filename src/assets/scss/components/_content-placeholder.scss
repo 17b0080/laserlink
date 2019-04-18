@@ -1,0 +1,33 @@
+.content-placeholder {
+  position: relative;
+  width: rem-calc(220);
+  height: rem-calc(220);
+  margin-top: rem-calc(50);
+  margin-right: auto;
+  margin-left: auto;
+
+  &__body {
+    position: absolute;
+    top: rem-calc(33);
+    right: rem-calc(33);
+    width: rem-calc(155);
+    height: rem-calc(155);
+    border: 2px solid $primary-color;
+    transform: rotate(45deg);
+  }
+
+  &__number {
+    position: absolute;
+    top: rem-calc(20);
+    right: rem-calc(101);
+  }
+
+  &__icon {
+  }
+
+  &__overlay {
+  }
+
+  &__image-fill {
+  }
+}
