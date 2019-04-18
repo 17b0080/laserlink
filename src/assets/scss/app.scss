@@ -74,13 +74,13 @@
 @import 'global/header';
 @import 'global/menu';
 @import 'global/index';
-// @import 'global/content-wrapper';
+@import 'global/content-wrapper';
 @import 'global/fullscreen-overlay';
 @import 'components/hamburger-menu';
 
 //Components
 @import 'components/gradients';
-// @import 'components/logo';
-// @import 'components/hero-text';
-// @import 'components/projects';
-// @import 'components/content-placeholder';
+@import 'components/logo';
+@import 'components/hero-text';
+@import 'components/mobile-projects';
+@import 'components/content-placeholder';
