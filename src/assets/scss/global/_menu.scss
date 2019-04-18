@@ -11,6 +11,10 @@
   font-weight: 300;
   text-transform: uppercase;
 
+  &--hiden {
+    display: none;
+  }
+
   @include breakpoint(large) {
     display: none;
   }
