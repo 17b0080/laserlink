@@ -15,7 +15,6 @@
   &--opened {
     width: 100vw;
     height: 100vh;
-    // background: red;
   }
 
   &--transparent {
@@ -26,6 +25,9 @@
     position: fixed;
     top: rem-calc(8);
     right: rem-calc(55);
-    z-index: z('header__label');
+
+    @include breakpoint(large) {
+      display: none;
+    }
   }
 }
