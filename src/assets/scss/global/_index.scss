@@ -1,5 +1,6 @@
 body[data-page='index'] {
   height: 10050px;
+  font-size: rem-calc(14);
   background-image: url('../img/Components/Pattern/Image.png');
 
   @include breakpoint(large) {
