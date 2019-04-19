@@ -406,12 +406,7 @@ class ProjectViewer {
   }
 
   clearDirt() {
-    this.context.clearRect(
-      this.halfWindowWidth - 604 - this.currentX,
-      this.halfWindowHeight - 604,
-      1208,
-      1208
-    );
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   render() {
