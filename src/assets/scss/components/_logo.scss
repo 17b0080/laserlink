@@ -1,0 +1,10 @@
+.logo {
+  display: block;
+  margin-top: rem-calc(70);
+  margin-right: auto;
+  margin-left: auto;
+
+  &__text {
+    margin-top: rem-calc(20);
+  }
+}

@@ -1,0 +1,6 @@
+.show-grid {
+  @include xy-grid();
+
+  justify-content: center;
+  margin-top: rem-calc(50);
+}

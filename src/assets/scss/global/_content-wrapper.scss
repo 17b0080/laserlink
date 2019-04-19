@@ -1,0 +1,7 @@
+.content-wrapper {
+  @include xy-grid-container();
+
+  @include breakpoint(medium) {
+    display: none;
+  }
+}

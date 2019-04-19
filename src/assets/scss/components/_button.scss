@@ -1,0 +1,41 @@
+.button {
+  position: relative;
+  width: rem-calc(110);
+  height: rem-calc(110);
+
+  &__body {
+    position: absolute;
+    top: rem-calc(16);
+    right: rem-calc(16);
+    width: rem-calc(77);
+    height: rem-calc(77);
+    border: 2px $primary-color solid;
+    transform: rotate(45deg);
+
+    &::before {
+      position: absolute;
+      top: rem-calc(4);
+      left: rem-calc(4);
+      width: rem-calc(65);
+      height: rem-calc(1);
+      background: $primary-color;
+      content: '';
+    }
+
+    &::after {
+      position: absolute;
+      bottom: rem-calc(4);
+      left: rem-calc(4);
+      width: rem-calc(65);
+      height: rem-calc(1);
+      background: $primary-color;
+      content: '';
+    }
+  }
+
+  &__text {
+    @include absolute-center;
+
+    font-size: rem-calc(14);
+  }
+}

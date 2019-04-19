@@ -1,0 +1,97 @@
+.hamburger-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: z('header') + 1;
+  width: rem-calc(44);
+  height: rem-calc(44);
+
+  @include breakpoint(medium) {
+    display: none;
+  }
+}
+
+.hamburger-menu {
+  position: absolute;
+  top: rem-calc(13);
+  right: rem-calc(15);
+  z-index: z('header') + 1;
+  width: $hamburger-bar-width;
+  height: $hamburger-bar-height + $hamburger-bar-spacing * 2;
+
+  @include breakpoint(medium) {
+    display: none;
+  }
+
+  .hamburger::before,
+  .hamburger::after,
+  .hamburger {
+    width: $hamburger-bar-width;
+    height: $hamburger-bar-height;
+    background: $primary-color;
+    border-radius: $hamburger-border-radius;
+  }
+
+  .hamburger {
+    position: relative;
+    transform: translateY($hamburger-bar-spacing);
+    transition: background-color 300ms;
+
+    &--animated {
+      background-color: transparent !important;
+      transition: background-color 0ms 300ms;
+    }
+
+    &--animated::after {
+      top: 0 !important;
+      background-color: $primary-color;
+      transform: rotate(-45deg);
+      transition:
+        top 300ms cubic-bezier(0.23, 1, 0.32, 1),
+        transform 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1) !important;
+    }
+
+    &--animated::before {
+      bottom: 0 !important;
+      background-color: $primary-color;
+      transform: rotate(45deg);
+      transition:
+        bottom 300ms cubic-bezier(0.23, 1, 0.32, 1),
+        transform 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1) !important;
+    }
+
+    &--black {
+      background-color: black;
+
+      &::after {
+        background-color: black;
+      }
+
+      &::before {
+        background-color: black;
+      }
+    }
+  }
+
+  .hamburger::before {
+    position: absolute;
+    bottom: $hamburger-bar-spacing;
+    left: 0;
+    transition:
+      bottom 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1),
+      transform 300ms cubic-bezier(0.23, 1, 0.32, 1),
+      background-color 600ms 0ms;
+    content: '';
+  }
+
+  .hamburger::after {
+    position: absolute;
+    top: $hamburger-bar-spacing;
+    left: 0;
+    transition:
+      top 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1),
+      transform 300ms cubic-bezier(0.23, 1, 0.32, 1),
+      background-color 600ms 0ms;
+    content: '';
+  }
+}

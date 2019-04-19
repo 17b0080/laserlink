@@ -1,0 +1,22 @@
+.show {
+  margin-top: rem-calc(90);
+
+  &--cell {
+    @include xy-cell(shrink, $gutters: $show-margin-gutters);
+
+    margin-top: 0;
+  }
+
+  &--first {
+    margin-top: rem-calc(50);
+  }
+
+  &__title {
+    margin-top: rem-calc(25);
+    text-align: center;
+  }
+
+  &__text {
+    margin-top: rem-calc(25);
+  }
+}

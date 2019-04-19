@@ -865,6 +865,7 @@ $hamburger-bar-height: rem-calc(3);
 $hamburger-bar-spacing: rem-calc(7);
 $hamburger-ham-time: 300ms;
 $hamburger-border-radius: $hamburger-bar-height;
+
 // 56. Xy Grid
 // -----------
 
@@ -872,8 +873,11 @@ $xy-grid: true;
 $grid-container: $global-width;
 $grid-columns: 12;
 $grid-margin-gutters: (
-  small: 25px,
+  small: 50px,
   medium: 30px
+);
+$show-margin-gutters: (
+  small: 40px
 );
 $grid-padding-gutters: $grid-margin-gutters;
 $grid-container-padding: $grid-padding-gutters;

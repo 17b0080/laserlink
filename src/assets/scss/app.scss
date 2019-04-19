@@ -17,7 +17,7 @@
 // @include foundation-flex-grid;
 
 // Generic components
-@include foundation-button;
+// @include foundation-button;
 // @include foundation-button-group;
 // @include foundation-close-button;
 // @include foundation-label;
@@ -67,21 +67,25 @@
 // @include motion-ui-animations;
 
 //Functions
-// @import 'functions/fonts';
-// @import 'functions/zindex';
+@import 'functions/fonts';
+@import 'functions/zindex';
 
-// Global
-// @import 'global/header';
-// @import 'global/menu';
+//Global
+@import 'global/header';
+@import 'global/menu';
 @import 'global/index';
-// @import 'global/content-wrapper';
-// @import 'global/fullscreen-overlay';
-// @import 'global/hamburger-menu';
+@import 'global/content-wrapper';
+@import 'global/fullscreen-overlay';
 
 //Components
-// @import 'components/gradients';
+@import 'components/gradients';
+@import 'components/logo';
+@import 'components/hamburger-menu';
+@import 'components/hero-text';
+@import 'components/show-grid';
+@import 'components/show-wrapper';
+@import 'components/show';
+@import 'components/button';
+@import 'components/content-placeholder';
+@import 'components/partners';
 @import 'components/project';
-// @import 'components/logo';
-// @import 'components/hero-text';
-// @import 'components/projects';
-// @import 'components/content-placeholder';

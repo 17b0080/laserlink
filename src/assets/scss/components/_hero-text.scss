@@ -1,0 +1,11 @@
+.hero-text {
+  margin-top: rem-calc(72);
+
+  &__header {
+    text-align: center;
+  }
+
+  &__content {
+    margin-top: rem-calc(25);
+  }
+}
