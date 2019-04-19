@@ -13,7 +13,8 @@
         data-src='["http://localhost:8000/assets/img/productImage.png","http://localhost:8000/assets/img/productImage.png","http://localhost:8000/assets/img/productImage.png","http://localhost:8000/assets/img/productImage.png","http://localhost:8000/assets/img/productImage.png"]'>
     </div>
     <div class="js-project-data"
-        data='[{"type": "video","text": "ну какой-то текст","header": "ну какой-то хеадер","src": "ну ссылка"}]'></div>
+        data='[{"text": "Clubmax 2000 – это экономичная и простая в обслуживании лазерная система от компании KVANT, которая отличается продуманным эргономичным дизайном и отличной производительностью. Ее мощности достаточно для проведения профессиональных шоу, рассчитанных на аудиторию до 1800 зрителей, поэтому она отлично подойдет для дискотек и выездных представлений на различных мероприятиях.","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"}]'>
+    </div>
     <div class="js-product-data" data="[]"></div>
 
 </div>
@@ -24,7 +25,7 @@
     <canvas class="background__blocks"></canvas>
     <canvas class="background__lines-n-shines"></canvas>
     <canvas class="background__shines"></canvas>
-    <canvas style="position: fixed; background-color: red" class="background__project"></canvas>
+
 </div>
 
 <div class="content">
@@ -96,4 +97,15 @@
     <a class="content__button js-product-block__rhombus__button"></a>
     <!-- конец автомата -->
     <!-- Конец продуктов -->
+</div>
+
+<div class="project-viewer project-viewer--closed">
+    <canvas class="project-viewer__canvas"></canvas>
+    <div class="project-viewer__content">
+        <h3 class="project-viewer__content__header"></h3>
+        <p class="project-viewer__content__text"></p>
+        <a class="js-close"
+            style="position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; background-color: red"></a>
+    </div>
+    <a class="project-viewer__order-button"></a>
 </div>

@@ -188,13 +188,15 @@ class App {
 
     this.counter += 1;
     // даун до 30 фпс
-    if (this.counter === 1) {
+    if (this.counter === 2) {
       this.counter = 0;
+
+      //
       if (this.windowWidth > 640) {
-        let projectRequest = this.projectViewer.request;
-        let blockRendered = false;
-        let gradientRendered = false;
-        if (!projectRequest) {
+        const projectOnWindow = !this.projectViewer.rhombus.closed;
+        if (!projectOnWindow) {
+          let blockRendered = false;
+          let gradientRendered = false;
           if (
             this.clientX !== this.currentX ||
             this.clientY !== this.currentY ||
@@ -215,13 +217,17 @@ class App {
           if (this.gradients.request && !gradientRendered) {
             this.gradients.render();
           }
-        }  {
+        } else {
+          let projectRendered = false;
           if (
             this.clientX !== this.currentX ||
-            this.clientY !== this.currentY ||
-            boolean
+            this.clientY !== this.currentY
           ) {
             this.updateXY();
+            this.projectViewer.render();
+            projectRendered = true;
+          }
+          if (!this.projectRendered && this.projectViewer.request) {
             this.projectViewer.render();
           }
         }
