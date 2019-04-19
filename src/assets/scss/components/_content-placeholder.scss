@@ -6,6 +6,11 @@
   margin-right: auto;
   margin-left: auto;
 
+  &--small {
+    width: rem-calc(142);
+    height: rem-calc(142);
+  }
+
   &__body {
     position: absolute;
     top: rem-calc(33);
@@ -16,6 +21,13 @@
     overflow: hidden;
     border: 2px solid $primary-color;
     transform: rotate(45deg);
+
+    &--small {
+      top: rem-calc(20);
+      right: rem-calc(20);
+      width: rem-calc(100);
+      height: rem-calc(100);
+    }
   }
 
   &__number {
