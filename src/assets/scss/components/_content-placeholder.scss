@@ -69,4 +69,10 @@
     z-index: z('content-wrapper');
     clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
   }
+
+  &__button {
+    position: absolute;
+    top: rem-calc(125);
+    left: rem-calc(165);
+  }
 }
