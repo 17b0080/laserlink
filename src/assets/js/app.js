@@ -46,9 +46,9 @@ class App {
     this.clientY = window.pageYOffset;
     this.currentY = this.clientY;
 
-    this.logoImageSrc = 'http://localhost:8000/assets/img/logoImage.png';
+    this.logoImageSrc = './assets/img/logoImage.png';
 
-    this.hoverImageSrc = 'http://localhost:8000/assets/img/hover.png';
+    this.hoverImageSrc = './assets/img/hover.png';
 
     this.workImagesSrc = JSON.parse(
       document.querySelector('.js-work-images').getAttribute('data-src')
@@ -58,8 +58,7 @@ class App {
       document.querySelector('.js-show-images').getAttribute('data-src')
     );
 
-    this.showMoreHoverSrc =
-      'http://localhost:8000/assets/img/showRhombusHoverMore.png';
+    this.showMoreHoverSrc = './assets/img/showRhombusHoverMore.png';
 
     this.partnerImagesSrc = JSON.parse(
       document.querySelector('.js-partner-images').getAttribute('data-src')

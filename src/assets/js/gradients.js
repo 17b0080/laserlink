@@ -225,14 +225,10 @@ class Gradients {
       };
     }
 
-    this.images[0].src =
-      'http://192.168.0.16:8000/assets/img/Gradients/gradient1.png';
-    this.images[1].src =
-      'http://192.168.0.16:8000/assets/img/Gradients/gradient2.png';
-    this.images[2].src =
-      'http://192.168.0.16:8000/assets/img/Gradients/gradient3.png';
-    this.images[3].src =
-      'http://192.168.0.16:8000/assets/img/Gradients/gradient4.png';
+    this.images[0].src = './assets/img/Gradients/gradient1.png';
+    this.images[1].src = './assets/img/Gradients/gradient2.png';
+    this.images[2].src = './assets/img/Gradients/gradient3.png';
+    this.images[3].src = './assets/img/Gradients/gradient4.png';
     this.init();
     this.parent.ready();
   }
