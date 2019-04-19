@@ -6,7 +6,7 @@
   width: rem-calc(44);
   height: rem-calc(44);
 
-  @include breakpoint(xlarge) {
+  @include breakpoint(medium) {
     display: none;
   }
 }
@@ -19,13 +19,7 @@
   width: $hamburger-bar-width;
   height: $hamburger-bar-height + $hamburger-bar-spacing * 2;
 
-  @include breakpoint(large) {
-    position: fixed;
-    top: rem-calc(25);
-    right: rem-calc(30);
-  }
-
-  @include breakpoint(xlarge) {
+  @include breakpoint(medium) {
     display: none;
   }
 

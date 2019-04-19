@@ -28,7 +28,7 @@
     top: rem-calc(8);
     right: rem-calc(55);
 
-    @include breakpoint(large) {
+    @include breakpoint(medium) {
       display: none;
     }
   }
