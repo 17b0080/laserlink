@@ -1,4 +1,4 @@
-$z-indexes: ('fullscreen-overlay', 'header', 'background');
+$z-indexes: ('fullscreen-overlay', 'header', 'content-wrapper', 'background');
 
 @function z($name) {
   @if index($z-indexes, $name) {
