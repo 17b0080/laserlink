@@ -1,6 +1,12 @@
 .show {
   margin-top: rem-calc(90);
 
+  &--cell {
+    @include xy-cell(shrink, $gutters: $show-margin-gutters);
+
+    margin-top: 0;
+  }
+
   &--first {
     margin-top: rem-calc(50);
   }
