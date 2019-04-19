@@ -17,7 +17,7 @@
 // @include foundation-flex-grid;
 
 // Generic components
-@include foundation-button;
+// @include foundation-button;
 // @include foundation-button-group;
 // @include foundation-close-button;
 // @include foundation-label;
@@ -76,11 +76,13 @@
 @import 'global/index';
 @import 'global/content-wrapper';
 @import 'global/fullscreen-overlay';
-@import 'components/hamburger-menu';
 
 //Components
 @import 'components/gradients';
 @import 'components/logo';
+@import 'components/hamburger-menu';
 @import 'components/hero-text';
-@import 'components/mobile-projects';
+@import 'components/show-wrapper';
+@import 'components/show';
+@import 'components/button';
 @import 'components/content-placeholder';
