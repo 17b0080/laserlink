@@ -1,7 +1,27 @@
 .partners {
   margin-top: rem-calc(200);
 
+  &__link {
+    // display: block;
+    // width: rem-calc(200);
+    // height: rem-calc(100);
+
+    &--cell {
+      @include xy-cell($gutter-position: left right top);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
   &__title {
     text-align: center;
+  }
+
+  &__image {
+    max-height: rem-calc(100);
+    margin-right: auto;
+    margin-left: auto;
   }
 }
