@@ -1,4 +1,28 @@
 /* globals window document */
+function getWidthAndHeight(width, height, dW, dH) {
+  let scale = 1;
+  let w = width;
+  let h = height;
+
+  if (h < dH) {
+    scale = dH / h;
+    h = dH;
+    w *= scale;
+  }
+
+  if (w < dW) {
+    scale = dW / w;
+    w = dW;
+    h *= scale;
+  }
+  // console.log(`
+  // Getting:
+  // {w: ${width}, h: ${height}}
+  // {dw: ${dW}, dh: ${dH}}
+  // {rw: ${w}, rh: ${h}}`);
+
+  return { w, h };
+}
 
 function changeTranslateX(item, x) {
   // eslint-disable-next-line no-param-reassign
@@ -8,6 +32,100 @@ function changeTranslateX(item, x) {
 function changeTranslate(item, x, y) {
   // eslint-disable-next-line no-param-reassign
   item.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+class Background {
+  constructor(opts) {
+    this.parent = opts.parent;
+    this.image = undefined;
+
+    this.windowWidth = this.parent.windowWidth;
+    this.windowHeight = this.parent.windowHeight;
+
+    this.maxAlpha = 0.5;
+    this.alpha = 0;
+
+    this.time = 300;
+    this.currentFrame = 0;
+    this.frames = Math.round(this.time / 16.6); // 16.6ms на кадр при 60 кадрах/с
+    this.speed = this.maxAlpha / this.frames;
+  }
+
+  open() {
+    this.image = this.parent.backgroundImage;
+
+    const { w, h } = getWidthAndHeight(
+      this.image.width,
+      this.image.height,
+      this.windowWidth,
+      this.windowHeight
+    );
+
+    this.imageWidth = w;
+    this.imageHeight = h;
+
+    this.openRequest = true;
+    this.closed = false;
+    this.request = true;
+  }
+
+  close() {
+    this.closeRequest = true;
+    this.opened = false;
+    this.request = true;
+  }
+
+  updateAlpha() {
+    this.alpha = this.speed * this.currentFrame;
+  }
+
+  nextOpenFrame() {
+    this.currentFrame += 1;
+
+    if (this.currentFrame === this.frames) {
+      this.opened = true;
+      this.openRequest = false;
+    }
+
+    this.updateAlpha();
+  }
+
+  nextCloseFrame() {
+    this.currentFrame -= 1;
+
+    if (this.currentFrame === 0) {
+      this.closeRequest = false;
+      this.closed = true;
+    }
+
+    this.updateAlpha();
+  }
+
+  drawFrame() {
+    console.log(this.alpha);
+    this.parent.context.save();
+    this.parent.context.globalAlpha = this.alpha;
+    this.parent.context.drawImage(
+      this.image,
+      0,
+      0,
+      this.imageWidth,
+      this.imageHeight
+    );
+    this.parent.context.restore();
+  }
+
+  render() {
+    if (this.openRequest) {
+      this.nextOpenFrame();
+    } else if (this.closeRequest) {
+      this.nextCloseFrame();
+    }
+
+    this.drawFrame();
+
+    this.request = this.openRequest || this.closeRequest;
+  }
 }
 
 class VideoRhombus {
@@ -29,8 +147,6 @@ class VideoRhombus {
     this.canvas.width = this.width;
     this.canvas.height = (this.height * 2) / 3;
     this.context = this.canvas.getContext('2d');
-
-    // this.context.save();
 
     this.time = 150;
     this.currentFrame = 0;
@@ -65,6 +181,15 @@ class VideoRhombus {
   }
 
   open() {
+    const { w, h } = getWidthAndHeight(
+      this.parent.video.videoWidth,
+      this.parent.video.videoHeight,
+      this.canvas.width,
+      this.canvas.height
+    );
+
+    this.w = w;
+    this.h = h;
     this.parent.video.play();
     this.openRequest = true;
     this.closed = false;
@@ -81,7 +206,7 @@ class VideoRhombus {
   }
 
   clip() {
-    console.log('clipping');
+    // console.log('clipping');
     this.context.beginPath();
     this.context.moveTo(this.framedDots.x0, this.framedDots.y0);
     this.context.lineTo(this.framedDots.x1, this.framedDots.y1);
@@ -138,7 +263,7 @@ class VideoRhombus {
   }
 
   drawFrame() {
-    this.context.drawImage(this.parent.video, 0, 0);
+    this.context.drawImage(this.parent.video, 0, 0, this.w, this.h);
     this.parent.context.drawImage(
       this.canvas,
       -this.currentX * 1.2 + this.halfWindowWidth - this.halfWidth,
@@ -300,55 +425,61 @@ class ProjectViewer {
   constructor(opts) {
     this.parent = opts.parent;
 
+    // JSON с информацией о всех шоу
+    this.data = this.parent.projectData;
+
+    // Смещение по Ох
+    this.currentX = this.parent.currentX;
+
+    // Зададим размеры экрана
     this.windowWidth = this.parent.windowWidth;
     this.halfWindowWidth = this.parent.halfWindowWidth;
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
+    // Получим все блоки, с которыми будут производиться операции
     this.projectWrapper = document.querySelector('.project-viewer');
     this.content = document.querySelector('.project-viewer__content');
     this.header = document.querySelector('.project-viewer__content__header');
     this.text = document.querySelector('.project-viewer__content__text');
     this.orderButton = document.querySelector('.project-viewer__order-button');
     this.video = document.createElement('video');
-    this.background = document.createElement('img');
-
-    this.canvas = document.querySelector('canvas.project-viewer__canvas');
-    this.canvas.width = this.windowWidth;
-    this.canvas.height = this.windowHeight;
-    this.context = this.canvas.getContext('2d');
-
-    this.currentX = this.parent.currentX;
-
-    this.rhombus = new ProjectRhombus({ parent: this });
-    this.videoRhombus = new VideoRhombus({ parent: this });
-
-    this.dirtDots = { x: 0, y: 0, w: 0, y0: 0 };
-
-    this.request = false;
+    this.backgroundImage = document.createElement('img');
 
     document.querySelector('.js-close').onclick = () => {
       console.log('click');
       this.close();
     };
 
-    this.data = this.parent.projectData;
+    // Получим холст, в котором будет производиться отрисовка
+    this.canvas = document.querySelector('canvas.project-viewer__canvas');
+    this.canvas.width = this.windowWidth;
+    this.canvas.height = this.windowHeight;
+    this.context = this.canvas.getContext('2d');
 
+    this.background = new Background({ parent: this });
+    this.rhombus = new ProjectRhombus({ parent: this });
+    this.videoRhombus = new VideoRhombus({ parent: this });
+
+    this.request = false;
+
+    // Зададим параметры видео и привяжем callback к его полной загрузке
     this.video.muted = true;
     this.video.loop = true;
     this.video.oncanplaythrough = () => {
-      console.log('vid loaded');
       this.onLoadEnd();
     };
 
-    this.background.onload = () => {
-      console.log('back loaded');
+    // Привяжем callback загрузки к фотографии заднего фона
+    this.backgroundImage.onload = () => {
       this.onLoadEnd();
     };
 
     this.loadState = 0;
     this.loaded = false;
   }
+
+  handleResize() {}
 
   updateXY() {
     this.currentX = this.parent.currentX / 20;
@@ -361,6 +492,8 @@ class ProjectViewer {
 
     if (this.loadState === 2) {
       this.closeLoader();
+
+      this.background.open();
       this.videoRhombus.open();
       this.rhombus.open();
       this.loaded = true;
@@ -371,7 +504,7 @@ class ProjectViewer {
     this.loadState = 0;
     this.loaded = false;
     this.video.src = this.data[index].video;
-    this.background.src = this.data[index].background;
+    this.backgroundImage.src = this.data[index].background;
     this.index = index;
   }
 
@@ -401,22 +534,24 @@ class ProjectViewer {
     if (this.closed) return 0;
     document.body.style.overflow = '';
     this.projectWrapper.classList.add('project-viewer--closed');
+    this.background.close();
     this.videoRhombus.close();
     this.rhombus.close();
   }
 
   clearDirt() {
-    this.context.clearRect(
-      this.halfWindowWidth - 604 - this.currentX,
-      this.halfWindowHeight - 604,
-      1208,
-      1208
-    );
+    this.context.clearRect(0, 0, this.windowWidth, this.windowHeight);
   }
 
   render() {
+    this.context.fillStyle = '#0d0a14';
+    this.context.fillRect(0, 0, this.windowWidth, this.windowHeight);
     if (this.loaded) {
-      this.clearDirt();
+      // this.clearDirt();
+      // БЭКГРАУНД
+      this.background.render();
+
+      // ТЕКСТ
       changeTranslateX(
         this.content,
         -this.currentX + this.halfWindowWidth - 280
@@ -436,6 +571,7 @@ class ProjectViewer {
         );
       }
 
+      // РОМБЫ
       this.rhombus.render();
       if (this.rhombus.opened || this.rhombus.closeRequest) {
         this.videoRhombus.render();
@@ -446,7 +582,10 @@ class ProjectViewer {
       }
     }
 
-    this.request = this.rhombus.request || this.videoRhombus.request;
+    this.request =
+      this.rhombus.request ||
+      this.videoRhombus.request ||
+      this.background.request;
   }
 }
 
