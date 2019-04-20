@@ -1,12 +1,14 @@
 .project-viewer {
   position: fixed;
+  z-index: z('project-viewer');
   width: 100vw;
   height: 100vh;
+  // animation-duration: 500ms;
 
   &--closed {
     display: none;
 
-    &__content {
+    .project-viewer__content {
       &__header {
         top: 30px;
         opacity: 0;
