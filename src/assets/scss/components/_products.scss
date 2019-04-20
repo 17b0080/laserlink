@@ -1,0 +1,11 @@
+.products {
+  margin-top: rem-calc(200);
+
+  &__subtitle {
+    margin-top: rem-calc(25);
+  }
+
+  &__cell {
+    @include xy-cell();
+  }
+}
