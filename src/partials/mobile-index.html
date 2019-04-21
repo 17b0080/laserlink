@@ -200,9 +200,9 @@
       </div>
     </div>
   </div>
-  <div class="contacts">
-    <h2 class="contacts__title">Оставайтесь на связи !</h2>
-    <div class="contacts__buttons">
+  <div class="contact">
+    <h2 class="contact__title">Оставайтесь на связи !</h2>
+    <div class="contact__buttons">
       <div class="button-wrapper">
         <button href="#" class=" button">
           <div class="button__body"></div>
@@ -218,9 +218,43 @@
         <span class="button__title">Сообщение на почту</span>
       </div>
     </div>
-    <h2 class="contacts__title contacts__title--second">Придумали свое шоу ?</h2>
     <div class="contact-form">
-      <form name="mail" class="mail" method="post"></form>
+      <form name="mail" class="email-form" method="post">
+        <label class="email-form__label" for="email-name">
+          <input name="name" id="email-name" class="email-form__input" type="text" required autocomplete="name"
+            placeholder=" ">
+          <span class="email-form__border"></span>
+          <span class="email-form__placeholder">Ваше имя</span>
+        </label>
+        <label class="email-form__label email-form__label--second" for="email-mail">
+          <input name="email" id="email-mail" class="email-form__input" type="email" required autocomplete="email"
+            placeholder=" ">
+          <span class="email-form__border"></span>
+          <span class="email-form__placeholder">Ваша почта</span>
+        </label>
+        <div class="email-form__textarea">
+          <textarea class="email-form__message" name="message" id="" rows="5" placeholder=" "></textarea>
+          <span class="email-form__border"></span>
+          <span class="email-form__placeholder email-form__placeholder--textarea ">Сообщение
+          </span>
+        </div>
+        <button type="submit" class="button email-form__button">
+          <div class="button__body"></div>
+          <p class="button__text">Отправить</p>
+        </button>
+      </form>
+      <form name="mail" class="phone-form" method="post">
+        <label class="email-form__label" for="email-name">
+          <input name="name" id="email-name" class="email-form__input" type="tel" required autocomplete="tel"
+            placeholder=" ">
+          <span class="email-form__border"></span>
+          <!-- <span class="email-form__placeholder">Номер Телефона</span> -->
+        </label>
+        <button type="submit" class="button email-form__button email-form__button--phone">
+          <div class="button__body"></div>
+          <p class="button__text">Отправить</p>
+        </button>
+      </form>
     </div>
   </div>
 </div>
