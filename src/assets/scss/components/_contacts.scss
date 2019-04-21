@@ -1,2 +1,17 @@
 .contacts {
+  margin-top: rem-calc(200);
+
+  &__title {
+    text-align: center;
+
+    &--second {
+      margin-top: rem-calc(120);
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: rem-calc(35);
+  }
 }

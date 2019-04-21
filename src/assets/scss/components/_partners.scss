@@ -1,6 +1,12 @@
 .partners {
   margin-top: rem-calc(200);
 
+  &-grid {
+    @include xy-grid;
+
+    justify-content: center;
+  }
+
   &__link {
     // display: block;
     // width: rem-calc(200);

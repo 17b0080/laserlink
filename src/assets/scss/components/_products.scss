@@ -1,6 +1,10 @@
 .products {
   margin-top: rem-calc(200);
 
+  &-grid {
+    @include xy-grid;
+  }
+
   &__subtitle {
     margin-top: rem-calc(25);
   }
