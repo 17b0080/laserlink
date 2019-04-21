@@ -1,25 +1,6 @@
 .show {
   margin-top: rem-calc(90);
 
-  &-wrapper {
-    margin-top: rem-calc(200);
-
-    &__title {
-      text-align: center;
-    }
-
-    &__subtitle {
-      margin-top: rem-calc(25);
-    }
-  }
-
-  &-grid {
-    @include xy-grid();
-
-    justify-content: center;
-    margin-top: rem-calc(50);
-  }
-
   &--cell {
     @include xy-cell(shrink, $gutters: $show-margin-gutters);
 
@@ -37,5 +18,24 @@
 
   &__text {
     margin-top: rem-calc(25);
+  }
+
+  &-wrapper {
+    margin-top: rem-calc(200);
+
+    &__title {
+      text-align: center;
+    }
+
+    &__subtitle {
+      margin-top: rem-calc(25);
+    }
+  }
+
+  &-grid {
+    @include xy-grid();
+
+    justify-content: center;
+    margin-top: rem-calc(50);
   }
 }
