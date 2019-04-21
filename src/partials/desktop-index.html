@@ -12,16 +12,16 @@
         data-src='["./assets/img/productImage.png","./assets/img/productImage.png","./assets/img/productImage.png","./assets/img/productImage.png","./assets/img/productImage.png"]'>
     </div>
     <div class="js-project-data"
-        data='[{"text": "Clubmax 2000 – это экономичная и простая в обслуживании лазерная система от компании KVANT, которая отличается продуманным эргономичным дизайном и отличной производительностью. Ее мощности достаточно для проведения профессиональных шоу, рассчитанных на аудиторию до 1800 зрителей, поэтому она отлично подойдет для дискотек и выездных представлений на различных мероприятиях.Clubmax 2000 – это экономичная и простая в обслуживании лазерная система от компании KVANT, которая отличается продуманным эргономичным дизайном и отличной производительностью. Ее мощности достаточно для проведения профессиональных шоу, рассчитанных на аудиторию до 1800 зрителей, поэтому она отлично подойдет для дискотек и выездных представлений на различных мероприятиях.Clubmax 2000 – это экономичная и простая в обслуживании лазерная система от компании KVANT, которая отличается продуманным эргономичным дизайном и отличной производительностью. Ее мощности достаточно для проведения профессиональных шоу, рассчитанных на аудиторию до 1800 зрителей, поэтому она отлично подойдет для дискотек и выездных представлений на различных мероприятиях.","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"}]'>
+        data='[{"text": "Clubmax 2000 – это экономичная и простая в обслуживании лазерная система от компании KVANT, которая отличается продуманным эргономичным дизайном и отличной производительностью. Ее мощности достаточно для проведения профессиональных шоу, рассчитанных на аудиторию до 1800 зрителей, поэтому она отлично подойдет для дискотек и выездных представлений на различных мероприятиях.Clubmax 2000 – это экономичная и простая в обслуживании лазерная система от компании KVANT, которая отличается продуманным эргономичным дизайном и отличной производительностью. Ее мощности достаточно для проведения .","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "https://pics.me.me/anime-tiddies-the-bra-a-literal-interpretation-31692930.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"},{"text": "ну какой-то текст","header": "ну какой-то хеадер","video": "./assets/img/video.mp4", "background": "./assets/img/works/main01.png"}]'>
     </div>
     <div class="js-product-data" data="[]"></div>
 </div>
 
 <div class="background">
     <canvas class="background__patterns"></canvas>
-    <canvas class="background__blocks"></canvas>
-    <canvas class="background__lines-n-shines"></canvas>
     <canvas class="background__shines"></canvas>
+    <canvas class="background__lines-n-shines"></canvas>
+    <canvas class="background__blocks"></canvas>
 </div>
 <div class="content">
     <!-- Начальный блок -->
@@ -91,11 +91,19 @@
 </div>
 <div class="project-viewer project-viewer--closed">
     <canvas class="project-viewer__canvas"></canvas>
+    <div class="project-viewer__arrow-placeholder arrow-placeholder--left">
+        <div class="arrow arrow--left"></div>
+    </div>
+    <div class="project-viewer__arrow-placeholder arrow-placeholder--right">
+        <div class="arrow arrow--right"></div>
+    </div>
     <div class="project-viewer__content">
         <h3 class="project-viewer__content__header"></h3>
         <p class="project-viewer__content__text"></p>
-        <a class="js-close"
-            style="position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; background-color: red"></a>
     </div>
-    <a class="project-viewer__order-button"></a>
+    <div class="project-viewer__order-button-wrapper">
+        <p class="order-button__text">заказать</p>
+        <div class="order-button__border"></div>
+    </div>
+    <div class="project-viewer__close-button"></div>
 </div>
