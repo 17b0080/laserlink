@@ -1,7 +1,16 @@
 .button {
   position: relative;
+  display: block;
   width: rem-calc(110);
   height: rem-calc(110);
+  margin-right: auto;
+  margin-left: auto;
+
+  &-wrapper {
+    width: rem-calc(140);
+    height: rem-calc(140);
+    text-align: center;
+  }
 
   &__body {
     position: absolute;
@@ -36,6 +45,16 @@
   &__text {
     @include absolute-center;
 
+    color: $primary-color;
     font-size: rem-calc(14);
+  }
+
+  &__title {
+    display: inline-block;
+    margin: 0 auto;
+    margin-top: rem-calc(8);
+    font-size: rem-calc(14);
+    text-align: center;
+    vertical-align: middle;
   }
 }
