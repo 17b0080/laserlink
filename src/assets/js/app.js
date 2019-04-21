@@ -95,7 +95,6 @@ class App {
    */
 
   handleResize() {
-    console.log('handle resize');
     // Пересчёт размеров
     this.windowWidth = window.innerWidth;
     this.windowHeight = window.innerHeight;
@@ -226,7 +225,7 @@ class App {
             this.projectViewer.render();
             projectRendered = true;
           }
-          if (!this.projectRendered && this.projectViewer.request) {
+          if (!projectRendered && this.projectViewer.request) {
             this.projectViewer.render();
           }
         }

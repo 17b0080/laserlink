@@ -3,24 +3,6 @@
   z-index: z('project-viewer');
   width: 100vw;
   height: 100vh;
-  // animation-duration: 500ms;
-
-  &--closed {
-    display: none;
-
-    .project-viewer__content {
-      &__header {
-        top: 30px;
-        opacity: 0;
-      }
-
-      &__text {
-      }
-    }
-
-    &__canvas {
-    }
-  }
 
   &__canvas {
     position: absolute;
@@ -30,7 +12,10 @@
     position: absolute;
     top: 50vh;
     width: 560px;
+    // height: 500px;
     margin: 0 auto;
+    overflow: hidden;
+    transition: height 500ms 1000ms;
 
     &__header {
       width: 564px;
@@ -71,6 +56,16 @@
 
     &__text {
       transform: rotate(-45deg);
+    }
+  }
+
+  &--closed {
+    visibility: hidden;
+    transition: visibility 0ms 1000ms;
+
+    .project-viewer__content {
+      height: 0;
+      transition: height 0ms;
     }
   }
 }

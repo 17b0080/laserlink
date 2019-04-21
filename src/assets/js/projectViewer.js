@@ -1,4 +1,4 @@
-/* globals window document */
+/* globals document */
 function getWidthAndHeight(width, height, dW, dH) {
   let scale = 1;
   let w = width;
@@ -102,7 +102,6 @@ class Background {
   }
 
   drawFrame() {
-    console.log(this.alpha);
     this.parent.context.save();
     this.parent.context.globalAlpha = this.alpha;
     this.parent.context.drawImage(
@@ -192,17 +191,17 @@ class VideoRhombus {
     this.h = h;
     this.parent.video.play();
     this.openRequest = true;
+    this.closeRequest = false;
     this.closed = false;
     this.request = true;
-    console.log('vid opening');
   }
 
   close() {
     this.parent.video.pause();
     this.closeRequest = true;
+    this.openRequest = false;
     this.opened = false;
     this.request = true;
-    console.log('vid closing');
   }
 
   clip() {
@@ -243,7 +242,8 @@ class VideoRhombus {
   nextOpenFrame() {
     this.currentFrame += 1;
 
-    if (this.currentFrame === this.frames) {
+    if (this.currentFrame >= this.frames) {
+      this.currentFrame = this.frames;
       this.opened = true;
       this.openRequest = false;
     }
@@ -254,7 +254,8 @@ class VideoRhombus {
   nextCloseFrame() {
     this.currentFrame -= 1;
 
-    if (this.currentFrame === 0) {
+    if (this.currentFrame <= 0) {
+      this.currentFrame = 0;
       this.closeRequest = false;
       this.closed = true;
     }
@@ -337,16 +338,16 @@ class ProjectRhombus {
 
   open() {
     this.openRequest = true;
+    this.closeRequest = false;
     this.closed = false;
     this.request = true;
-    console.log('rhombus opening');
   }
 
   close() {
     this.closeRequest = true;
+    this.openRequest = false;
     this.opened = false;
     this.request = true;
-    console.log('rhombus closing');
   }
 
   updateXY() {
@@ -375,8 +376,8 @@ class ProjectRhombus {
   nextOpenFrame() {
     this.currentFrame += 1;
 
-    if (this.currentFrame === this.frames) {
-      console.log('opened: true, openRequest: false');
+    if (this.currentFrame >= this.frames) {
+      this.currentFrame = this.frames;
       this.opened = true;
       this.openRequest = false;
       this.parent.onOpened();
@@ -388,8 +389,8 @@ class ProjectRhombus {
   nextCloseFrame() {
     this.currentFrame -= 1;
 
-    if (this.currentFrame === 0) {
-      console.log('closed: true: closeRequst: false');
+    if (this.currentFrame <= 0) {
+      this.currentFrame = 0;
       this.closeRequest = false;
       this.closed = true;
     }
@@ -410,8 +411,10 @@ class ProjectRhombus {
 
   render() {
     if (this.openRequest) {
+      console.log('open req');
       this.nextOpenFrame();
     } else if (this.closeRequest) {
+      console.log('close req');
       this.nextCloseFrame();
     } else if (this.opened) {
       this.updateDots();
@@ -447,7 +450,6 @@ class ProjectViewer {
     this.backgroundImage = document.createElement('img');
 
     document.querySelector('.js-close').onclick = () => {
-      console.log('click');
       this.close();
     };
 
@@ -479,7 +481,11 @@ class ProjectViewer {
     this.loaded = false;
   }
 
-  handleResize() {}
+  handleResize() {
+    this.background.handleResize();
+    this.rhombus.handleResize();
+    this.videoRhombus.handleResize();
+  }
 
   updateXY() {
     this.currentX = this.parent.currentX / 20;
@@ -509,34 +515,43 @@ class ProjectViewer {
   }
 
   openLoader() {
-    console.log('opening loader');
+    // console.log('opening loader');
   }
 
   closeLoader() {
-    console.log('closing loader');
+    // console.log('closing loader');
   }
 
   onOpened() {
+    this.content.style.visibility = 'hidden';
+    this.content.style.height = '';
     this.header.innerHTML = this.data[this.index].header;
     this.text.innerHTML = this.data[this.index].text;
+    const contentHeight = this.content.getBoundingClientRect().height;
+    this.content.style.height = `${contentHeight}px`;
+    this.content.style.visibility = 'visible';
+    this.content.style.transition = `height ${contentHeight * 10}ms`;
   }
 
   open(index) {
-    if (this.opened) return 0;
-    document.body.style.overflow = 'hidden';
-    this.projectWrapper.classList.remove('project-viewer--closed');
-    console.log('fill background');
-    this.openLoader();
-    this.loadData(index);
+    if (!this.opened) {
+      document.body.style.overflow = 'hidden';
+      this.projectWrapper.classList.remove('project-viewer--closed');
+      this.openLoader();
+      this.loadData(index);
+    }
   }
 
   close() {
-    if (this.closed) return 0;
-    document.body.style.overflow = '';
-    this.projectWrapper.classList.add('project-viewer--closed');
-    this.background.close();
-    this.videoRhombus.close();
-    this.rhombus.close();
+    if (!this.closed) {
+      document.body.style.overflow = '';
+      this.projectWrapper.classList.add('project-viewer--closed');
+      this.background.close();
+      this.videoRhombus.close();
+      this.rhombus.close();
+
+      this.content.style.visibility = 'hidden';
+    }
   }
 
   clearDirt() {
