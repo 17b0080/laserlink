@@ -1,0 +1,166 @@
+.email-form {
+  display: none;
+
+  &__label {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: rem-calc(24);
+    cursor: text;
+
+    &--second {
+      margin-top: rem-calc(50);
+    }
+
+    &:focus {
+      &__border {
+        background: #7fb2f0;
+      }
+    }
+  }
+
+  &__input {
+    width: 100%;
+    height: rem-calc(24);
+    margin: 0;
+    padding: 0;
+    color: $primary-color;
+    font-size: rem-calc(17);
+    line-height: 1;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    outline: none;
+    box-shadow: none;
+    appearance: none;
+
+    &:focus {
+      background: none;
+      border: 0;
+      outline: none;
+      box-shadow: none;
+    }
+
+    &:not(:focus):placeholder-shown {
+      + .email-form__border {
+        border-bottom: 2px solid $primary-color;
+      }
+    }
+
+    &:placeholder-shown {
+      + .email-form__border {
+        border-bottom: 2px solid #7fb2f0;
+      }
+    }
+
+    &:focus {
+      + .email-form__border {
+        border-bottom: 2px solid #7fb2f0;
+      }
+    }
+
+    &:invalid:not(:placeholder-shown) {
+      + .email-form__border {
+        border-bottom: 2px solid #ff6f69;
+      }
+    }
+
+    // &:valid {
+    //   + .email-form__border {
+    //     border-bottom: 2px solid #bdf271;
+    //   }
+    // }
+  }
+
+  &__placeholder {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: $primary-color;
+    font-size: rem-calc(20);
+    line-height: rem-calc(24);
+    transition: all 450ms;
+
+    &--top {
+      bottom: rem-calc(20);
+      font-size: rem-calc(14);
+    }
+
+    &--textarea {
+      top: rem-calc(0);
+      bottom: auto;
+    }
+
+    &--textarea-top {
+      top: rem-calc(-22);
+      font-size: rem-calc(14);
+    }
+  }
+
+  &__border {
+    position: absolute;
+    bottom: rem-calc(-5);
+    left: 0;
+    width: 100%;
+    height: rem-calc(2);
+    border-bottom: 2px solid $primary-color;
+    // background: $primary-color;
+  }
+
+  &__textarea {
+    position: relative;
+    margin-top: rem-calc(40);
+    background: transparent;
+  }
+
+  &__message {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    color: $primary-color;
+    background: transparent;
+    border: 0;
+    // appearance: none;
+
+    &:focus {
+      background: transparent;
+      background: none;
+      border: 0;
+      outline: none;
+      box-shadow: none;
+    }
+
+    &:not(:focus):placeholder-shown {
+      + .email-form__border {
+        border-bottom: 2px solid $primary-color;
+      }
+    }
+
+    &:placeholder-shown {
+      + .email-form__border {
+        border-bottom: 2px solid #7fb2f0;
+      }
+    }
+
+    &:focus {
+      + .email-form__border {
+        border-bottom: 2px solid #7fb2f0;
+      }
+    }
+
+    // &:valid {
+    //   + .email-form__border {
+    //     border-bottom: 2px solid #bdf271;
+    //   }
+    // }
+  }
+
+  &__button {
+    margin-right: 0;
+    margin-left: auto;
+
+    &--phone {
+      margin-top: rem-calc(30);
+    }
+  }
+}
