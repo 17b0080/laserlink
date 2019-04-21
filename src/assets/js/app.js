@@ -33,6 +33,8 @@ class App {
 
     this.counter = 0;
 
+    this.loader = document.querySelector('.loader-wrapper');
+
     // Выделение памяти под блоки
     this.readyState = 0;
     this.background = undefined;
@@ -70,6 +72,10 @@ class App {
 
     this.projectData = JSON.parse(
       document.querySelector('.js-project-data').getAttribute('data')
+    );
+
+    this.productData = JSON.parse(
+      document.querySelector('.js-product-data').getAttribute('data')
     );
     this.init();
   }
@@ -136,6 +142,7 @@ class App {
       this.text = new Text({ parent: this });
       this.listen();
       this.render(true);
+      this.loader.classList.add('loader-wrapper--closed');
     }
   }
 
@@ -172,7 +179,7 @@ class App {
       this.currentY = this.clientY;
     }
 
-    // this.background.updateXY();
+    this.background.updateXY();
     this.blocks.updateXY();
     this.gradients.updateXY();
     this.lines.updateXY();
@@ -186,7 +193,7 @@ class App {
 
     this.counter += 1;
     // даун до 30 фпс
-    if (this.counter === 2) {
+    if (this.counter >= 2 || boolean) {
       this.counter = 0;
 
       //
@@ -201,7 +208,7 @@ class App {
             boolean
           ) {
             this.updateXY();
-            // this.background.render();
+            this.background.render();
             this.blocks.render();
             this.gradients.render();
             this.lines.render();
