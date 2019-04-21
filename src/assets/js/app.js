@@ -191,7 +191,7 @@ class App {
 
       //
       if (this.windowWidth > 640) {
-        const projectOnWindow = !this.projectViewer.rhombus.closed;
+        const projectOnWindow = !this.projectViewer.closed;
         if (!projectOnWindow) {
           let blockRendered = false;
           let gradientRendered = false;
