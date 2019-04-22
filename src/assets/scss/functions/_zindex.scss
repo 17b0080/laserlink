@@ -2,6 +2,7 @@ $z-indexes: (
   'fullscreen-overlay',
   'project-viewer',
   'header',
+  'product',
   'content-wrapper',
   'background'
 );
@@ -11,7 +12,7 @@ $z-indexes: (
     @return ((length($z-indexes) - index($z-indexes, $name)) + 1) * 10;
   }
 
- @else {
+  @else {
     @warn 'There is no item "#{$name}" in this list; choose one of: #{$z-indexes}';
 
     @return null;
