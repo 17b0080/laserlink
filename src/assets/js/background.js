@@ -48,7 +48,7 @@ class Background {
     this.parent = opts.parent;
 
 
-    this.scale = 2;
+    this.scale = 3/2;
 
     // пропуск кадров
     this.counter = 0;
@@ -129,7 +129,7 @@ class Background {
   drawLines() {
     this.linesContext.beginPath();
     this.linesContext.lineWidth = 2;
-    this.linesContext.strokeStyle = 'rgba(43, 43, 43, 1)';
+    this.linesContext.strokeStyle = 'rgba(43, 43, 43, 0.2)';
 
     // drawLine(this.linesContext, 200 * this.scale, 0, 300 * this.scale, 100 * this.scale);
     // drawLine(this.linesContext, 100 * this.scale, 0, 300 * this.scale, 200 * this.scale);
@@ -158,7 +158,7 @@ class Background {
     drawLine(this.linesContext, 200 * this.scale, 0, 300 * this.scale, 100 * this.scale);
     drawLine(this.linesContext, 100 * this.scale, 0, 300 * this.scale, 200 * this.scale);
     drawLine(this.linesContext, 0, 0, 300 * this.scale, 300 * this.scale);
-    drawLine(this.linesContext, 300 * this.scale, 300 * this.scale, 200 * this.scale, 400) * this.scale;
+    drawLine(this.linesContext, 300 * this.scale, 300 * this.scale, 200 * this.scale, 400 * this.scale) ;
     drawLine(this.linesContext, 200 * this.scale, 400 * this.scale, 0, 200 * this.scale);
     drawLine(this.linesContext, 0, 100 * this.scale, 300 * this.scale, 400 * this.scale);
     drawLine(this.linesContext, 0, 300 * this.scale, 100 * this.scale, 400 * this.scale);
@@ -199,7 +199,7 @@ class Background {
 
     // this.dotsContext.closePath();
     // this.dotsContext.fill();
-    this.dotsContext.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    this.dotsContext.fillStyle = 'rgba(255, 255, 255, 0.2)';
     this.dotsContext.beginPath();
     this.dotsContext.moveTo(0, 0);
     this.dotsContext.arc(0, 0, 3, 0, 2 * Math.PI, true);
