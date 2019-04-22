@@ -99,6 +99,28 @@ class GradientBlock {
 
     this.request = false;
 
+    if(this.images.length===2) {
+       this.gradients = [
+      new Gradient({
+        parent: this,
+        rotate: 0,
+        x0: this.dots.x0,
+        y0: this.dots.y0,
+        dx: -500,
+        dy: -500,
+        image: this.images[0]
+      }),
+      // revert
+      new Gradient({
+        parent: this,
+        rotate: 90,
+        x0: this.dots.x2,
+        y0: this.dots.y2,
+        dx: 500,
+        dy: -500,
+        image: this.images[1]
+      })]
+    } else {
     this.gradients = [
       new Gradient({
         parent: this,
@@ -129,6 +151,7 @@ class GradientBlock {
         image: this.images[2]
       })
     ];
+    }
 
     this.triggered = false;
     this.animated = false;
@@ -142,16 +165,17 @@ class GradientBlock {
   updateXY() {
     this.currentX = this.parent.currentX;
     this.currentY = this.parent.currentY;
-
-    this.gradients[0].updateXY();
-    this.gradients[1].updateXY();
-    this.gradients[2].updateXY();
+    for(let i = 0; i < this.gradients.length; i += 1) {
+this.gradients[i].updateXY();
+    }    
+    
   }
 
   tick() {
-    this.gradients[0].tick();
-    this.gradients[1].tick();
-    this.gradients[2].tick();
+      for(let i = 0; i < this.gradients.length; i += 1) {
+this.gradients[i].tick();
+      }
+    
   }
 
   newTick() {
@@ -165,16 +189,15 @@ class GradientBlock {
       this.animated = true;
     }
     this.g = 1 - (1 - this.k) ** 5;
-
-    this.gradients[0].newTick();
-    this.gradients[1].newTick();
-    this.gradients[2].newTick();
+for(let i = 0; i < this.gradients.length; i += 1) {
+    this.gradients[i].newTick();
+}
   }
 
   draw() {
-    this.gradients[0].draw();
-    this.gradients[1].draw();
-    this.gradients[2].draw();
+    for(let i = 0; i < this.gradients.length; i += 1) {
+    this.gradients[i].draw();
+    }
   }
 
   render() {
@@ -280,7 +303,7 @@ class Gradients {
           x2: -245,
           y2: 760
         },
-        images: [this.images[1], this.images[1], this.images[1]],
+        images: [this.images[2], this.images[2], this.images[2]],
         triggerY: 741
       }),
       new GradientBlock({
@@ -315,16 +338,29 @@ class Gradients {
       new GradientBlock({
         parent: this,
         dots: {
-          x0: 227,
-          y0: 4593 + this.showLinesHeight + 331 + 39,
-          x1: -183,
-          y1: 4593 + this.showLinesHeight + 431 + 39,
-          x2: -137,
-          y2: 4593 + this.showLinesHeight + 281 + 39
+          x0: 230,
+          y0: 4593 + this.showLinesHeight + 331 + 34,
+          // x1: -183,
+          // y1: 4593 + this.showLinesHeight + 431 + 39,
+          x2: -134,
+          y2: 4593 + this.showLinesHeight + 281 + 34
         },
-        images: [this.images[1], this.images[1], this.images[1]],
+        images: [this.images[3], this.images[3]],
         triggerY: 4393 + this.showLinesHeight + 606
       }),
+      // new GradientBlock({
+      //   parent: this,
+      //   dots: {
+      //     x0: 227,
+      //     y0: 4593 + this.showLinesHeight + 331 + 39,
+      //     x1: -183,
+      //     y1: 4593 + this.showLinesHeight + 431 + 39,
+      //     x2: -137,
+      //     y2: 4593 + this.showLinesHeight + 281 + 39
+      //   },
+      //   images: [this.images[1], this.images[1], this.images[1]],
+      //   triggerY: 4393 + this.showLinesHeight + 606
+      // }),
       // Продукция
 
       new GradientBlock({
@@ -332,12 +368,10 @@ class Gradients {
         dots: {
           x0: 167,
           y0: 4593 + this.showLinesHeight + this.partnerLinesHeight + 776,
-          x1: -199.5,
-          y1: 4593 + this.showLinesHeight + this.partnerLinesHeight + 890,
           x2: -177,
           y2: 4593 + this.showLinesHeight + this.partnerLinesHeight + 790
         },
-        images: [this.images[1], this.images[1], this.images[1]],
+        images: [this.images[1], this.images[1]],
         triggerY: 4393 + this.showLinesHeight + this.partnerLinesHeight + 999
       })
     ];

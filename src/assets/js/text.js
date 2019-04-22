@@ -79,6 +79,8 @@ class Text {
     this.partnerLines = this.parent.blocks.partnerLines;
     this.productLines = this.parent.blocks.productLines;
 
+    this.halfWindowWidth = this.parent.windowWidth / 2;
+
     this.showLinesHeight = this.showLines.height;
     this.partnerLinesHeight = this.partnerLines.height;
     this.productLinesHeight = this.productLines.height;
@@ -96,14 +98,19 @@ class Text {
       h: document.querySelector('.js-show-block__sub-header'),
       p: document.querySelector('.js-show-block__text')
     };
-
     this.showRhombuses = getShowRhombuses(this);
-    this.productRhombuses = getProductRhombuses(this);
+    
 
-    this.Partners = {
-      h: document.querySelector('.js-partners-block__sub-header'),
-      p: document.querySelector('.js-partners-block__text')
+    this.partnerBlock = {
+      h: document.querySelectorAll('.js-partner-block__sub-header'),
+      p: document.querySelector('.js-partner-block__text')
     };
+
+    this.productBlock = {
+      h: document.querySelectorAll('.js-product-block__sub-header'),
+      p: document.querySelector('.js-product-block__text')
+    };
+    this.productRhombuses = getProductRhombuses(this);
 
     this.applyStyles();
   }
@@ -211,6 +218,15 @@ class Text {
       this.showRhombuses[i].a.style.lineHeight = `${220 * this.scale}px`;
       k += 1;
     }
+
+    changeTranslate(this.partnerBlock.h[0],114*this.scale,(4593+242+this.showLinesHeight)*this.scale);
+    changeTranslate(this.partnerBlock.h[1],427*this.scale,(4593+739+this.showLinesHeight)*this.scale);
+    changeTranslate(this.partnerBlock.p,114*this.scale,(4593+307+this.showLinesHeight)*this.scale)
+
+
+    changeTranslate(this.productBlock.h[0], 114 * this.scale, (this.showLinesHeight + 840 + 4593 + this.partnerLinesHeight + 242)*this.scale)
+    changeTranslate(this.productBlock.h[1], 418 * this.scale, (this.showLinesHeight + 840 + 4593 + this.partnerLinesHeight + 748)*this.scale)
+    changeTranslate(this.productBlock.p, 114 * this.scale, (this.showLinesHeight + 840 + 4593 + this.partnerLinesHeight + 339)*this.scale)
 
     for (let i = 0, k = 0, j = 0; i < this.productRhombuses.length; i += 1) {
       if (k === 3) {

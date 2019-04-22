@@ -2112,35 +2112,6 @@ class ProductRhombus {
     this.noise = opts.images[1];
     this.showMore = opts.images[2];
 
-    // Скалирование картинки и выдача паттерна
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = this.scaledWidth;
-    this.canvas.height = this.scaledHeight;
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.image, 0, 0, this.scaledWidth, this.scaledHeight);
-    this.imagePattern = this.context.createPattern(this.canvas, 'repeat');
-
-    this.canvas
-      .getContext('2d')
-      .clearRect(0, 0, this.scaledWidth, this.scaledHeight);
-
-    this.canvas
-      .getContext('2d')
-      .clearRect(0, 0, this.scaledWidth, this.scaledHeight);
-
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.noise, 0, 0, this.scaledWidth, this.scaledHeight);
-
-    this.noisePattern = this.context.createPattern(this.canvas, 'repeat');
-
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.showMore, 0, 0, this.scaledWidth, this.scaledHeight);
-
-    this.showMorePattern = this.context.createPattern(this.canvas, 'repeat');
-    // Конец скалирования и выдачи паттерна
   }
 
   /**
@@ -2174,18 +2145,22 @@ class ProductRhombus {
 
   drawImage() {
     this.context.save();
-    this.context.translate(this.x, this.y);
+
+    this.context.beginPath();
+    this.context.moveTo(this.dots.x0, this.dots.y0);
+    this.context.lineTo(this.dots.x1, this.dots.y1);
+    this.context.lineTo(this.dots.x2, this.dots.y2);
+    this.context.lineTo(this.dots.x3, this.dots.y3);
+    this.context.closePath();
+    this.context.clip();
+
     this.context.globalAlpha = this.imageAlpha;
-    this.context.fillStyle = this.noisePattern;
-    this.context.fill();
-    this.context.fillStyle = this.imagePattern;
-    this.context.fill();
+    this.context.drawImage(this.noise, this.x, this.y, this.scaledWidth, this.scaledHeight);
+    this.context.drawImage(this.image, this.x, this.y, this.scaledWidth, this.scaledHeight)
     if (this.imageReady && this.showMoreAlpha > 0) {
-      this.context.fillStyle = this.showMorePattern;
       this.context.globalAlpha = this.showMoreAlpha;
-      this.context.fill();
+      this.context.drawImage(this.showMore, this.x, this.y, this.scaledWidth, this.scaledHeight)
     }
-    this.context.globalAlpha = 1;
     this.context.restore();
   }
 
