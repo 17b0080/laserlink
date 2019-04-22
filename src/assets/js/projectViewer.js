@@ -134,17 +134,17 @@ class VideoRhombus {
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
-    this.width = 700;
+    this.width = 718;
     this.halfWidth = this.width / 2;
-    this.height = 700;
+    this.height = 718;
     this.halfHeight = this.height / 2;
 
     this.canvas = document.createElement('canvas');
     this.canvas.width = this.width;
-    this.canvas.height = (this.height * 2) / 3;
+    this.canvas.height = this.height - 181;
     this.context = this.canvas.getContext('2d');
 
-    this.time = 150;
+    this.time = 50;
     this.currentFrame = 0;
     this.frames = Math.round(this.time / 16.6); // 16.6ms на кадр при 60 кадрах/с
     this.speed = this.halfWidth / this.frames;
@@ -264,7 +264,7 @@ class VideoRhombus {
     this.parent.context.drawImage(
       this.canvas,
       -this.currentX * 1.8 + this.halfWindowWidth - this.halfWidth,
-      this.halfWindowHeight - 600
+      this.halfWindowHeight - 700
     );
   }
 
@@ -297,12 +297,12 @@ class ProjectRhombus {
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
-    this.width = 1200;
-    this.halfWidth = 600;
-    this.height = 1200;
-    this.halfHeight = 600;
+    this.width = 1400;
+    this.halfWidth = 700;
+    this.height = 1400;
+    this.halfHeight = 700;
 
-    this.time = 500;
+    this.time = 250;
     this.currentFrame = 0;
     this.frames = Math.round(this.time / 16.6); // 16.6ms на кадр при 60 кадрах/с
     this.speed = this.halfWidth / this.frames;
@@ -426,6 +426,9 @@ class ProjectViewer {
     // JSON с информацией о всех шоу
     this.data = this.parent.projectData;
 
+    //
+    this.scale = this.parent.scale;
+
     // Смещение по Ох
     this.currentX = this.parent.currentX;
 
@@ -434,8 +437,6 @@ class ProjectViewer {
     this.halfWindowWidth = this.parent.halfWindowWidth;
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
-
-
 
     this.loader = document.querySelector('.loader-wrapper');
     // Получим все блоки, с которыми будут производиться операции
@@ -468,6 +469,14 @@ class ProjectViewer {
     this.request = false;
 
     //
+    this.orderButton.onclick = () => {
+      console.log('click');
+      this.next = false;
+      this.prev = false;
+      this.order = true;
+      this.close();
+    };
+
     this.arrowLeft.onclick = () => {
       this.prev = true;
       this.indexToOpen = (this.index - 1) % this.data.length;
@@ -499,6 +508,7 @@ class ProjectViewer {
     this.closed = true;
     this.next = false;
     this.prev = false;
+    this.order = false;
   }
 
   handleResize() {
@@ -517,8 +527,6 @@ class ProjectViewer {
     this.loadState += 1;
 
     if (this.loadState === 2) {
-      
-
       this.background.open();
       this.videoRhombus.open();
       this.rhombus.open();
@@ -535,12 +543,12 @@ class ProjectViewer {
   }
 
   openLoader() {
-    this.loader.classList.remove('loader-wrapper--closed')
+    this.loader.classList.remove('loader-wrapper--closed');
     // console.log('opening loader');
   }
 
   closeLoader() {
-    this.loader.classList.add('loader-wrapper--closed')
+    this.loader.classList.add('loader-wrapper--closed');
     // console.log('closing loader');
   }
 
@@ -575,9 +583,24 @@ class ProjectViewer {
   }
 
   onClosed() {
-    if (!(this.next || this.prev)) {
+    if (!(this.next || this.prev) && !this.order) {
       this.closed = true;
       this.projectWrapper.style.visibility = 'hidden';
+    } else if (this.order) {
+      this.projectWrapper.style.visibility = 'hidden';
+      this.closed = true;
+      this.order = false;
+      window.scrollTo({
+        top:
+          (4593 +
+            this.parent.blocks.showLines.height +
+            840 +
+            this.parent.blocks.productLines.height +
+            880 +
+            this.parent.blocks.partnerLines.height) *
+          this.scale,
+        behavior: 'smooth'
+      });
     } else {
       this.next = false;
       this.prev = false;

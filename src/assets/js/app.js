@@ -197,7 +197,7 @@ class App {
       this.counter = 0;
 
       //
-      if (this.windowWidth > 640) {
+      if (this.windowWidth >= 990) {
         const projectOnWindow = !this.projectViewer.closed;
         if (!projectOnWindow) {
           let blockRendered = false;

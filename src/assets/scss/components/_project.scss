@@ -11,26 +11,20 @@
   &__content {
     position: absolute;
     top: 50vh;
-    width: 400px;
-    // height: 500px;
-    margin: 0 auto;
+    width: 560px;
     overflow: hidden;
     transition: height 500ms 1000ms;
-
-    @include breakpoint(large) {
-      width: 560px;
-    }
 
     &__header {
       color: #0d0a14;
       font-weight: normal;
       font-size: 31px;
-      font-family: 'SF Pro Text';
+      text-transform: uppercase;
       font-style: normal;
       font-stretch: normal;
-      line-height: 1.19;
       letter-spacing: normal;
       text-align: center;
+      margin-bottom: 30px;
     }
 
     &__text {
@@ -38,7 +32,7 @@
       color: #0d0a14;
       font-weight: normal;
       font-size: 16px;
-      font-family: 'SF Pro Text';
+      // font-family: 'SF Pro Text';
       font-style: normal;
       font-stretch: normal;
       line-height: 1;
