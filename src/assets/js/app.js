@@ -5,6 +5,7 @@ import Lines from './lines';
 import Text from './text';
 import Gradients from './gradients';
 import ProjectViewer from './projectViewer';
+import ProductViewer from './productViewer';
 
 // Кросс-браузерная анимация
 if (!window.requestAnimationFrame) {
@@ -137,6 +138,7 @@ class App {
     this.readyState += 1;
     if (this.readyState === 1) {
       this.projectViewer = new ProjectViewer({ parent: this });
+      this.productViewer = new ProductViewer({parent : this});
       this.gradients = new Gradients({ parent: this });
       this.lines = new Lines({ parent: this });
       this.text = new Text({ parent: this });
@@ -186,6 +188,7 @@ class App {
     this.text.updateXY();
 
     this.projectViewer.updateXY();
+    this.productViewer.updateXY();
   }
 
   render(boolean = false) {
@@ -199,7 +202,8 @@ class App {
       //
       if (this.windowWidth >= 990) {
         const projectOnWindow = !this.projectViewer.closed;
-        if (!projectOnWindow) {
+        const productOnWindow = !this.productViewer.closed;
+        if (!projectOnWindow && !productOnWindow) {
           let blockRendered = false;
           let gradientRendered = false;
           if (
@@ -222,7 +226,7 @@ class App {
           if (this.gradients.request && !gradientRendered) {
             this.gradients.render();
           }
-        } else {
+        } else if(projectOnWindow){
           let projectRendered = false;
           if (
             this.clientX !== this.currentX ||
@@ -234,6 +238,19 @@ class App {
           }
           if (!projectRendered && this.projectViewer.request) {
             this.projectViewer.render();
+          }
+        } else if(productOnWindow){
+          let productRendered = false;
+          if (
+            this.clientX !== this.currentX ||
+            this.clientY !== this.currentY
+          ) {
+            this.updateXY();
+            this.productViewer.render();
+            productRendered = true;
+          }
+          if (!productRendered && this.productViewer.request) {
+            this.productViewer.render();
           }
         }
       }

@@ -124,7 +124,7 @@ class Background {
   }
 }
 
-class VideoRhombus {
+class ImageRhombus {
   constructor(opts) {
     this.parent = opts.parent;
     this.currentX = this.parent.currentX;
@@ -134,9 +134,9 @@ class VideoRhombus {
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
-    this.width = 718;
+    this.width = 600;
     this.halfWidth = this.width / 2;
-    this.height = 718;
+    this.height = 600;
     this.halfHeight = this.height / 2;
 
     this.canvas = document.createElement('canvas');
@@ -151,15 +151,13 @@ class VideoRhombus {
 
     this.framedDots = {
       x0: this.halfWidth + this.currentFrame * this.speed,
-      x1: this.halfWidth - this.currentX,
+      x1: this.halfWidth,
       x2: this.halfWidth + this.currentFrame * this.speed,
-      x3: this.halfWidth + (this.currentFrame * this.speed) / 2,
-      x4: this.halfWidth - (this.currentFrame * this.speed) / 2,
+      x3: this.halfWidth,
       y0: this.halfHeight,
       y1: this.halfHeight - this.currentFrame * this.speed,
       y2: this.halfHeight,
-      y3: this.halfHeight + (this.currentFrame * this.speed) / 2,
-      y4: this.halfHeight + (this.currentFrame * this.speed) / 2
+      y3: this.halfHeight + this.currentFrame * this.speed,
     };
 
     // Покажем внутри какой фигуры мы будем рисовать
@@ -178,15 +176,14 @@ class VideoRhombus {
 
   open() {
     const { w, h } = getWidthAndHeight(
-      this.parent.video.videoWidth,
-      this.parent.video.videoHeight,
+      this.parent.image.width,
+      this.parent.image.height,
       this.canvas.width,
       this.canvas.height
     );
 
     this.w = w;
     this.h = h;
-    this.parent.video.play();
     this.openRequest = true;
     this.closeRequest = false;
     this.closed = false;
@@ -194,44 +191,39 @@ class VideoRhombus {
   }
 
   close() {
-    this.parent.video.pause();
     this.closeRequest = true;
     this.openRequest = false;
     this.opened = false;
     this.request = true;
   }
 
-  clip() {
-    this.context.beginPath();
-    this.context.moveTo(this.framedDots.x0, this.framedDots.y0);
-    this.context.lineTo(this.framedDots.x1, this.framedDots.y1);
-    this.context.lineTo(this.framedDots.x2, this.framedDots.y2);
-    this.context.lineTo(this.framedDots.x3, this.framedDots.y3);
-    this.context.lineTo(this.framedDots.x4, this.framedDots.y4);
-    this.context.closePath();
-    this.context.clip();
+  path() {
+    this.parent.context.beginPath();
+    this.parent.context.moveTo(this.framedDots.x0, this.framedDots.y0);
+    this.parent.context.lineTo(this.framedDots.x1, this.framedDots.y1);
+    this.parent.context.lineTo(this.framedDots.x2, this.framedDots.y2);
+    this.parent.context.lineTo(this.framedDots.x3, this.framedDots.y3);
+    this.parent.context.closePath();
   }
 
   updateDots() {
-    const x0 =
-      this.halfWidth - this.currentFrame * this.speed > 0
-        ? this.halfWidth - this.currentFrame * this.speed
-        : 0;
-    const y1 =
-      this.halfHeight - this.currentFrame * this.speed > 0
-        ? this.halfHeight - this.currentFrame * this.speed
-        : 0;
+    // const x0 =
+    //   this.halfWidth - this.currentFrame * this.speed > 0
+    //     ? this.halfWidth - this.currentFrame * this.speed
+    //     : 0;
+    // const y1 =
+    //   this.halfHeight - this.currentFrame * this.speed > 0
+    //     ? this.halfHeight - this.currentFrame * this.speed
+    //     : 0;
     this.framedDots = {
-      x0,
-      x1: this.halfWidth,
-      x2: this.halfWidth + this.currentFrame * this.speed,
-      x3: this.halfWidth + (this.currentFrame * this.speed) / 2,
-      x4: this.halfWidth - (this.currentFrame * this.speed) / 2,
-      y0: this.halfHeight,
-      y1,
-      y2: this.halfHeight,
-      y3: this.halfHeight + (this.currentFrame * this.speed) / 2,
-      y4: this.halfHeight + (this.currentFrame * this.speed) / 2
+      x0: this.halfWindowWidth - this.currentFrame * this.speed - this.currentX,
+      x1: this.halfWindowWidth - this.currentX,
+      x2: this.halfWindowWidth + this.currentFrame * this.speed - this.currentX,
+      x3: this.halfWindowWidth - this.currentX,
+      y0: this.halfWindowHeight + this.halfHeight - 650,
+      y1: this.halfWindowHeight + this.halfHeight - this.currentFrame * this.speed - 650,
+      y2: this.halfWindowHeight + this.halfHeight - 650,
+      y3: this.halfWindowHeight + this.halfHeight + this.currentFrame * this.speed - 650,
     };
   }
 
@@ -260,12 +252,24 @@ class VideoRhombus {
   }
 
   drawFrame() {
-    this.context.drawImage(this.parent.video, 0, 0, this.w, this.h);
-    this.parent.context.drawImage(
-      this.canvas,
-      -this.currentX * 1.8 + this.halfWindowWidth - this.halfWidth,
-      this.halfWindowHeight - 700
-    );
+    this.parent.context.save();
+    this.path();
+    this.parent.context.clip();
+    this.parent.context.lineWidth = 4; // половина срезается клипом
+    this.parent.context.strokeStyle = '#CCA75C';
+
+    this.parent.context.drawImage(this.parent.image, this.halfWindowWidth - this.halfWidth - this.currentX, this.halfWindowHeight-650, this.width, this.height);
+    this.parent.context.stroke();
+    this.parent.context.restore();
+
+    this.parent.context.fillStyle = '#CCA75C';
+    this.parent.context.beginPath();
+    this.parent.context.moveTo(this.framedDots.x3, this.framedDots.y3 - 8);
+    this.parent.context.lineTo(this.framedDots.x3-10, this.framedDots.y3 - 18);
+    this.parent.context.lineTo(this.framedDots.x3, this.framedDots.y3 - 28);
+    this.parent.context.lineTo(this.framedDots.x3+10, this.framedDots.y3 - 18);
+    this.parent.context.closePath();
+    this.parent.context.fill();
   }
 
   render() {
@@ -273,15 +277,11 @@ class VideoRhombus {
       this.nextOpenFrame();
     } else if (this.closeRequest) {
       this.nextCloseFrame();
-      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     } else if (this.opened) {
       this.updateDots();
     }
 
-    this.context.save();
-    this.clip();
     this.drawFrame();
-    this.context.restore();
 
     this.request = this.openRequest || this.closeRequest;
   }
@@ -419,12 +419,12 @@ class ProjectRhombus {
   }
 }
 
-class ProjectViewer {
+class ProductViewer {
   constructor(opts) {
     this.parent = opts.parent;
 
     // JSON с информацией о всех шоу
-    this.data = this.parent.projectData;
+    this.data = this.parent.productData;
 
     //
     this.scale = this.parent.scale;
@@ -440,31 +440,30 @@ class ProjectViewer {
 
     this.loader = document.querySelector('.loader-wrapper');
     // Получим все блоки, с которыми будут производиться операции
-    this.projectWrapper = document.querySelector('.project-viewer');
-    this.content = document.querySelector('.project-viewer__content');
-    this.header = document.querySelector('.project-viewer__content__header');
-    this.text = document.querySelector('.project-viewer__content__text');
-    this.arrowLeft = document.querySelector('.project-viewer__arrow-placeholder.arrow-placeholder--left');
-    this.arrowRight = document.querySelector('.project-viewer__arrow-placeholder.arrow-placeholder--right');
+    this.productWrapper = document.querySelector('.product-viewer');
+    this.content = document.querySelector('.product-viewer__content');
+    this.text = document.querySelector('.product-viewer__content__text');
+    this.arrowLeft = document.querySelector('.product-viewer__arrow-placeholder.arrow-placeholder--left');
+    this.arrowRight = document.querySelector('.product-viewer__arrow-placeholder.arrow-placeholder--right');
     this.orderButton = document.querySelector(
-      '.project-viewer__order-button-wrapper'
+      '.product-viewer__order-button-wrapper'
     );
-    this.video = document.createElement('video');
+    this.image = document.createElement('img');
     this.backgroundImage = document.createElement('img');
 
-    document.querySelector('.project-viewer__close-button').onclick = () => {
+    document.querySelector('.product-viewer__close-button').onclick = () => {
       this.close();
     };
 
     // Получим холст, в котором будет производиться отрисовка
-    this.canvas = document.querySelector('canvas.project-viewer__canvas');
+    this.canvas = document.querySelector('canvas.product-viewer__canvas');
     this.canvas.width = this.windowWidth;
     this.canvas.height = this.windowHeight;
     this.context = this.canvas.getContext('2d');
 
     this.background = new Background({ parent: this });
     this.rhombus = new ProjectRhombus({ parent: this });
-    this.videoRhombus = new VideoRhombus({ parent: this });
+    this.imageRhombus = new ImageRhombus({ parent: this });
 
     this.request = false;
 
@@ -492,9 +491,7 @@ class ProjectViewer {
     };
 
     // Зададим параметры видео и привяжем callback к его полной загрузке
-    this.video.muted = true;
-    this.video.loop = true;
-    this.video.oncanplaythrough = () => {
+    this.image.onload = () => {
       this.onLoadEnd();
     };
 
@@ -514,13 +511,13 @@ class ProjectViewer {
   handleResize() {
     this.background.handleResize();
     this.rhombus.handleResize();
-    this.videoRhombus.handleResize();
+    this.imageRhombus.handleResize();
   }
 
   updateXY() {
     this.currentX = this.parent.currentX / 20;
     this.rhombus.updateXY();
-    this.videoRhombus.updateXY();
+    this.imageRhombus.updateXY();
   }
 
   onLoadEnd() {
@@ -528,7 +525,7 @@ class ProjectViewer {
 
     if (this.loadState === 2) {
       this.background.open();
-      this.videoRhombus.open();
+      this.imageRhombus.open();
       this.rhombus.open();
       this.loaded = true;
       this.closeLoader();
@@ -538,7 +535,7 @@ class ProjectViewer {
   loadData() {
     this.loadState = 0;
     this.loaded = false;
-    this.video.src = this.data[this.index].video;
+    this.image.src = this.data[this.index].image;
     this.backgroundImage.src = this.data[this.index].background;
   }
 
@@ -555,7 +552,6 @@ class ProjectViewer {
   onOpened() {
     this.content.style.visibility = 'hidden';
     this.content.style.height = '';
-    this.header.innerHTML = this.data[this.index].header;
     this.text.innerHTML = this.data[this.index].text;
     const contentHeight = this.content.getBoundingClientRect().height;
     this.content.style.height = '0px';
@@ -572,11 +568,11 @@ class ProjectViewer {
 
   open(index) {
     if (!this.opened) {
-      this.projectWrapper.style.visibility = 'visible';
+      this.productWrapper.style.visibility = 'visible';
       this.closed = false;
       this.index = index;
       document.body.style.overflow = 'hidden';
-      this.projectWrapper.classList.remove('project-viewer--closed');
+      this.productWrapper.classList.remove('product-viewer--closed');
       this.openLoader();
       this.loadData();
     }
@@ -585,18 +581,18 @@ class ProjectViewer {
   onClosed() {
     if (!(this.next || this.prev) && !this.order) {
       this.closed = true;
-      this.projectWrapper.style.visibility = 'hidden';
+      this.productWrapper.style.visibility = 'hidden';
     } else if (this.order) {
-      this.projectWrapper.style.visibility = 'hidden';
+      this.productWrapper.style.visibility = 'hidden';
       this.closed = true;
       this.order = false;
       window.scrollTo({
         top:
           (4593 +
             this.parent.blocks.showLines.height +
-            840 +
+            892 +
             this.parent.blocks.productLines.height +
-            880 +
+            883 +
             this.parent.blocks.partnerLines.height) *
           this.scale,
         behavior: 'smooth'
@@ -611,9 +607,8 @@ class ProjectViewer {
   close() {
     if (!this.closed) {
       document.body.style.overflow = '';
-      // this.projectWrapper.classList.add('project-viewer--closed');
       this.background.close();
-      this.videoRhombus.close();
+      this.imageRhombus.close();
       this.rhombus.close();
 
       this.content.style.visibility = 'hidden';
@@ -678,7 +673,7 @@ class ProjectViewer {
       // РОМБЫ
       this.rhombus.render();
       if (this.rhombus.opened || this.rhombus.closeRequest) {
-        this.videoRhombus.render();
+        this.imageRhombus.render();
       }
 
       if (this.rhombus.closed) {
@@ -688,12 +683,12 @@ class ProjectViewer {
 
     this.request =
       this.rhombus.request ||
-      this.videoRhombus.request ||
+      this.imageRhombus.request ||
       this.background.request;
   }
 }
 
-export default ProjectViewer;
+export default ProductViewer;
 
 /**
  *

@@ -55,12 +55,11 @@ body[data-page='index'] {
 
   &__main-header {
     position: absolute;
-    width: 682px;
+    width: 100vw;
     height: 48px;
     color: #f5f4ea;
     font-weight: normal;
     font-size: 40px;
-    font-family: 'SF Pro Display';
     font-style: normal;
     font-stretch: normal;
     line-height: 1.2;
@@ -74,7 +73,6 @@ body[data-page='index'] {
     color: #f5f4ea;
     font-weight: normal;
     font-size: 31px;
-    font-family: 'SF Pro Text';
     font-style: normal;
     font-stretch: normal;
     line-height: 1.19;
@@ -88,7 +86,6 @@ body[data-page='index'] {
     color: #f5f4ea;
     font-weight: normal;
     font-size: 18px;
-    font-family: 'SF Pro Text';
     font-style: normal;
     font-stretch: normal;
     line-height: 0.89;
@@ -100,7 +97,6 @@ body[data-page='index'] {
     color: #f5f4ea;
     font-weight: normal;
     font-size: 14px;
-    font-family: 'SF Pro Text';
     font-style: normal;
     font-stretch: normal;
     // line-height: 1.43;

@@ -174,7 +174,7 @@ class Blocks {
     this.partnerLines = new PartnerLines({
       parent: this,
       gradientIndex: 4,
-      dy: 4593 + this.showLines.height + 872,
+      dy: 4593 + this.showLines.height + 883,
       rhombusWidth: 220,
       rhombusHeight: 220,
       spaceBetweenRhombuses: 36,
@@ -185,7 +185,7 @@ class Blocks {
     this.productLines = new ProductLines({
       parent: this,
       gradientIndex: 5,
-      dy: 4593 + this.showLines.height + 872 + this.partnerLines.height + 912,
+      dy: 4593 + this.showLines.height + 872 + this.partnerLines.height + 892,
       rhombusWidth: 283,
       rhombusHeight: 283,
       spaceBetweenRhombuses: 50,

@@ -1,0 +1,137 @@
+.product-viewer {
+  position: fixed;
+  z-index: z('product-viewer');
+  width: 100vw;
+  height: 100vh;
+
+  &__canvas {
+    position: absolute;
+  }
+
+  &__content {
+    position: absolute;
+    top: 50vh;
+    width: 560px;
+    overflow: hidden;
+    transition: height 500ms 1000ms;
+
+    &__header {
+      color: #0d0a14;
+      font-weight: normal;
+      font-size: 31px;
+      text-transform: uppercase;
+      font-style: normal;
+      font-stretch: normal;
+      letter-spacing: normal;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    &__text {
+      margin: 0 auto;
+      color: #0d0a14;
+      font-weight: normal;
+      font-size: 16px;
+      // font-family: 'SF Pro Text';
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1;
+      letter-spacing: normal;
+      text-align: justify;
+      transition-duration: 150ms;
+    }
+  }
+
+  &__order-button-wrapper {
+    position: absolute;
+    width: 116px;
+    height: 116px;
+    visibility: hidden;
+
+    .order-button__text {
+      position: absolute;
+      width: 116px;
+      height: 116px;
+      color: rgb(13, 10, 20);
+      font-weight: 300;
+      font-size: 20px;
+      font-family: 'CocogooseClassic-Light';
+      line-height: 116px;
+      letter-spacing: 0;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .order-button__border {
+      position: absolute;
+      width: 116px;
+      height: 116px;
+
+      &::before {
+        display: block;
+        width: 116px;
+        height: 116px;
+        border: 2px solid #cca75c;
+        transform: rotate(45deg);
+        content: '';
+      }
+    }
+  }
+
+  &__arrow-placeholder {
+    position: absolute;
+    top: 50%;
+    width: 19px;
+    height: 33px;
+    cursor: pointer;
+
+    .arrow {
+      position: relative;
+      top: -50%;
+      display: inline-block;
+      width: 19px;
+      height: 33px;
+
+      &::before {
+        position: absolute;
+        top: 50%;
+        display: block;
+        width: 23px;
+        height: 23px;
+        border: 2px solid black;
+        transform: translateY(-50%) rotate(45deg);
+        content: '';
+      }
+    }
+
+    .arrow--left {
+      &::before {
+        border-top: 0;
+        border-right: 0;
+      }
+    }
+
+    .arrow--right {
+      &::before {
+        right: 5px;
+        border-bottom: 0;
+        border-left: 0;
+        content: '';
+      }
+    }
+  }
+
+  &__close-button {
+    position: absolute;
+    top: 17px;
+    right: 59px;
+    width: 48px;
+    height: 48px;
+    background-color: red;
+    cursor: pointer;
+  }
+
+  &--closed {
+    visibility: hidden;
+  }
+}
