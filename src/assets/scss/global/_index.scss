@@ -3,7 +3,7 @@ body[data-page='index'] {
   font-size: rem-calc(14);
   background-image: url('../img/Components/Pattern/Image.png');
 
-  @include breakpoint(large) {
+  @include breakpoint(medium) {
     background-image: none;
   }
 }
@@ -119,25 +119,22 @@ body[data-page='index'] {
   }
 }
 
-
 .loader-wrapper {
   position: fixed;
-  display: block;
   top: 0;
   left: 0;
+  display: block;
   width: 100vw;
   height: 100vh;
   background-color: #0d0a14;
-  transition: opacity 1000ms, display 0ms;
   opacity: 1;
+  transition: opacity 1000ms, display 0ms;
 
   &--closed {
-    opacity: 0;
     display: none;
+    opacity: 0;
     transition: opacity 1000ms, display 0ms 1000ms;
   }
-
-
 
   &__gif {
     position: absolute;
