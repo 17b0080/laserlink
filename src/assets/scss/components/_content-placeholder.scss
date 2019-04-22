@@ -109,11 +109,19 @@
   }
 
   &__image-fill {
-    position: absolute;
-    top: 0;
-    right: 0;
+    @include absolute-center;
+
     z-index: z('content-wrapper');
+    max-height: rem-calc(220);
     clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+
+    &--small {
+      max-height: rem-calc(142);
+    }
+
+    &--product {
+      max-height: rem-calc(400);
+    }
   }
 
   &__button {
@@ -138,7 +146,7 @@
       margin-bottom: 0;
       font-size: rem-calc(18);
       text-align: center;
-      text-transform: uppercase;
+      // text-transform: uppercase;
 
       &--small {
         font-size: rem-calc(14);
