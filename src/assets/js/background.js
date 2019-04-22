@@ -47,6 +47,9 @@ class Background {
     window.Background = this;
     this.parent = opts.parent;
 
+
+    this.scale = 2;
+
     // пропуск кадров
     this.counter = 0;
     // Выделение памяти под переменные
@@ -74,8 +77,19 @@ class Background {
     this.context.imageSmoothingEnabled = false;
 
     // Выделение памяти под паттерны
-    this.lines = undefined;
-    this.dots = undefined;
+    this.lines = document.createElement('canvas');
+    this.lines.width = 300 * this.scale;
+    this.lines.height = 400 * this.scale;
+    this.linesContext = this.lines.getContext('2d');
+    this.drawLines();
+    this.linesPattern = this.context.createPattern(this.lines, 'repeat');
+
+    this.dots = document.createElement('canvas');
+    this.dots.width = 100*this.scale;
+    this.dots.height = 100*this.scale;
+    this.dotsContext = this.dots.getContext('2d');
+    this.drawDots();
+    this.dotsPattern = this.context.createPattern(this.dots, 'repeat');
 
     // Движение
     this.clientX = 0;
@@ -110,6 +124,97 @@ class Background {
   updateXY() {
     this.currentX = this.parent.currentX / 15;
     this.currentY = this.parent.currentY / 3;
+  }
+
+  drawLines() {
+    this.linesContext.beginPath();
+    this.linesContext.lineWidth = 2;
+    this.linesContext.strokeStyle = 'rgba(43, 43, 43, 1)';
+
+    // drawLine(this.linesContext, 200 * this.scale, 0, 300 * this.scale, 100 * this.scale);
+    // drawLine(this.linesContext, 100 * this.scale, 0, 300 * this.scale, 200 * this.scale);
+    // drawLine(this.linesContext, 0, 0, 300 * this.scale, 300 * this.scale);
+    // drawLine(this.linesContext, 300 * this.scale, 300 * this.scale, 200 * this.scale, 400) * this.scale;
+    // drawLine(this.linesContext, 200 * this.scale, 400 * this.scale, 0, 200 * this.scale);
+    // drawLine(this.linesContext, 0, 100 * this.scale, 300 * this.scale, 400 * this.scale);
+    // drawLine(this.linesContext, 0, 300 * this.scale, 100 * this.scale, 400 * this.scale);
+    // drawLine(this.linesContext, 200 * this.scale, 0, 100 * this.scale, 100 * this.scale);
+    // drawLine(this.linesContext, 300 * this.scale, 100 * this.scale, 0, 400 * this.scale);
+    // drawLine(this.linesContext, 300 * this.scale, 300 * this.scale, 200 * this.scale, 400 * this.scale);
+
+    // drawLine(this.linesContext, 200 * this.scale, 0, 200 * this.scale, 400 * this.scale);
+    // drawLine(this.linesContext, 200 * this.scale, 400 * this.scale, 300 * this.scale, 400 * this.scale);
+    // drawLine(this.linesContext, 300 * this.scale, 400 * this.scale, 300 * this.scale, 0);
+    // drawLine(this.linesContext, 300 * this.scale, 0, 200 * this.scale, 0);
+    // drawLine(this.linesContext, 200 * this.scale, 100 * this.scale, 100 * this.scale, 100 * this.scale);
+    // drawLine(this.linesContext, 100 * this.scale, 100 * this.scale, 100 * this.scale, 300 * this.scale);
+    // drawLine(this.linesContext, 100 * this.scale, 300 * this.scale, 200 * this.scale, 300 * this.scale);
+    // drawLine(this.linesContext, 100 * this.scale, 200 * this.scale, 0, 200 * this.scale);
+    // drawLine(this.linesContext, 0, 0, 0, 400 * this.scale);
+
+
+
+
+    drawLine(this.linesContext, 200 * this.scale, 0, 300 * this.scale, 100 * this.scale);
+    drawLine(this.linesContext, 100 * this.scale, 0, 300 * this.scale, 200 * this.scale);
+    drawLine(this.linesContext, 0, 0, 300 * this.scale, 300 * this.scale);
+    drawLine(this.linesContext, 300 * this.scale, 300 * this.scale, 200 * this.scale, 400) * this.scale;
+    drawLine(this.linesContext, 200 * this.scale, 400 * this.scale, 0, 200 * this.scale);
+    drawLine(this.linesContext, 0, 100 * this.scale, 300 * this.scale, 400 * this.scale);
+    drawLine(this.linesContext, 0, 300 * this.scale, 100 * this.scale, 400 * this.scale);
+    drawLine(this.linesContext, 200 * this.scale, 0, 100 * this.scale, 100 * this.scale);
+    drawLine(this.linesContext, 300 * this.scale, 100 * this.scale, 0, 400 * this.scale);
+    drawLine(this.linesContext, 300 * this.scale, 300 * this.scale, 200 * this.scale, 400 * this.scale);
+
+    drawLine(this.linesContext, 200 * this.scale, 0, 200 * this.scale, 400 * this.scale);
+    drawLine(this.linesContext, 200 * this.scale, 400 * this.scale, 300 * this.scale, 400 * this.scale);
+    drawLine(this.linesContext, 300 * this.scale, 400 * this.scale, 300 * this.scale, 0);
+    drawLine(this.linesContext, 300 * this.scale, 0, 200 * this.scale, 0);
+    drawLine(this.linesContext, 200 * this.scale, 100 * this.scale, 100 * this.scale, 100 * this.scale);
+    drawLine(this.linesContext, 100 * this.scale, 100 * this.scale, 100 * this.scale, 300 * this.scale);
+    drawLine(this.linesContext, 100 * this.scale, 300 * this.scale, 200 * this.scale, 300 * this.scale);
+    drawLine(this.linesContext, 100 * this.scale, 200 * this.scale, 0, 200 * this.scale);
+    drawLine(this.linesContext, 0, 0, 0, 400 * this.scale);
+
+    this.linesContext.closePath();
+    this.linesContext.stroke();
+    console.log('stroke');
+  }
+
+  drawDots() {
+    console.log('draw dots');
+    // this.dotsContext.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    // this.dotsContext.beginPath();
+    // this.dotsContext.moveTo(0, 0);
+    // this.dotsContext.arc(0, 0, 3, 0, 2 * Math.PI, true);
+
+    // this.dotsContext.moveTo(100, 0);
+    // this.dotsContext.arc(100, 0, 3, 0, 2 * Math.PI, true);
+
+    // this.dotsContext.moveTo(0, 100);
+    // this.dotsContext.arc(0, 100, 3, 0, 2 * Math.PI, true);
+
+    // this.dotsContext.moveTo(100, 100);
+    // this.dotsContext.arc(100, 100, 3, 0, 2 * Math.PI, true);
+
+    // this.dotsContext.closePath();
+    // this.dotsContext.fill();
+    this.dotsContext.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    this.dotsContext.beginPath();
+    this.dotsContext.moveTo(0, 0);
+    this.dotsContext.arc(0, 0, 3, 0, 2 * Math.PI, true);
+
+    this.dotsContext.moveTo(100*this.scale, 0);
+    this.dotsContext.arc(100*this.scale, 0, 3, 0, 2 * Math.PI, true);
+
+    this.dotsContext.moveTo(0, 100*this.scale);
+    this.dotsContext.arc(0, 100*this.scale, 3, 0, 2 * Math.PI, true);
+
+    this.dotsContext.moveTo(100*this.scale, 100*this.scale);
+    this.dotsContext.arc(100*this.scale, 100*this.scale, 3, 0, 2 * Math.PI, true);
+
+    this.dotsContext.closePath();
+    this.dotsContext.fill();
   }
 
   renderLines() {
@@ -301,9 +406,47 @@ class Background {
 
   render() {
     this.context.clearRect(0, 0, this.windowWidth, this.windowHeight);
-    // this.renderDots('rgba(255, 255, 255, 0.5)', 1 / 4);
-    this.renderLines();
-    this.renderDots('rgba(255, 255, 255, 0.5)', 3 / 2);
+    this.context.save();
+    this.context.translate(
+      ((-this.currentX * 1) / 2) % 300*this.scale,
+      -this.currentY % 400*this.scale
+    );
+    this.context.fillStyle = this.linesPattern;
+    this.context.fillRect(
+      -300*this.scale,
+      -400*this.scale,
+      this.windowWidth + 600*this.scale,
+      this.windowHeight + 800*this.scale
+    );
+    this.context.restore();
+
+    this.context.save();
+    this.context.translate(
+      ((-this.currentX * 4) / 3) % 100*this.scale,
+      -this.currentY % 100*this.scale
+    );
+    this.context.fillStyle = this.dotsPattern;
+    this.context.fillRect(
+      -100*this.scale,
+      -100*this.scale,
+      this.windowWidth + 200*this.scale,
+      this.windowHeight + 200*this.scale
+    );
+    this.context.restore();
+
+    this.context.save();
+    this.context.translate(
+      ((-this.currentX * 1) / 3) % 100*this.scale,
+      -this.currentY % 100*this.scale
+    );
+    this.context.fillStyle = this.dotsPattern;
+    this.context.fillRect(
+      -100*this.scale,
+      -100*this.scale,
+      this.windowWidth + 200*this.scale,
+      this.windowHeight + 200*this.scale
+    );
+    this.context.restore();
   }
 }
 

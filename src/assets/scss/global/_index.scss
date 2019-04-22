@@ -118,3 +118,31 @@ body[data-page='index'] {
     text-transform: uppercase;
   }
 }
+
+
+.loader-wrapper {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0d0a14;
+  transition: opacity 1000ms, display 0ms;
+  opacity: 1;
+
+  &--closed {
+    opacity: 0;
+    display: none;
+    transition: opacity 1000ms, display 0ms 1000ms;
+  }
+
+
+
+  &__gif {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

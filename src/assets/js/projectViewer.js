@@ -72,7 +72,6 @@ class Background {
 
   updateAlpha() {
     this.alpha = this.speed * this.currentFrame;
-    // console.log(this.alpha);
   }
 
   nextOpenFrame() {
@@ -436,6 +435,9 @@ class ProjectViewer {
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
+
+
+    this.loader = document.querySelector('.loader-wrapper');
     // Получим все блоки, с которыми будут производиться операции
     this.projectWrapper = document.querySelector('.project-viewer');
     this.content = document.querySelector('.project-viewer__content');
@@ -515,12 +517,13 @@ class ProjectViewer {
     this.loadState += 1;
 
     if (this.loadState === 2) {
-      this.closeLoader();
+      
 
       this.background.open();
       this.videoRhombus.open();
       this.rhombus.open();
       this.loaded = true;
+      this.closeLoader();
     }
   }
 
@@ -532,10 +535,12 @@ class ProjectViewer {
   }
 
   openLoader() {
+    this.loader.classList.remove('loader-wrapper--closed')
     // console.log('opening loader');
   }
 
   closeLoader() {
+    this.loader.classList.add('loader-wrapper--closed')
     // console.log('closing loader');
   }
 
@@ -573,7 +578,6 @@ class ProjectViewer {
     if (!(this.next || this.prev)) {
       this.closed = true;
       this.projectWrapper.style.visibility = 'hidden';
-      console.log('hide');
     } else {
       this.next = false;
       this.prev = false;
@@ -601,7 +605,6 @@ class ProjectViewer {
   }
 
   render() {
-    // console.log(this.projectWrapper.style.visibility);
     this.context.fillStyle = '#0d0a14';
     this.context.fillRect(0, 0, this.windowWidth, this.windowHeight);
     if (this.loaded) {
@@ -635,10 +638,19 @@ class ProjectViewer {
           this.content.getBoundingClientRect().width / 2
       );
 
-      changeTranslateX(
-        this.orderButton,
-        -this.currentX + this.halfWindowWidth - 58
-      );
+      if (this.rhombus.height > this.windowHeight) {
+        changeTranslate(
+          this.orderButton,
+          -this.currentX + this.halfWindowWidth - 58,
+          this.windowHeight - 90
+        );
+      } else {
+        changeTranslate(
+          this.orderButton,
+          -this.currentX + this.halfWindowWidth - 58,
+          this.halfWindowHeight + 380
+        );
+      }
 
       // РОМБЫ
       this.rhombus.render();

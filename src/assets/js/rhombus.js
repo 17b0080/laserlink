@@ -51,15 +51,6 @@ class FirstRhombus {
     this.imageReady = false;
 
     this.image = opts.image;
-    // Скалирование картинки и выдача паттерна
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = this.scaledWidth;
-    this.canvas.height = this.scaledHeight;
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.image, 0, 0, this.scaledWidth, this.scaledHeight);
-    this.imagePattern = this.context.createPattern(this.canvas, 'repeat');
-    // Конец скалирования и выдачи паттерна
   }
 
   /**
@@ -73,20 +64,11 @@ class FirstRhombus {
   }
 
   handleResize() {
-    this.canvas
-      .getContext('2d')
-      .clearRect(0, 0, this.scaledWidth, this.scaledHeight);
-
     this.scale = this.parent.scale;
     this.scaledWidth = this.width * this.scale;
     this.halfScaledWidth = this.scaledWidth / 2;
     this.scaledHeight = this.height * this.scale;
     this.halfScaledHeight = this.scaledHeight / 2;
-
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.image, 0, 0, this.scaledWidth, this.scaledHeight);
-    this.imagePattern = this.context.createPattern(this.canvas, 'repeat');
 
     this.speed = this.halfScaledWidth / this.counters;
 
@@ -95,10 +77,14 @@ class FirstRhombus {
 
   drawImage() {
     this.context.save();
-    this.context.translate(this.x, this.y);
     this.context.globalAlpha = this.imageAlpha;
-    this.context.fill();
-    this.context.globalAlpha = 1;
+    this.context.drawImage(
+      this.image,
+      this.x,
+      this.y,
+      this.scaledWidth,
+      this.scaledHeight
+    );
     this.context.restore();
   }
 
@@ -207,8 +193,8 @@ class FirstRhombus {
       this.context.lineTo(this.dots.x1, this.dots.y1);
       this.context.lineTo(this.dots.x2, this.dots.y2);
       this.context.lineTo(this.dots.x3, this.dots.y3);
-      this.drawImage();
       this.context.closePath();
+      this.drawImage();
       this.context.stroke();
       this.rendered = true;
     }
@@ -332,7 +318,7 @@ class FirstBlock {
         this.y + this.rhombus.scaledHeight < this.windowHeight + 4)
     ) {
       this.onWindow = true;
-      window.trigger(0);
+      // window.trigger(0);
     } else {
       this.onWindow = false;
     }
@@ -398,32 +384,6 @@ class WorkRhombus {
     this.upperImage = opts.images[0]; // сверху
     this.image = opts.images[1]; // большая
     this.downImage = opts.images[2]; // снизу
-
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = this.scaledWidth;
-    this.canvas.height = this.scaledHeight;
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.image, 0, 0, this.scaledWidth, this.scaledHeight);
-    this.canvas
-      .getContext('2d')
-      .drawImage(
-        this.downImage,
-        161 * this.scale,
-        302 * this.scale,
-        31 * this.scale,
-        31 * this.scale
-      );
-    this.canvas
-      .getContext('2d')
-      .drawImage(
-        this.upperImage,
-        165 * this.scale,
-        28 * this.scale,
-        24 * this.scale,
-        24 * this.scale
-      );
-    this.imagePattern = this.context.createPattern(this.canvas, 'repeat');
   }
 
   updateXY(x, y) {
@@ -441,29 +401,6 @@ class WorkRhombus {
 
     this.x = x;
     this.y = y;
-
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.image, 0, 0, this.scaledWidth, this.scaledHeight);
-    this.canvas
-      .getContext('2d')
-      .drawImage(
-        this.downImage,
-        161 * this.scale,
-        302 * this.scale,
-        31 * this.scale,
-        31 * this.scale
-      );
-    this.canvas
-      .getContext('2d')
-      .drawImage(
-        this.upperImage,
-        165 * this.scale,
-        28 * this.scale,
-        24 * this.scale,
-        24 * this.scale
-      );
-    this.imagePattern = this.context.createPattern(this.canvas, 'repeat');
 
     this.speed = this.halfScaledWidth / this.counters;
 
@@ -522,10 +459,49 @@ class WorkRhombus {
 
   drawImage() {
     this.context.save();
-    this.context.translate(this.x, this.y);
+
+    this.context.beginPath();
+    this.context.moveTo(this.dots.x0, this.dots.y0);
+    this.context.lineTo(this.dots.x1, this.dots.y1);
+    this.context.lineTo(this.dots.x2, this.dots.y2);
+    this.context.lineTo(this.dots.x3, this.dots.y3);
+    this.context.closePath();
+    this.context.clip();
+
     this.context.globalAlpha = this.imageAlpha;
-    this.context.fill();
-    this.context.globalAlpha = 1;
+    this.context.drawImage(
+      this.image,
+      this.x,
+      this.y,
+      this.scaledWidth,
+      this.scaledHeight
+    );
+
+    this.context.globalAlpha = 0.7;
+    this.context.fillStyle = '#0D0A14';
+    this.context.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
+
+    // if (this.imageReady) {
+    //   this.context.globalAlpha = 1;
+    // } else {
+    // this.context.globalAlpha = this.imageAlpha;
+    // }
+    this.context.globalAlpha = this.imageAlpha;
+    this.context.drawImage(
+      this.downImage,
+      this.x + 161 * this.scale,
+      this.y + 302 * this.scale,
+      31 * this.scale,
+      31 * this.scale
+    );
+    this.context.drawImage(
+      this.upperImage,
+      this.x + 165 * this.scale,
+      this.y + 28 * this.scale,
+      24 * this.scale,
+      24 * this.scale
+    );
+
     this.context.restore();
   }
 
@@ -536,7 +512,8 @@ class WorkRhombus {
       this.ready = true;
     }
 
-    if (this.imageAlpha === 1) this.imageReady = true;
+    if (this.imageAlpha >= 1) {
+      this.imageAlpha = 1;this.imageReady = true};
 
     if (!this.upReady) {
       this.upCounter += 1;
@@ -663,11 +640,7 @@ class HoverRhombus {
     this.canvas = document.createElement('canvas');
     this.canvas.width = this.width;
     this.canvas.height = this.height;
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.image, 0, 0, this.width, this.height);
 
-    this.imagePattern = this.context.createPattern(this.canvas, 'repeat');
     this.imageAlpha = 0;
     this.imageCounters = 100;
     this.imageCounter = 0;
@@ -690,11 +663,6 @@ class HoverRhombus {
 
     this.x = x;
     this.y = y;
-
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.image, 0, 0, this.scaledWidth, this.scaledHeight);
-    this.imagePattern = this.context.createPattern(this.canvas, 'repeat');
 
     this.speed = this.halfScaledWidth / this.counters;
 
@@ -722,10 +690,10 @@ class HoverRhombus {
     }
 
     if (this.ready && this.hovered && !this.imageReady) {
-      this.imageAlpha += 0.05;
+      this.imageAlpha += 0.1;
       if (this.imageAlpha > 1) this.imageAlpha = 1;
     } else if (this.ready && !this.hovered && this.imageAlpha !== 0) {
-      this.imageAlpha -= 0.05;
+      this.imageAlpha -= 0.1;
       if (this.imageAlpha < 0) this.imageAlpha = 0;
     }
   }
@@ -774,10 +742,24 @@ class HoverRhombus {
 
   drawImage() {
     this.context.save();
-    this.context.translate(this.x, this.y);
+
+    this.context.beginPath();
+    this.context.moveTo(this.dots.x0, this.dots.y0);
+    this.context.lineTo(this.dots.x1, this.dots.y1);
+    this.context.lineTo(this.dots.x2, this.dots.y2);
+    this.context.lineTo(this.dots.x3, this.dots.y3);
+    this.context.closePath();
+    this.context.clip();
+
     this.context.globalAlpha = this.imageAlpha;
-    this.context.fill();
-    this.context.globalAlpha = 1;
+    this.context.drawImage(
+      this.image,
+      this.x,
+      this.y,
+      this.scaledWidth,
+      this.scaledHeight
+    );
+
     this.context.restore();
   }
 
@@ -948,7 +930,7 @@ class WorkBlock {
         this.sy + 13 * this.scale + this.side.height < this.windowHeight + 4)
     ) {
       this.onWindow = true;
-      this.trigger(this.gradientIndex);
+      // this.trigger(this.gradientIndex);
     } else {
       this.onWindow = false;
     }
@@ -1055,26 +1037,6 @@ class ShowRhombus {
     this.hovered = false;
     this.image = opts.images[0];
     this.showMore = opts.images[1];
-
-    // Скалирование картинки и выдача паттерна
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = this.scaledWidth;
-    this.canvas.height = this.scaledHeight;
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.image, 0, 0, this.scaledWidth, this.scaledHeight);
-    this.imagePattern = this.context.createPattern(this.canvas, 'repeat');
-
-    this.canvas
-      .getContext('2d')
-      .clearRect(0, 0, this.scaledWidth, this.scaledHeight);
-
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.showMore, 0, 0, this.scaledWidth, this.scaledHeight);
-
-    this.showMorePattern = this.context.createPattern(this.canvas, 'repeat');
-    // Конец скалирования и выдачи паттерна
   }
 
   /**
@@ -1096,11 +1058,6 @@ class ShowRhombus {
     this.x = x;
     this.y = y;
 
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.image, 0, 0, this.scaledWidth, this.scaledHeight);
-    this.imagePattern = this.context.createPattern(this.canvas, 'repeat');
-
     this.speed = this.halfScaledWidth / this.counters;
 
     this.calculateDots();
@@ -1108,16 +1065,33 @@ class ShowRhombus {
 
   drawImage() {
     this.context.save();
-    this.context.translate(this.x, this.y);
+
+    this.context.beginPath();
+    this.context.moveTo(this.dots.x0, this.dots.y0);
+    this.context.lineTo(this.dots.x1, this.dots.y1);
+    this.context.lineTo(this.dots.x2, this.dots.y2);
+    this.context.lineTo(this.dots.x3, this.dots.y3);
+    this.context.closePath();
+    this.context.clip();
+
     this.context.globalAlpha = this.imageAlpha;
-    this.context.fillStyle = this.imagePattern;
-    this.context.fill();
+    this.context.drawImage(
+      this.image,
+      this.x,
+      this.y,
+      this.scaledWidth,
+      this.scaledHeight
+    );
     if (this.imageReady && this.showMoreAlpha > 0) {
-      this.context.fillStyle = this.showMorePattern;
       this.context.globalAlpha = this.showMoreAlpha;
-      this.context.fill();
+      this.context.drawImage(
+        this.showMore,
+        this.x,
+        this.y,
+        this.scaledWidth,
+        this.scaledHeight
+      );
     }
-    this.context.globalAlpha = 1;
     this.context.restore();
   }
 
@@ -1428,7 +1402,7 @@ class ShowBlock {
         this.y + this.scaledHeight < this.windowHeight + 4)
     ) {
       this.onWindow = true;
-      window.trigger(this.gradientIndex);
+      // window.trigger(this.gradientIndex);
     } else {
       this.onWindow = false;
     }
@@ -1957,7 +1931,7 @@ class PartnerBlock {
         this.y + this.scaledHeight < this.windowHeight + 4)
     ) {
       this.onWindow = true;
-      window.trigger(this.gradientIndex);
+      // window.trigger(this.gradientIndex);
     } else {
       this.onWindow = false;
     }
@@ -2524,7 +2498,7 @@ class ProductBlock {
         this.y + this.scaledHeight < this.windowHeight + 4)
     ) {
       this.onWindow = true;
-      window.trigger(this.gradientIndex);
+      // window.trigger(this.gradientIndex);
     } else {
       this.onWindow = false;
     }

@@ -7,6 +7,7 @@ class Gradient {
     this.spacing = this.parent.spacing;
     this.currentX = this.parent.currentX;
     this.currentY = this.parent.currentY;
+    this.alpha = 0;
 
     this.request = false;
 
@@ -76,7 +77,6 @@ class Gradient {
 
   draw() {
     this.parent.context.drawImage(this.canvas, this.dots.x, this.dots.y);
-
     this.request = this.g !== 1;
   }
 }
@@ -87,10 +87,12 @@ class GradientBlock {
     this.context = this.parent.context;
     this.scale = this.parent.scale;
 
+    this.triggerY = opts.triggerY * this.scale;
+
     this.currentX = this.parent.currentX;
     this.currentY = this.parent.currentY;
     this.spacing = this.parent.spacing;
-
+    this.alpha = 0;
     this.images = opts.images;
 
     this.dots = opts.dots;
@@ -103,8 +105,8 @@ class GradientBlock {
         rotate: 0,
         x0: this.dots.x0,
         y0: this.dots.y0,
-        dx: -1000,
-        dy: -1000,
+        dx: -500,
+        dy: -500,
         image: this.images[0]
       }),
       new Gradient({
@@ -112,8 +114,8 @@ class GradientBlock {
         rotate: 180,
         x0: this.dots.x1,
         y0: this.dots.y1,
-        dx: -1000,
-        dy: -1000,
+        dx: -500,
+        dy: -500,
         image: this.images[1]
       }),
       // revert
@@ -122,8 +124,8 @@ class GradientBlock {
         rotate: 90,
         x0: this.dots.x2,
         y0: this.dots.y2,
-        dx: 1000,
-        dy: -1000,
+        dx: 500,
+        dy: -500,
         image: this.images[2]
       })
     ];
@@ -131,8 +133,10 @@ class GradientBlock {
     this.triggered = false;
     this.animated = false;
     this.k = 0;
-    this.kStep = 1 / 60;
+    this.kStep = 1 / 10;
     this.g = 1;
+
+    this.delay = 450;
   }
 
   updateXY() {
@@ -151,7 +155,11 @@ class GradientBlock {
   }
 
   newTick() {
-    this.k += 0.01;
+    this.k += 0.005;
+        this.alpha += 0.1;
+    if(this.alpha > 1) {
+      this.alpha = 1;
+    }
     if (this.k > 1) {
       this.k = 1;
       this.animated = true;
@@ -170,18 +178,28 @@ class GradientBlock {
   }
 
   render() {
+    if (!this.triggered) {
+      if (
+        this.triggerY - this.currentY < 0 &&
+        this.triggerY + 20 - this.currentY > 0
+      ) {
+        this.triggered = true;
+      }
+    }
+
     if (this.triggered === true && this.animated === false) {
+      this.context.save();
+      this.context.globalAlpha = this.alpha;
       this.newTick();
       this.draw();
+      this.context.restore();
+
+      this.request = true;
     } else if (this.animated === true) {
       this.tick();
       this.draw();
+      this.request = false;
     }
-
-    this.request =
-      this.gradients[0].request ||
-      this.gradients[1].request ||
-      this.gradients[2].request;
   }
 }
 
@@ -201,7 +219,11 @@ class Gradients {
     this.canvas.width = this.windowWidth;
     this.canvas.height = this.windowHeight;
     this.context = this.canvas.getContext('2d');
-    this.context.globalAlpha = 0.5;
+    this.context.globalAlpha = 1;
+
+    this.showLinesHeight = this.parent.blocks.showLines.height;
+    this.partnerLinesHeight = this.parent.blocks.productLines.height;
+    this.productLinesHeight = this.parent.blocks.productLines.height;
 
     this.imagesStates = 0;
     this.images = [];
@@ -245,7 +267,8 @@ class Gradients {
           x2: -299.5,
           y2: -133.5
         },
-        images: [this.images[3], this.images[3], this.images[3]]
+        images: [this.images[3], this.images[3], this.images[3]],
+        triggerY: 0
       }),
       new GradientBlock({
         parent: this,
@@ -257,19 +280,21 @@ class Gradients {
           x2: -245,
           y2: 760
         },
-        images: [this.images[1], this.images[1], this.images[1]]
+        images: [this.images[1], this.images[1], this.images[1]],
+        triggerY: 741
       }),
       new GradientBlock({
         parent: this,
         dots: {
-          x0: 188,
-          y0: 2264,
-          x1: -300,
-          y1: 2335,
-          x2: -178,
-          y2: 2203
+          x0: 218,
+          y0: 2294,
+          x1: -190,
+          y1: 2365,
+          x2: -201,
+          y2: 2353
         },
-        images: [this.images[1], this.images[1], this.images[1]]
+        images: [this.images[1], this.images[1], this.images[1]],
+        triggerY: 2325
       }),
       // шоу
       new GradientBlock({
@@ -282,35 +307,41 @@ class Gradients {
           x2: -277,
           y2: 4062
         },
-        images: [this.images[1], this.images[1], this.images[1]]
+        images: [this.images[1], this.images[1], this.images[1]],
+        triggerY: 3950
       }),
       // Партнёры
+
       new GradientBlock({
         parent: this,
         dots: {
-          x0: 327,
-          y0: 5511,
+          x0: 227,
+          y0: 4593 + this.showLinesHeight + 331 + 39,
           x1: -183,
-          y1: 5540,
-          x2: -277,
-          y2: 5540
+          y1: 4593 + this.showLinesHeight + 431 + 39,
+          x2: -137,
+          y2: 4593 + this.showLinesHeight + 281 + 39
         },
-        images: [this.images[1], this.images[1], this.images[1]]
+        images: [this.images[1], this.images[1], this.images[1]],
+        triggerY: 4393 + this.showLinesHeight + 606
       }),
       // Продукция
+
       new GradientBlock({
         parent: this,
         dots: {
-          x0: 267,
-          y0: 6790,
+          x0: 167,
+          y0: 4593 + this.showLinesHeight + this.partnerLinesHeight + 776,
           x1: -199.5,
-          y1: 6779.5,
-          x2: -277,
-          y2: 6779.5
+          y1: 4593 + this.showLinesHeight + this.partnerLinesHeight + 890,
+          x2: -177,
+          y2: 4593 + this.showLinesHeight + this.partnerLinesHeight + 790
         },
-        images: [this.images[1], this.images[1], this.images[1]]
+        images: [this.images[1], this.images[1], this.images[1]],
+        triggerY: 4393 + this.showLinesHeight + this.partnerLinesHeight + 999
       })
     ];
+    console.log();
   }
 
   trigger(index) {
@@ -341,6 +372,7 @@ class Gradients {
   render() {
     this.context.clearRect(0, 0, this.windowWidth, this.windowHeight);
     let request = false;
+
     for (let i = 0; i < this.gradients.length; i += 1) {
       this.gradients[i].render();
       request = request || this.gradients[i].request;
