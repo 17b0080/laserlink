@@ -1,0 +1,42 @@
+.product {
+  position: relative;
+  padding-top: rem-calc(120);
+  overflow: hidden;
+
+  &__top {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: z(product);
+    width: 100%;
+    height: rem-calc(118);
+    background: #fefefe;
+    transform: scale(1.1);
+    clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%);
+  }
+
+  &__content {
+    position: relative;
+    padding-top: rem-calc(270);
+    background: #fefefe;
+  }
+
+  &__description {
+    display: inline-block;
+  }
+
+  &__content-placeholder {
+    position: absolute;
+    top: rem-calc(-70%);
+    left: 50%;
+    z-index: z(product) + 1;
+    transform: translateX(-50%);
+  }
+
+  &-container {
+    @include xy-gutters(
+      $gutters: $show-margin-gutters,
+      $gutter-position: top left right bottom
+    );
+  }
+}
