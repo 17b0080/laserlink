@@ -6,29 +6,9 @@
   margin-right: auto;
   margin-left: auto;
 
-  &-wrapper {
-    width: rem-calc(220);
-    height: rem-calc(257);
-    margin-right: auto;
-    margin-left: auto;
-
-    &--small {
-      width: rem-calc(142);
-      height: rem-calc(172);
-    }
-
-    &__title {
-      margin-top: rem-calc(8);
-      margin-bottom: 0;
-      font-size: rem-calc(18);
-      text-align: center;
-      text-transform: uppercase;
-
-      &--small {
-        font-size: rem-calc(14);
-        text-transform: none;
-      }
-    }
+  &--product {
+    width: rem-calc(453);
+    height: rem-calc(453);
   }
 
   &--small {
@@ -46,6 +26,14 @@
     overflow: hidden;
     border: 2px solid $primary-color;
     transform: rotate(45deg);
+
+    &--product {
+      top: rem-calc(65);
+      right: rem-calc(65);
+      width: rem-calc(320);
+      height: rem-calc(320);
+      border: 2px solid $gold;
+    }
 
     &--small {
       top: rem-calc(20);
@@ -91,6 +79,16 @@
     height: rem-calc(30);
   }
 
+  &__symbol {
+    position: absolute;
+    bottom: rem-calc(20);
+    left: rem-calc(222);
+    width: rem-calc(12);
+    height: rem-calc(12);
+    background: $gold;
+    transform: rotate(45deg);
+  }
+
   &__overlay {
     position: absolute;
     top: 0;
@@ -122,5 +120,30 @@
     position: absolute;
     top: rem-calc(125);
     left: rem-calc(165);
+  }
+
+  &-wrapper {
+    width: rem-calc(220);
+    height: rem-calc(257);
+    margin-right: auto;
+    margin-left: auto;
+
+    &--small {
+      width: rem-calc(142);
+      height: rem-calc(172);
+    }
+
+    &__title {
+      margin-top: rem-calc(8);
+      margin-bottom: 0;
+      font-size: rem-calc(18);
+      text-align: center;
+      text-transform: uppercase;
+
+      &--small {
+        font-size: rem-calc(14);
+        text-transform: none;
+      }
+    }
   }
 }
