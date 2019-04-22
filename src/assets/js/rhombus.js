@@ -188,7 +188,6 @@ class FirstRhombus {
       this.context.beginPath();
       this.context.strokeStyle = 'white';
       this.context.strokeWidth = 2;
-      this.context.fillStyle = this.imagePattern;
       this.context.moveTo(this.dots.x0, this.dots.y0);
       this.context.lineTo(this.dots.x1, this.dots.y1);
       this.context.lineTo(this.dots.x2, this.dots.y2);
@@ -1092,6 +1091,10 @@ class ShowRhombus {
         this.scaledHeight
       );
     }
+
+    this.context.globalAlpha = 0.7;
+    this.context.fillStyle = '#0D0A14';
+    this.context.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
     this.context.restore();
   }
 

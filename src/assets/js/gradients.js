@@ -106,8 +106,8 @@ class GradientBlock {
         rotate: 0,
         x0: this.dots.x0,
         y0: this.dots.y0,
-        dx: -500,
-        dy: -500,
+        dx: -1000,
+        dy: -1000,
         image: this.images[0]
       }),
       // revert
@@ -116,8 +116,8 @@ class GradientBlock {
         rotate: 90,
         x0: this.dots.x2,
         y0: this.dots.y2,
-        dx: 500,
-        dy: -500,
+        dx: 1000,
+        dy: -1000,
         image: this.images[1]
       })]
     } else {
@@ -127,8 +127,8 @@ class GradientBlock {
         rotate: 0,
         x0: this.dots.x0,
         y0: this.dots.y0,
-        dx: -500,
-        dy: -500,
+        dx: -1000,
+        dy: -1000,
         image: this.images[0]
       }),
       new Gradient({
@@ -136,8 +136,8 @@ class GradientBlock {
         rotate: 180,
         x0: this.dots.x1,
         y0: this.dots.y1,
-        dx: -500,
-        dy: -500,
+        dx: -1000,
+        dy: -1000,
         image: this.images[1]
       }),
       // revert
@@ -146,8 +146,8 @@ class GradientBlock {
         rotate: 90,
         x0: this.dots.x2,
         y0: this.dots.y2,
-        dx: 500,
-        dy: -500,
+        dx: 1000,
+        dy: -1000,
         image: this.images[2]
       })
     ];
@@ -156,7 +156,7 @@ class GradientBlock {
     this.triggered = false;
     this.animated = false;
     this.k = 0;
-    this.kStep = 1 / 10;
+    this.kStep = 1 / 15;
     this.g = 1;
 
     this.delay = 450;
@@ -204,7 +204,7 @@ for(let i = 0; i < this.gradients.length; i += 1) {
     if (!this.triggered) {
       if (
         this.triggerY - this.currentY < 0 &&
-        this.triggerY + 20 - this.currentY > 0
+        this.triggerY + 100 - this.currentY > 0
       ) {
         this.triggered = true;
       }

@@ -237,6 +237,11 @@ class Text {
       const dy = this.productLines.productBlocks[j].dy;
       const x = dx * this.scale;
       const y = dy * this.scale;
+      
+      this.productRhombuses[i].a.onclick = () => {
+        this.parent.productViewer.open(i);
+      };
+
       changeTranslate(
         this.productRhombuses[i].p,
         x + (283 + 50) * k * this.scale,
