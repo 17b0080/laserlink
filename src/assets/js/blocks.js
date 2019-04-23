@@ -194,7 +194,7 @@ class Blocks {
     });
 
     this.works = [this.work1, this.work2, this.work3, this.work4];
-    this.parent.ready();
+    this.parent.onBlockReady();
   }
 
   readyImage() {
