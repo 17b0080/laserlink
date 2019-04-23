@@ -3,7 +3,7 @@ body[data-page='index'] {
   font-size: rem-calc(14);
   background-image: url('../img/Components/Pattern/Image.png');
 
-  @include breakpoint(medium) {
+  @include breakpoint(large) {
     background-image: none;
   }
 }
