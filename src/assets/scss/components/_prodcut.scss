@@ -1,6 +1,7 @@
 .product {
   position: relative;
   padding-top: rem-calc(120);
+  padding-bottom: rem-calc(120);
   overflow: hidden;
 
   &__top {
@@ -12,29 +13,35 @@
     height: rem-calc(118);
     background: #fefefe;
     transform: scale(1.1);
-    clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%);
+    clip-path: polygon(30% 0, 70% 0, 100% 100%, 0% 100%);
   }
 
-  &__top {
+  &__bottom {
     position: absolute;
-    top: 0;
     bottom: 0;
+    left: 0;
     z-index: z(product);
     width: 100%;
     height: rem-calc(118);
     background: #fefefe;
     transform: scale(1.1);
-    clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%);
+    clip-path: polygon(0 0, 100% 0%, 70% 100%, 30% 100%);
+  }
+
+  &__hamburger-wrapper {
+    position: absolute;
   }
 
   &__content {
     position: relative;
-    padding-top: rem-calc(270);
+    padding-top: rem-calc(200);
+    padding-bottom: rem-calc(50);
     background: #fefefe;
   }
 
   &__description {
     display: inline-block;
+    padding-bottom: rem-calc(20);
   }
 
   &__content-placeholder {
@@ -45,10 +52,35 @@
     transform: translateX(-50%);
   }
 
+  &__table {
+    margin-bottom: 0;
+  }
+
+  &__button {
+    position: absolute;
+    bottom: rem-calc(-50);
+    left: 50%;
+    z-index: z('product') + 1;
+    transform: translateX(-50%);
+  }
+
+  &__arrow {
+    position: absolute;
+    top: rem-calc(250);
+    right: 0;
+    z-index: z('product') + 1;
+
+    &--left {
+      right: auto;
+      left: 0;
+      transform: rotate(180deg);
+    }
+  }
+
   &-container {
     @include xy-gutters(
       $gutters: $show-margin-gutters,
-      $gutter-position: top left right bottom
+      $gutter-position: top left right
     );
   }
 }

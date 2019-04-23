@@ -24,7 +24,7 @@
 // @include foundation-progress-bar;
 // @include foundation-slider;
 // @include foundation-switch;
-// @include foundation-table;
+@include foundation-table;
 
 // Basic components
 // @include foundation-badge;
@@ -43,11 +43,11 @@
 // @include foundation-tabs;
 // @include foundation-thumbnail;
 // Menu-based containers
-@include foundation-menu;
-@include foundation-menu-icon;
+// @include foundation-menu;
+// @include foundation-menu-icon;
 // @include foundation-accordion-menu;
 // @include foundation-drilldown-menu;
-@include foundation-dropdown-menu;
+// @include foundation-dropdown-menu;
 
 // Layout components
 // @include foundation-off-canvas;
@@ -79,9 +79,10 @@
 @import 'global/content-wrapper';
 
 //Components
+@import 'components/table';
+@import 'components/hamburger-menu';
 @import 'components/gradients';
 @import 'components/logo';
-@import 'components/hamburger-menu';
 @import 'components/hero-text';
 @import 'components/show';
 @import 'components/button';

@@ -6,6 +6,11 @@
   margin-right: auto;
   margin-left: auto;
 
+  &--large {
+    width: rem-calc(166);
+    height: rem-calc(166);
+  }
+
   &__body {
     position: absolute;
     top: rem-calc(16);
@@ -34,6 +39,25 @@
       background: $primary-color;
       content: '';
     }
+
+    &--large {
+      top: rem-calc(25);
+      left: rem-calc(25);
+      width: rem-calc(116);
+      height: rem-calc(116);
+
+      &::before {
+        display: none;
+      }
+
+      &::after {
+        display: none;
+      }
+
+      &-gold {
+        border: 2px $gold solid;
+      }
+    }
   }
 
   &__text {
@@ -41,6 +65,15 @@
 
     color: $primary-color;
     font-size: rem-calc(14);
+
+    &--large {
+      font-size: rem-calc(20);
+      text-transform: uppercase;
+    }
+
+    &-dark {
+      color: $secondary-color;
+    }
   }
 
   &__title {

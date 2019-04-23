@@ -7,8 +7,8 @@
   margin-left: auto;
 
   &--product {
-    width: rem-calc(453);
-    height: rem-calc(453);
+    width: rem-calc(350);
+    height: rem-calc(365);
   }
 
   &--small {
@@ -29,10 +29,11 @@
 
     &--product {
       top: rem-calc(65);
-      right: rem-calc(65);
-      width: rem-calc(320);
-      height: rem-calc(320);
+      left: 50%;
+      width: rem-calc(250);
+      height: rem-calc(250);
       border: 2px solid $gold;
+      transform: translateX(-50%) rotate(45deg);
     }
 
     &--small {
@@ -81,12 +82,12 @@
 
   &__symbol {
     position: absolute;
-    bottom: rem-calc(20);
-    left: rem-calc(222);
+    bottom: rem-calc(11);
+    left: 50%;
     width: rem-calc(12);
     height: rem-calc(12);
     background: $gold;
-    transform: rotate(45deg);
+    transform: translateX(-50%) rotate(45deg);
   }
 
   &__overlay {
@@ -120,7 +121,7 @@
     }
 
     &--product {
-      max-height: rem-calc(400);
+      max-height: rem-calc(350);
     }
   }
 
