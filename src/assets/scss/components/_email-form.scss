@@ -1,8 +1,17 @@
 .email-form {
   // display: none;
+  @include breakpoint(large) {
+    position: absolute;
+    left: 0;
+    width: 432px;
+    margin-top: 45px;
+  }
 
+  transition: left 300ms;
 
-  
+  &--left {
+    left: -600px;
+  }
 
   &__label {
     position: relative;
@@ -92,6 +101,11 @@
     &--textarea {
       top: rem-calc(0);
       bottom: auto;
+
+      &--top {
+        top: rem-calc(-20);
+        font-size: rem-calc(14);
+      }
     }
 
     &--textarea-top {
@@ -120,6 +134,7 @@
     width: 100%;
     min-width: 100%;
     max-width: 100%;
+    padding: 0;
     color: $primary-color;
     background: transparent;
     border: 0;
@@ -161,6 +176,10 @@
   &__button {
     margin-right: 0;
     margin-left: auto;
+
+    @include breakpoint(large) {
+      margin-right: -129px;
+    }
 
     &--phone {
       margin-top: rem-calc(30);
