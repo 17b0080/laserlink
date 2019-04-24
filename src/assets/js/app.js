@@ -6,6 +6,7 @@ import Text from './text';
 import Gradients from './gradients';
 import ProjectViewer from './projectViewer';
 import ProductViewer from './productViewer';
+import TextTriggers from './textTrigger';
 
 // Кросс-браузерная анимация
 if (!window.requestAnimationFrame) {
@@ -39,6 +40,7 @@ class App {
     // Выделение памяти под блоки
     this.readyState = 0;
     this.background = undefined;
+    this.gradients = undefined;
     this.blocks = undefined;
     this.lines = undefined;
     this.text = undefined;
@@ -134,14 +136,23 @@ class App {
     window.addEventListener('mousemove', this.handleMouseMove.bind(this));
   }
 
+  onBlockReady() {
+    console.log('onblock');
+    // this.ready();
+    this.gradients = new Gradients({ parent: this });
+  }
+
   ready() {
     this.readyState += 1;
     if (this.readyState === 1) {
       this.projectViewer = new ProjectViewer({ parent: this });
-      this.productViewer = new ProductViewer({parent : this});
-      this.gradients = new Gradients({ parent: this });
+      this.productViewer = new ProductViewer({ parent: this });
+      // this.gradients = new Gradients({ parent: this });
+
       this.lines = new Lines({ parent: this });
       this.text = new Text({ parent: this });
+      this.textTrigger = new TextTriggers({ parent: this });
+      window.trigger(0);
       this.listen();
       this.render(true);
       this.loader.classList.add('loader-wrapper--closed');
@@ -186,6 +197,7 @@ class App {
     this.gradients.updateXY();
     this.lines.updateXY();
     this.text.updateXY();
+    this.textTrigger.updateXY();
 
     this.projectViewer.updateXY();
     this.productViewer.updateXY();
@@ -206,6 +218,7 @@ class App {
         if (!projectOnWindow && !productOnWindow) {
           let blockRendered = false;
           let gradientRendered = false;
+          let textChecked = false;
           if (
             this.clientX !== this.currentX ||
             this.clientY !== this.currentY ||
@@ -217,16 +230,21 @@ class App {
             this.gradients.render();
             this.lines.render();
             this.text.render();
+            this.textTrigger.check();
             blockRendered = true;
             gradientRendered = true;
+            textChecked = true;
           }
           if (this.blocks.request && !blockRendered) {
             this.blocks.render();
+            if (!textChecked) {
+              this.textTrigger.check();
+            }
           }
           if (this.gradients.request && !gradientRendered) {
             this.gradients.render();
           }
-        } else if(projectOnWindow){
+        } else if (projectOnWindow) {
           let projectRendered = false;
           if (
             this.clientX !== this.currentX ||
@@ -239,7 +257,7 @@ class App {
           if (!projectRendered && this.projectViewer.request) {
             this.projectViewer.render();
           }
-        } else if(productOnWindow){
+        } else if (productOnWindow) {
           let productRendered = false;
           if (
             this.clientX !== this.currentX ||

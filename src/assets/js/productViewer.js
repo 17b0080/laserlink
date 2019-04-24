@@ -134,9 +134,9 @@ class ImageRhombus {
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
-    this.width = 600;
+    this.width = 550;
     this.halfWidth = this.width / 2;
-    this.height = 600;
+    this.height = 550;
     this.halfHeight = this.height / 2;
 
     this.canvas = document.createElement('canvas');
@@ -157,7 +157,7 @@ class ImageRhombus {
       y0: this.halfHeight,
       y1: this.halfHeight - this.currentFrame * this.speed,
       y2: this.halfHeight,
-      y3: this.halfHeight + this.currentFrame * this.speed,
+      y3: this.halfHeight + this.currentFrame * this.speed
     };
 
     // Покажем внутри какой фигуры мы будем рисовать
@@ -221,9 +221,17 @@ class ImageRhombus {
       x2: this.halfWindowWidth + this.currentFrame * this.speed - this.currentX,
       x3: this.halfWindowWidth - this.currentX,
       y0: this.halfWindowHeight + this.halfHeight - 650,
-      y1: this.halfWindowHeight + this.halfHeight - this.currentFrame * this.speed - 650,
+      y1:
+        this.halfWindowHeight +
+        this.halfHeight -
+        this.currentFrame * this.speed -
+        650,
       y2: this.halfWindowHeight + this.halfHeight - 650,
-      y3: this.halfWindowHeight + this.halfHeight + this.currentFrame * this.speed - 650,
+      y3:
+        this.halfWindowHeight +
+        this.halfHeight +
+        this.currentFrame * this.speed -
+        650
     };
   }
 
@@ -258,30 +266,43 @@ class ImageRhombus {
     this.parent.context.lineWidth = 4; // половина срезается клипом
     this.parent.context.strokeStyle = '#CCA75C';
 
-    this.parent.context.drawImage(this.parent.image, this.halfWindowWidth - this.halfWidth - this.currentX, this.halfWindowHeight-650, this.width, this.height);
+    this.parent.context.drawImage(
+      this.parent.image,
+      this.halfWindowWidth - this.halfWidth - this.currentX,
+      this.halfWindowHeight - 650,
+      this.width,
+      this.height
+    );
     this.parent.context.stroke();
     this.parent.context.restore();
 
     this.parent.context.fillStyle = '#CCA75C';
     this.parent.context.beginPath();
     this.parent.context.moveTo(this.framedDots.x3, this.framedDots.y3 - 8);
-    this.parent.context.lineTo(this.framedDots.x3-10, this.framedDots.y3 - 18);
+    this.parent.context.lineTo(
+      this.framedDots.x3 - 10,
+      this.framedDots.y3 - 18
+    );
     this.parent.context.lineTo(this.framedDots.x3, this.framedDots.y3 - 28);
-    this.parent.context.lineTo(this.framedDots.x3+10, this.framedDots.y3 - 18);
+    this.parent.context.lineTo(
+      this.framedDots.x3 + 10,
+      this.framedDots.y3 - 18
+    );
     this.parent.context.closePath();
     this.parent.context.fill();
   }
 
   render() {
     if (this.openRequest) {
+      this.drawFrame();
       this.nextOpenFrame();
     } else if (this.closeRequest) {
+      this.drawFrame();
       this.nextCloseFrame();
     } else if (this.opened) {
+      this.drawFrame();
       this.updateDots();
     }
-
-    this.drawFrame();
 
     this.request = this.openRequest || this.closeRequest;
   }
@@ -443,11 +464,18 @@ class ProductViewer {
     this.productWrapper = document.querySelector('.product-viewer');
     this.content = document.querySelector('.product-viewer__content');
     this.text = document.querySelector('.product-viewer__content__text');
-    this.arrowLeft = document.querySelector('.product-viewer__arrow-placeholder.arrow-placeholder--left');
-    this.arrowRight = document.querySelector('.product-viewer__arrow-placeholder.arrow-placeholder--right');
+    this.arrowLeft = document.querySelector(
+      '.product-viewer__arrow-placeholder.arrow-placeholder--left'
+    );
+    this.arrowRight = document.querySelector(
+      '.product-viewer__arrow-placeholder.arrow-placeholder--right'
+    );
     this.orderButton = document.querySelector(
       '.product-viewer__order-button-wrapper'
     );
+    this.tbody = document
+      .querySelector('.table--desktop')
+      .querySelector('tbody');
     this.image = document.createElement('img');
     this.backgroundImage = document.createElement('img');
 
@@ -553,6 +581,11 @@ class ProductViewer {
     this.content.style.visibility = 'hidden';
     this.content.style.height = '';
     this.text.innerHTML = this.data[this.index].text;
+    for (let i = 0; i < 7; i += 1) {
+      this.tbody.children[i].innerHTML = `<td class="table__cell">${
+        this.data[this.index].table[i]
+      }</td>`;
+    }
     const contentHeight = this.content.getBoundingClientRect().height;
     this.content.style.height = '0px';
     this.content.style.transition = `height ${contentHeight}ms`;
@@ -656,17 +689,18 @@ class ProductViewer {
           this.content.getBoundingClientRect().width / 2
       );
 
+      // КНОПКА
       if (this.rhombus.height > this.windowHeight) {
         changeTranslate(
           this.orderButton,
           -this.currentX + this.halfWindowWidth - 58,
-          this.windowHeight - 90
+          this.windowHeight - 80
         );
       } else {
         changeTranslate(
           this.orderButton,
           -this.currentX + this.halfWindowWidth - 58,
-          this.halfWindowHeight + 380
+          this.halfWindowHeight + 700 - 116 - 50
         );
       }
 
