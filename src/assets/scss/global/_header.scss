@@ -14,6 +14,10 @@
   background: rgba(0, 0, 0, 0.8);
   transition: opacity 0.3s;
 
+  @include breakpoint(medium) {
+    justify-content: flex-start;
+  }
+
   &--opened {
     width: 100vw;
     height: 100vh;
