@@ -2,7 +2,14 @@
   // display: none;
 
   @include breakpoint(large) {
+    position: absolute;
     margin-top: 45px;
+  }
+
+  transition: left 300ms;
+
+  &--left {
+    left: -600px;
   }
 
   &__label {
@@ -126,6 +133,7 @@
     width: 100%;
     min-width: 100%;
     max-width: 100%;
+    padding: 0;
     color: $primary-color;
     background: transparent;
     border: 0;

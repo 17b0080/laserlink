@@ -1,0 +1,11 @@
+.phone-form {
+  transition: right 300ms;
+
+  @include breakpoint(large) {
+    position: absolute;
+  }
+
+  &--right {
+    right: -600px;
+  }
+}
