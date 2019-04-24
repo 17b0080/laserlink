@@ -20,5 +20,12 @@
     width: 100%;
     height: rem-calc(400);
     margin-top: rem-calc(50);
+
+    &-wrapper {
+      @include breakpoint(large) {
+        position: fixed;
+        width: 432px;
+      }
+    }
   }
 }
