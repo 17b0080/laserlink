@@ -8,6 +8,7 @@ import ProjectViewer from './projectViewer';
 import ProductViewer from './productViewer';
 import TextTriggers from './textTrigger';
 import Input from './Input';
+import InputSwitcher from './InputSwitcher';
 
 function get(str) {
   return document.querySelector(str);
@@ -170,6 +171,10 @@ class App {
           placeholder: getChildren(get('div.email-form__textarea'), 2)
         }
       ]);
+      this.inputSwitcher = new InputSwitcher({
+        phone: getChildren(get('.contact__buttons'), 0),
+        mail: getChildren(get('.contact__buttons'), 1)
+      });
       this.lines = new Lines({ parent: this });
       this.text = new Text({ parent: this });
       this.textTrigger = new TextTriggers({ parent: this });

@@ -33,12 +33,14 @@
     @include breakpoint(large) {
       width: 432px;
       margin: 0 auto;
+      overflow: hidden;
     }
 
     &-wrapper {
       @include breakpoint(large) {
         position: fixed;
         width: 100vw;
+        max-width: 1184px;
       }
     }
   }
