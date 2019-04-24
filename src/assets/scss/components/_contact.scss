@@ -1,6 +1,10 @@
 .contact {
   margin-top: rem-calc(200);
 
+  @include breakpoint(large) {
+    @include xy-grid-container($width: rem-calc(750));
+  }
+
   &__title {
     text-align: center;
 
@@ -21,10 +25,20 @@
     height: rem-calc(400);
     margin-top: rem-calc(50);
 
+    &__switch-button {
+      width: 100px;
+      height: 100px;
+    }
+
+    @include breakpoint(large) {
+      width: 432px;
+      margin: 0 auto;
+    }
+
     &-wrapper {
       @include breakpoint(large) {
         position: fixed;
-        width: 432px;
+        width: 100vw;
       }
     }
   }

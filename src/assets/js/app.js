@@ -7,6 +7,14 @@ import Gradients from './gradients';
 import ProjectViewer from './projectViewer';
 import ProductViewer from './productViewer';
 import TextTriggers from './textTrigger';
+import Input from './Input';
+
+function get(str) {
+  return document.querySelector(str);
+}
+function getChildren(item, i) {
+  return item.children[i];
+}
 
 // Кросс-браузерная анимация
 if (!window.requestAnimationFrame) {
@@ -148,7 +156,20 @@ class App {
       this.projectViewer = new ProjectViewer({ parent: this });
       this.productViewer = new ProductViewer({ parent: this });
       // this.gradients = new Gradients({ parent: this });
-
+      this.input = new Input([
+        {
+          input: getChildren(get('label[for=email-name]'), 0),
+          placeholder: getChildren(get('label[for=email-name]'), 2)
+        },
+        {
+          input: getChildren(get('label[for=email-mail]'), 0),
+          placeholder: getChildren(get('label[for=email-mail]'), 2)
+        },
+        {
+          input: getChildren(get('div.email-form__textarea'), 0),
+          placeholder: getChildren(get('div.email-form__textarea'), 2)
+        }
+      ]);
       this.lines = new Lines({ parent: this });
       this.text = new Text({ parent: this });
       this.textTrigger = new TextTriggers({ parent: this });

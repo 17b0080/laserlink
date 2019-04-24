@@ -1,8 +1,9 @@
 .email-form {
   // display: none;
 
-
-  
+  @include breakpoint(large) {
+    margin-top: 45px;
+  }
 
   &__label {
     position: relative;
@@ -92,6 +93,11 @@
     &--textarea {
       top: rem-calc(0);
       bottom: auto;
+
+      &--top {
+        top: rem-calc(-20);
+        font-size: rem-calc(14);
+      }
     }
 
     &--textarea-top {
@@ -161,6 +167,10 @@
   &__button {
     margin-right: 0;
     margin-left: auto;
+
+    @include breakpoint(large) {
+      margin-right: -129px;
+    }
 
     &--phone {
       margin-top: rem-calc(30);
