@@ -1,5 +1,7 @@
 .project-viewer {
   position: fixed;
+  top: 0;
+  left: 0;
   z-index: z('project-viewer');
   width: 100vw;
   height: 100vh;
@@ -16,15 +18,15 @@
     transition: height 500ms 1000ms;
 
     &__header {
+      margin-bottom: 30px;
       color: #0d0a14;
       font-weight: normal;
       font-size: 31px;
-      text-transform: uppercase;
       font-style: normal;
       font-stretch: normal;
       letter-spacing: normal;
       text-align: center;
-      margin-bottom: 30px;
+      text-transform: uppercase;
     }
 
     &__text {
