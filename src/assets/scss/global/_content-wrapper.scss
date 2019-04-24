@@ -1,7 +1,7 @@
 .content-wrapper {
-  @include xy-grid-container();
+  @include xy-grid-container($width: rem-calc(600));
 
-  @include breakpoint(medium) {
+  @include breakpoint(large) {
     display: none;
   }
 }
