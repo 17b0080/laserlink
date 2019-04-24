@@ -11,6 +11,12 @@
     height: rem-calc(365);
   }
 
+  &--project {
+    // width: rem-calc(374);
+    width: 100%;
+    height: rem-calc(374);
+  }
+
   &--small {
     width: rem-calc(142);
     height: rem-calc(142);
@@ -34,6 +40,16 @@
       height: rem-calc(250);
       border: 2px solid $gold;
       transform: translateX(-50%) rotate(45deg);
+    }
+
+    &--project {
+      top: 0;
+      left: 50%;
+      // width: rem-calc(374);
+      width: 100%;
+      height: rem-calc(374);
+      transform: translateX(-50%) rotate(0deg);
+      clip-path: polygon(75% 25%, 100% 50%, 75% 80%, 25% 80%, 0 50%, 25% 25%);
     }
 
     &--small {
@@ -107,6 +123,15 @@
     right: 0;
     z-index: z('content-wrapper');
     clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+
+  &__video {
+    position: absolute;
+    // top: 0;
+    // left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   &__image-fill {
