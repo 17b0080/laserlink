@@ -3,6 +3,8 @@
 
   &-grid {
     @include xy-grid;
+
+    justify-content: center;
   }
 
   &__subtitle {
@@ -11,5 +13,9 @@
 
   &__cell {
     @include xy-cell();
+
+    @include breakpoint(medium) {
+      @include xy-cell(50%);
+    }
   }
 }
