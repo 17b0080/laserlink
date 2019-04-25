@@ -6,45 +6,26 @@
   z-index: z('header') + 1;
   display: flex;
   justify-content: space-between;
-  width: rem-calc(210);
-  height: rem-calc(400);
+  min-width: rem-calc(250);
   font-weight: 300;
   text-transform: uppercase;
-
-  @include breakpoint(medium) {
-    @include menu-direction(horizontal);
-
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: rem-calc(44);
-    font-weight: 400;
-    text-transform: none;
-    transform: none;
-  }
 
   &--hiden {
     display: none;
   }
 
   &__item {
-    @include breakpoint(medium) {
-      display: flex;
-      align-items: center;
-    }
   }
 
   &__link {
     position: relative;
-    width: rem-calc(300);
-    height: rem-calc(20);
-    padding: 0 !important;
+    width: auto;
+    margin-top: rem-calc(20);
     font-size: rem-calc(18);
     line-height: 1.17;
     text-align: left;
 
     @include breakpoint(medium) {
-      width: rem-calc(130);
       text-align: center;
     }
   }
@@ -54,6 +35,24 @@
     top: 0;
     margin-left: rem-calc(5);
     transform: rotate(90deg);
+  }
+
+  @include breakpoint(medium) {
+    @include menu-direction(horizontal);
+
+    top: 0;
+    left: 0;
+    justify-content: space-around;
+    width: 100%;
+    height: rem-calc(44);
+    font-weight: 400;
+    text-transform: none;
+    transform: none;
+
+    &__item {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 
@@ -70,6 +69,7 @@
 
   &__item {
     margin-top: rem-calc(15);
+    padding-left: rem-calc(10);
 
     @include breakpoint(medium) {
       margin-bottom: rem-calc(20);
@@ -78,14 +78,11 @@
 
   &__link {
     position: relative;
-    width: rem-calc(300);
-    height: rem-calc(18);
     font-size: rem-calc(16);
     line-height: 1.17;
     text-align: left;
 
     @include breakpoint(medium) {
-      width: rem-calc(200);
       padding: rem-calc(10);
     }
   }
