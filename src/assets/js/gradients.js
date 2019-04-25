@@ -83,6 +83,7 @@ class Gradient {
 
 class GradientBlock {
   constructor(opts) {
+    this.i = opts.i;
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.scale = this.parent.scale;
@@ -206,6 +207,13 @@ class GradientBlock {
         this.triggerY + 100 - this.currentY > 0
       ) {
         this.triggered = true;
+        for (let i = 0; i < this.parent.gradients.length; i += 1) {
+          if (i !== this.i) {
+            this.parent.gradients[i].triggered = false;
+            this.parent.gradients[i].animated = false;
+            this.parent.gradients[i].k = 0;
+          }
+        }
       }
     }
 
@@ -279,6 +287,7 @@ class Gradients {
     this.gradients = [
       new GradientBlock({
         parent: this,
+        i: 0,
         dots: {
           x0: 55,
           y0: -132,
@@ -292,6 +301,7 @@ class Gradients {
       }),
       new GradientBlock({
         parent: this,
+        i: 1,
         dots: {
           x0: 64,
           y0: 777,
@@ -305,6 +315,7 @@ class Gradients {
       }),
       new GradientBlock({
         parent: this,
+        i: 2,
         dots: {
           x0: 218,
           y0: 2294,
@@ -319,6 +330,7 @@ class Gradients {
       // шоу
       new GradientBlock({
         parent: this,
+        i: 3,
         dots: {
           x0: 35,
           y0: 4050,
@@ -334,6 +346,7 @@ class Gradients {
 
       new GradientBlock({
         parent: this,
+        i: 4,
         dots: {
           x0: 230,
           y0: 4593 + this.showLinesHeight + 331 + 34,
@@ -362,6 +375,7 @@ class Gradients {
 
       new GradientBlock({
         parent: this,
+        i: 5,
         dots: {
           x0: 167,
           y0: 4593 + this.showLinesHeight + this.partnerLinesHeight + 776,
