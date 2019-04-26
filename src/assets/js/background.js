@@ -8,7 +8,7 @@ class Background {
     window.Background = this;
     this.parent = opts.parent;
 
-    this.scale = 3 / 2;
+    this.scale = 2;
 
     // пропуск кадров
     this.counter = 0;
@@ -50,6 +50,16 @@ class Background {
     this.dotsContext = this.dots.getContext('2d');
     this.drawDots();
     this.dotsPattern = this.context.createPattern(this.dots, 'repeat');
+
+    this.microDots = document.createElement('canvas');
+    this.microDots.height = 100 * this.scale;
+    this.microDots.width = 100 * this.scale;
+    this.microDotsContext = this.microDots.getContext('2d');
+    this.drawMicroDots();
+    this.microDotsPattern = this.context.createPattern(
+      this.microDots,
+      'repeat'
+    );
 
     // Движение
     this.clientX = 0;
@@ -277,195 +287,241 @@ class Background {
     this.dotsContext.fill();
   }
 
-  renderLines() {
-    this.context.beginPath();
-    this.context.lineWidth = 2;
-    this.context.strokeStyle = 'rgba(43, 43, 43, 0.2)';
+  drawMicroDots() {
+    console.log('draw micro dots');
+    this.microDotsContext.fillStyle = 'rgba(255, 255, 255, 0.2)';
+    this.microDotsContext.beginPath();
+    this.microDotsContext.moveTo(0, 50 * this.scale);
+    this.microDotsContext.arc(0, 50 * this.scale, 2, 0, 2 * Math.PI, true);
 
-    const currentX300 = this.currentX % (300 * this.lineScale);
-    const currentY400 = this.currentY % (400 * this.lineScale);
-    for (let i = -1; i < this.linePatternsX; i += 1) {
-      for (let j = -1; j < this.linePatternsY; j += 1) {
-        const i300 = i * 300;
-        const j400 = j * 400;
-        drawLine(
-          this.context,
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 0) * this.lineScale - Math.round(currentY400),
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 100) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 100) * this.lineScale - Math.round(currentX300),
-          (j400 + 0) * this.lineScale - Math.round(currentY400),
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 200) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 0) * this.lineScale - Math.round(currentX300),
-          (j400 + 0) * this.lineScale - Math.round(currentY400),
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 300) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 300) * this.lineScale - Math.round(currentY400),
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400),
-          (i300 + 0) * this.lineScale - Math.round(currentX300),
-          (j400 + 200) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 0) * this.lineScale - Math.round(currentX300),
-          (j400 + 100) * this.lineScale - Math.round(currentY400),
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 0) * this.lineScale - Math.round(currentX300),
-          (j400 + 300) * this.lineScale - Math.round(currentY400),
-          (i300 + 100) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 0) * this.lineScale - Math.round(currentY400),
-          (i300 + 100) * this.lineScale - Math.round(currentX300),
-          (j400 + 100) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 100) * this.lineScale - Math.round(currentY400),
-          (i300 + 0) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 300) * this.lineScale - Math.round(currentY400),
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400)
-        );
-      }
-    }
-    this.context.stroke();
+    this.microDotsContext.moveTo(50 * this.scale, 50 * this.scale);
+    this.microDotsContext.arc(
+      50 * this.scale,
+      50 * this.scale,
+      2,
+      0,
+      2 * Math.PI,
+      true
+    );
 
-    this.context.beginPath();
-    this.context.lineWidth = 1;
-    this.context.strokeStyle = 'rgba(43, 43, 43, 0.2)';
-    for (let i = -1; i < this.linePatternsX; i += 1) {
-      for (let j = -1; j < this.linePatternsY; j += 1) {
-        const i300 = i * 300;
-        const j400 = j * 400;
-        drawLine(
-          this.context,
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 0) * this.lineScale - Math.round(currentY400),
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400),
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400),
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 0) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 300) * this.lineScale - Math.round(currentX300),
-          (j400 + 0) * this.lineScale - Math.round(currentY400),
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 0) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 100) * this.lineScale - Math.round(currentY400),
-          (i300 + 100) * this.lineScale - Math.round(currentX300),
-          (j400 + 100) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 100) * this.lineScale - Math.round(currentX300),
-          (j400 + 100) * this.lineScale - Math.round(currentY400),
-          (i300 + 100) * this.lineScale - Math.round(currentX300),
-          (j400 + 300) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 100) * this.lineScale - Math.round(currentX300),
-          (j400 + 300) * this.lineScale - Math.round(currentY400),
-          (i300 + 200) * this.lineScale - Math.round(currentX300),
-          (j400 + 300) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 100) * this.lineScale - Math.round(currentX300),
-          (j400 + 200) * this.lineScale - Math.round(currentY400),
-          (i300 + 0) * this.lineScale - Math.round(currentX300),
-          (j400 + 200) * this.lineScale - Math.round(currentY400)
-        );
-        drawLine(
-          this.context,
-          (i300 + 0) * this.lineScale - Math.round(currentX300),
-          (j400 + 0) * this.lineScale - Math.round(currentY400),
-          (i300 + 0) * this.lineScale - Math.round(currentX300),
-          (j400 + 400) * this.lineScale - Math.round(currentY400)
-        );
-      }
-    }
-    this.context.stroke();
+    this.microDotsContext.moveTo(100 * this.scale, 50 * this.scale);
+    this.microDotsContext.arc(
+      100 * this.scale,
+      50 * this.scale,
+      2,
+      0,
+      2 * Math.PI,
+      true
+    );
+
+    this.microDotsContext.closePath();
+    this.microDotsContext.fill();
   }
 
-  renderDots(fillStyle, speed) {
-    this.context.beginPath();
-    this.context.fillStyle = fillStyle;
-    const halfCurrentX100 = (this.currentX * speed) % 100;
-    const halfCurrentY100 = (this.currentY * speed) % 100;
+  // renderLines() {
+  //   this.context.beginPath();
+  //   this.context.lineWidth = 2;
+  //   this.context.strokeStyle = 'rgba(43, 43, 43, 0.2)';
 
-    for (let i = -1; i < this.dotsX; i += 1) {
-      for (let j = -1; j < this.dotsY; j += 1) {
-        const i100 = i * 100;
-        const j100 = j * 100;
-        this.context.moveTo(
-          (i100 - Math.round(halfCurrentX100)) * this.dotScale,
-          (j100 - Math.round(halfCurrentY100)) * this.dotScale
-        );
-        this.context.arc(
-          (i100 - Math.round(halfCurrentX100)) * this.dotScale,
-          (j100 - Math.round(halfCurrentY100)) * this.dotScale,
-          1.5 * this.dotScale,
-          0,
-          2 * Math.PI,
-          true
-        );
-      }
-    }
-    this.context.fill();
-  }
+  //   const currentX300 = this.currentX % (300 * this.lineScale);
+  //   const currentY400 = this.currentY % (400 * this.lineScale);
+  //   for (let i = -1; i < this.linePatternsX; i += 1) {
+  //     for (let j = -1; j < this.linePatternsY; j += 1) {
+  //       const i300 = i * 300;
+  //       const j400 = j * 400;
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 0) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 100) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 100) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 0) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 200) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 0) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 0) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 300) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 300) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 0) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 200) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 0) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 100) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 0) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 300) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 100) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 0) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 100) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 100) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 100) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 0) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 300) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400)
+  //       );
+  //     }
+  //   }
+  //   this.context.stroke();
+
+  //   this.context.beginPath();
+  //   this.context.lineWidth = 1;
+  //   this.context.strokeStyle = 'rgba(43, 43, 43, 0.2)';
+  //   for (let i = -1; i < this.linePatternsX; i += 1) {
+  //     for (let j = -1; j < this.linePatternsY; j += 1) {
+  //       const i300 = i * 300;
+  //       const j400 = j * 400;
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 0) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 0) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 300) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 0) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 0) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 100) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 100) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 100) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 100) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 100) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 100) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 300) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 100) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 300) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 200) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 300) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 100) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 200) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 0) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 200) * this.lineScale - Math.round(currentY400)
+  //       );
+  //       drawLine(
+  //         this.context,
+  //         (i300 + 0) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 0) * this.lineScale - Math.round(currentY400),
+  //         (i300 + 0) * this.lineScale - Math.round(currentX300),
+  //         (j400 + 400) * this.lineScale - Math.round(currentY400)
+  //       );
+  //     }
+  //   }
+  //   this.context.stroke();
+  // }
+
+  // renderDots(fillStyle, speed) {
+  //   this.context.beginPath();
+  //   this.context.fillStyle = fillStyle;
+  //   const halfCurrentX100 = (this.currentX * speed) % 100;
+  //   const halfCurrentY100 = (this.currentY * speed) % 100;
+
+  //   for (let i = -1; i < this.dotsX; i += 1) {
+  //     for (let j = -1; j < this.dotsY; j += 1) {
+  //       const i100 = i * 100;
+  //       const j100 = j * 100;
+  //       this.context.moveTo(
+  //         (i100 - Math.round(halfCurrentX100)) * this.dotScale,
+  //         (j100 - Math.round(halfCurrentY100)) * this.dotScale
+  //       );
+  //       this.context.arc(
+  //         (i100 - Math.round(halfCurrentX100)) * this.dotScale,
+  //         (j100 - Math.round(halfCurrentY100)) * this.dotScale,
+  //         1.5 * this.dotScale,
+  //         0,
+  //         2 * Math.PI,
+  //         true
+  //       );
+  //     }
+  //   }
+  //   this.context.fill();
+  // }
 
   render() {
     this.context.clearRect(0, 0, this.windowWidth, this.windowHeight);
+
+    this.context.save();
+    this.context.translate(
+      (((-this.currentX * 1) / 3) % 100) * this.scale,
+      (-this.currentY % 100) * this.scale
+    );
+    this.context.fillStyle = this.microDotsPattern;
+    this.context.fillRect(
+      -100 * this.scale,
+      -100 * this.scale,
+      this.windowWidth + 200 * this.scale,
+      this.windowHeight + 200 * this.scale
+    );
+    this.context.restore();
+
     this.context.save();
     this.context.translate(
       (((-this.currentX * 1) / 2) % 300) * this.scale,
@@ -483,20 +539,6 @@ class Background {
     this.context.save();
     this.context.translate(
       (((-this.currentX * 4) / 3) % 100) * this.scale,
-      (-this.currentY % 100) * this.scale
-    );
-    this.context.fillStyle = this.dotsPattern;
-    this.context.fillRect(
-      -100 * this.scale,
-      -100 * this.scale,
-      this.windowWidth + 200 * this.scale,
-      this.windowHeight + 200 * this.scale
-    );
-    this.context.restore();
-
-    this.context.save();
-    this.context.translate(
-      (((-this.currentX * 1) / 3) % 100) * this.scale,
       (-this.currentY % 100) * this.scale
     );
     this.context.fillStyle = this.dotsPattern;
