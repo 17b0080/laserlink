@@ -410,38 +410,6 @@ $drilldown-submenu-background: $white;
 $drilldown-arrow-color: $primary-color;
 $drilldown-arrow-size: 6px;
 
-// 17. Dropdown
-// ------------
-
-$dropdown-padding: 1rem;
-$dropdown-background: $body-background;
-$dropdown-border: 1px solid $medium-gray;
-$dropdown-font-size: 1rem;
-$dropdown-width: 300px;
-$dropdown-radius: $global-radius;
-$dropdown-sizes: (
-  tiny: 100px,
-  small: 200px,
-  large: 400px
-);
-
-// 18. Dropdown Menu
-// -----------------
-
-$dropdownmenu-arrows: true;
-$dropdownmenu-arrow-color: $anchor-color;
-$dropdownmenu-arrow-size: 6px;
-$dropdownmenu-arrow-padding: 1.5rem;
-$dropdownmenu-min-width: 200px;
-$dropdownmenu-background: null;
-$dropdownmenu-submenu-background: $white;
-$dropdownmenu-padding: $global-menu-padding;
-$dropdownmenu-nested-margin: 0;
-$dropdownmenu-submenu-padding: $dropdownmenu-padding;
-$dropdownmenu-border: 1px solid $medium-gray;
-$dropdown-menu-item-color-active: get-color(primary);
-$dropdown-menu-item-background-active: transparent;
-
 // 19. Flexbox Utilities
 // ---------------------
 
