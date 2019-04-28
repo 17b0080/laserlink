@@ -1,0 +1,27 @@
+.footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: z('header') + 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: rem-calc(32);
+  color: transparentize($color: $primary-color, $amount: 0.25);
+  background: rgba(0, 0, 0, 0.8);
+
+  @include breakpoint(medium) {
+    height: rem-calc(44);
+  }
+
+  &__company {
+    display: none;
+
+    @include breakpoint(medium) {
+      display: block;
+      font-size: rem-calc(20);
+      font-family: 'Trajan Pro';
+    }
+  }
+}
