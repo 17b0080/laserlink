@@ -2,7 +2,7 @@
   margin-top: rem-calc(200);
 
   @include breakpoint(large) {
-    @include xy-grid-container($width: rem-calc(750));
+    @include xy-grid-container($width: rem-calc(480));
   }
 
   &__title {
@@ -37,6 +37,10 @@
     }
 
     &-wrapper {
+      @include xy-grid-container($width: rem-calc(600));
+
+      // margin: 0 0 rem-calc(50) 0;
+
       @include breakpoint(large) {
         position: fixed;
         width: 100vw;

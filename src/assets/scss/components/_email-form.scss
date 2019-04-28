@@ -178,7 +178,7 @@
     margin-left: auto;
 
     @include breakpoint(large) {
-      margin-right: -129px;
+      // margin-right: -129px;
     }
 
     &--phone {
