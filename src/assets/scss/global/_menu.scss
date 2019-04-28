@@ -26,15 +26,33 @@
     text-align: left;
 
     @include breakpoint(medium) {
+      margin-top: 0;
       text-align: center;
+    }
+  }
+
+  &__decor-number {
+    display: none;
+
+    @include breakpoint(medium) {
+      position: absolute;
+      top: 0;
+      left: rem-calc(-15);
+      display: block;
+      font-size: rem-calc(12);
     }
   }
 
   &__icon {
     position: absolute;
     top: 0;
+    width: rem-calc(16);
+    height: rem-calc(16);
     margin-left: rem-calc(5);
-    transform: rotate(90deg);
+
+    &--rotated {
+      transform: rotate(90deg);
+    }
   }
 
   @include breakpoint(medium) {
@@ -57,9 +75,14 @@
 }
 
 .sub-menu {
+  display: none;
   margin: 0;
-  padding: 0;
+  // padding: 0;
   list-style: none;
+
+  &--shown {
+    display: block;
+  }
 
   @include breakpoint(medium) {
     position: absolute;
@@ -83,7 +106,7 @@
     text-align: left;
 
     @include breakpoint(medium) {
-      padding: rem-calc(10);
+      padding-right: rem-calc(15) !important;
     }
   }
 }
