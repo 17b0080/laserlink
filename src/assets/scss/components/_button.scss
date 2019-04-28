@@ -85,6 +85,10 @@
     vertical-align: middle;
   }
 
+  &__icon {
+    width: rem-calc(32);
+  }
+
   &-wrapper {
     width: rem-calc(140);
     height: rem-calc(140);
