@@ -1,0 +1,16 @@
+.rewards-frame {
+  display: none;
+
+  @include breakpoint(medium) {
+    position: fixed;
+    right: rem-calc(10);
+    bottom: rem-calc(54);
+    z-index: z('rewards-frame');
+    display: block;
+    width: 80vw;
+    height: rem-calc(400);
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid $primary-color;
+    border-radius: rem-calc(5);
+  }
+}

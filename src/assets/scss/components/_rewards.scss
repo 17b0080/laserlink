@@ -1,0 +1,19 @@
+.rewards {
+  display: none;
+
+  @include breakpoint(medium) {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &__text {
+    height: rem-calc(20);
+  }
+
+  &__icon {
+    width: rem-calc(18);
+    height: rem-calc(18);
+    margin: 0 0 0 rem-calc(10);
+    transform: rotate(-90deg);
+  }
+}
