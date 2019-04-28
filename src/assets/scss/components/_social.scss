@@ -1,0 +1,47 @@
+.social {
+  display: flex;
+  justify-content: space-around;
+  color: transparentize($color: $primary-color, $amount: 0.25);
+
+  &__phone {
+    display: flex;
+    justify-content: space-around;
+    font-size: rem-calc(16);
+
+    @include breakpoint(medium) {
+      margin-top: 0;
+    }
+  }
+
+  &__number {
+    display: inline-block;
+    margin: 0 rem-calc(5) 0 rem-calc(5);
+    color: transparentize($color: $primary-color, $amount: 0.25);
+
+    @include breakpoint(medium) {
+      display: inline-block;
+      margin: 0 rem-calc(10) 0 rem-calc(10);
+      color: transparentize($color: $primary-color, $amount: 0.25);
+    }
+  }
+
+  &__icons {
+    display: flex;
+    justify-content: space-around;
+
+    @include breakpoint(medium) {
+      margin-top: 0;
+    }
+  }
+
+  &__image {
+    width: rem-calc(24);
+    height: rem-calc(24);
+    margin: 0 rem-calc(10) 0 rem-calc(10);
+
+    @include breakpoint(medium) {
+      width: rem-calc(24);
+      margin: 0 rem-calc(10) 0 rem-calc(10);
+    }
+  }
+}
