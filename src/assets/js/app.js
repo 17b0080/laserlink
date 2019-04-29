@@ -9,6 +9,7 @@ import ProductViewer from './productViewer';
 import TextTriggers from './textTrigger';
 import Input from './Input';
 import InputSwitcher from './InputSwitcher';
+import StateSwitcher from './stateSwitcher';
 
 function get(str) {
   return document.querySelector(str);
@@ -28,6 +29,55 @@ if (!window.requestAnimationFrame) {
     );
   };
 }
+
+// eslint-disable-next-line no-new
+// new StateSwitcher({
+//   item: document.querySelector('.rewards-frame'),
+//   button: document.querySelector('.rewards'),
+//   defaultState: true,
+//   onTrue() {
+//     this.item.classList.add('rewards-frame--opened');
+//   },
+//   onFalse() {
+//     this.item.classList.remove('rewards-frame--opened');
+//   }
+// });
+
+StateSwitcher({
+  itemList: [document.querySelector('.rewards-frame')],
+  button: document.querySelector('.rewards'),
+  defaultState: true,
+  onTrue(itemList) {
+    itemList.forEach(item => {
+      item.classList.add(`${item.classList[0]}--opened`);
+    });
+  },
+  onFalse(itemList) {
+    itemList.forEach(item => {
+      item.classList.remove(`${item.classList[0]}--opened`);
+    });
+  }
+});
+
+StateSwitcher({
+  itemList: [
+    document.querySelector('.header'),
+    document.querySelector('.hamburger'),
+    document.querySelector('.menu')
+  ],
+  button: document.querySelector('.hamburger-wrapper'),
+  defaultState: true,
+  onTrue(itemList) {
+    itemList.forEach(item => {
+      item.classList.add(`${item.classList[0]}--opened`);
+    });
+  },
+  onFalse(itemList) {
+    itemList.forEach(item => {
+      item.classList.remove(`${item.classList[0]}--opened`);
+    });
+  }
+});
 
 class App {
   constructor() {

@@ -5,13 +5,14 @@
 
   z-index: z('header') + 1;
   display: flex;
+  display: none;
   justify-content: space-between;
   min-width: rem-calc(250);
   font-weight: 300;
   text-transform: uppercase;
 
-  &--hiden {
-    display: none;
+  &--opened {
+    display: block;
   }
 
   &__item {
