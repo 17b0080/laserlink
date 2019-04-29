@@ -1,0 +1,30 @@
+.rewards-fullscreen {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: z('fullscreen-overlay');
+  display: none;
+  background: rgba(13, 10, 20, 0.9);
+
+  &--opened {
+    display: block;
+  }
+
+  &__image {
+    @include absolute-center;
+
+    z-index: z('fullscreen-overlay') + 1;
+    max-width: rem-calc(600);
+  }
+
+  &__hamburger-wrapper {
+    z-index: z('fullscreen-overlay') + 1;
+    display: block;
+  }
+
+  &__hamburger-menu {
+    display: block;
+  }
+}
