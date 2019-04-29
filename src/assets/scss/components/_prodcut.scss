@@ -69,6 +69,8 @@
     top: rem-calc(250);
     right: 0;
     z-index: z('product') + 1;
+    width: rem-calc(48);
+    height: rem-calc(48);
 
     &--left {
       right: auto;
