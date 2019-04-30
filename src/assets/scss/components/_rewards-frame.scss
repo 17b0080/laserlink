@@ -3,8 +3,8 @@
 
   @include breakpoint(medium) {
     display: block;
-    flex-shrink: 0;
     flex-direction: column;
+    flex-shrink: 0;
     width: 98%;
     height: 100%;
     overflow: auto;
@@ -93,7 +93,6 @@
       right: rem-calc(10);
       bottom: rem-calc(54);
       z-index: z('rewards-frame');
-      display: none;
       width: 95vw;
       height: rem-calc(400);
       padding: rem-calc(30) 0 0 0;
@@ -101,9 +100,13 @@
       background: rgba(0, 0, 0, 0.8);
       border: 1px solid $primary-color;
       border-radius: rem-calc(5);
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.3s ease-in;
 
       &--opened {
-        display: block;
+        visibility: visible;
+        opacity: 1;
       }
 
       @include breakpoint(large) {
