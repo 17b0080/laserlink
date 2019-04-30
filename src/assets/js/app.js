@@ -10,6 +10,7 @@ import TextTriggers from './textTrigger';
 import Input from './Input';
 import InputSwitcher from './InputSwitcher';
 import StateSwitcher from './stateSwitcher';
+import rewardViewer from './rewards';
 
 function get(str) {
   return document.querySelector(str);
@@ -44,17 +45,21 @@ if (!window.requestAnimationFrame) {
 // });
 
 StateSwitcher({
-  itemList: [document.querySelector('.rewards-frame')],
-  button: document.querySelector('.rewards'),
-  defaultState: true,
-  onTrue(itemList) {
-    itemList.forEach(item => {
-      item.classList.add(`${item.classList[0]}--opened`);
+  itemList: [
+    document.querySelector('.rewards-frame-wrapper'),
+    document.querySelector('.rewards__icon')
+  ],
+  itemClassList: ['opened', 'rotated'],
+  buttonList: [document.querySelector('.rewards')],
+  state: true,
+  onTrue(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.add(itemClassList[index]);
     });
   },
-  onFalse(itemList) {
-    itemList.forEach(item => {
-      item.classList.remove(`${item.classList[0]}--opened`);
+  onFalse(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.remove(itemClassList[index]);
     });
   }
 });
@@ -65,19 +70,44 @@ StateSwitcher({
     document.querySelector('.hamburger'),
     document.querySelector('.menu')
   ],
-  button: document.querySelector('.hamburger-wrapper'),
-  defaultState: true,
-  onTrue(itemList) {
-    itemList.forEach(item => {
-      item.classList.add(`${item.classList[0]}--opened`);
+  itemClassList: ['opened', 'animated', 'opened'],
+  buttonList: [document.querySelector('.hamburger-wrapper')],
+  state: true,
+  onTrue(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.add(itemClassList[index]);
     });
   },
-  onFalse(itemList) {
-    itemList.forEach(item => {
-      item.classList.remove(`${item.classList[0]}--opened`);
+  onFalse(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.remove(itemClassList[index]);
     });
   }
 });
+
+// dropdown aka submenu
+StateSwitcher({
+  itemList: [
+    document.querySelector('.menu').children[1].children[1],
+    // document.querySelector('.menu').children[1].children[0],
+    document.querySelector('.menu').children[1].children[0].children[1]
+  ],
+  buttonList: [document.querySelector('.menu').children[1].children[0]],
+  state: true,
+  itemClassList: ['opened', 'rotated'],
+  onTrue(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.add(itemClassList[index]);
+    });
+  },
+  onFalse(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.remove(itemClassList[index]);
+    });
+  }
+});
+
+rewardViewer();
 
 class App {
   constructor() {

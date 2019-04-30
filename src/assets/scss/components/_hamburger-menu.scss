@@ -37,12 +37,12 @@
     transform: translateY($hamburger-bar-spacing);
     transition: background-color 300ms;
 
-    &--opened {
+    &--animated {
       background-color: transparent !important;
       transition: background-color 0ms 300ms;
     }
 
-    &--opened::after {
+    &--animated::after {
       top: 0 !important;
       background-color: $primary-color;
       transform: rotate(-45deg);
@@ -51,7 +51,7 @@
         transform 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1) !important;
     }
 
-    &--opened::before {
+    &--animated::before {
       bottom: 0 !important;
       background-color: $primary-color;
       transform: rotate(45deg);

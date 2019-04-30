@@ -19,18 +19,27 @@
 
 export default function StateSwitcher(opts) {
   const { itemList } = opts;
-  const { button } = opts;
+  const { buttonList } = opts;
+
+  const itemClassList = itemList.map(
+    (item, index) =>
+      `${item.classList[item.classList.length - 1]}--${
+        opts.itemClassList[index]
+      }`
+  );
+  console.log(itemClassList);
 
   const { onTrue } = opts;
   const { onFalse } = opts;
 
-  let state = false;
-  if (opts.defaultState === true) state = true;
+  let { state } = opts;
+
   function handleClick() {
-    console.log('click');
-    state === true ? onTrue(itemList) : onFalse(itemList);
+    state === true
+      ? onTrue(itemList, itemClassList)
+      : onFalse(itemList, itemClassList);
     state = !state;
   }
 
-  button.onclick = handleClick;
+  buttonList.forEach(button => (button.onclick = handleClick));
 }
