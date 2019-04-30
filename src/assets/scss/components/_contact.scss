@@ -32,6 +32,7 @@
 
     @include breakpoint(large) {
       width: 432px;
+      height: rem-calc(450);
       margin: 0 auto;
       overflow: hidden;
     }
