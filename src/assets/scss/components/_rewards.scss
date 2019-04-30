@@ -15,5 +15,10 @@
     height: rem-calc(18);
     margin: 0 0 0 rem-calc(10);
     transform: rotate(-90deg);
+    transition: transform 150ms;
+
+    &--rotated {
+      transform: rotate(90deg);
+    }
   }
 }

@@ -9,6 +9,8 @@ import ProductViewer from './productViewer';
 import TextTriggers from './textTrigger';
 import Input from './Input';
 import InputSwitcher from './InputSwitcher';
+import StateSwitcher from './stateSwitcher';
+import rewardViewer from './rewards';
 
 function get(str) {
   return document.querySelector(str);
@@ -28,6 +30,84 @@ if (!window.requestAnimationFrame) {
     );
   };
 }
+
+// eslint-disable-next-line no-new
+// new StateSwitcher({
+//   item: document.querySelector('.rewards-frame'),
+//   button: document.querySelector('.rewards'),
+//   defaultState: true,
+//   onTrue() {
+//     this.item.classList.add('rewards-frame--opened');
+//   },
+//   onFalse() {
+//     this.item.classList.remove('rewards-frame--opened');
+//   }
+// });
+
+StateSwitcher({
+  itemList: [
+    document.querySelector('.rewards-frame-wrapper'),
+    document.querySelector('.rewards__icon')
+  ],
+  itemClassList: ['opened', 'rotated'],
+  buttonList: [document.querySelector('.rewards')],
+  state: true,
+  onTrue(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.add(itemClassList[index]);
+    });
+  },
+  onFalse(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.remove(itemClassList[index]);
+    });
+  }
+});
+
+StateSwitcher({
+  itemList: [
+    document.querySelector('.header'),
+    document.querySelector('.hamburger'),
+    document.querySelector('.menu')
+  ],
+  itemClassList: ['opened', 'animated', 'opened'],
+  buttonList: [document.querySelector('.hamburger-wrapper')],
+  state: true,
+  onTrue(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.add(itemClassList[index]);
+    });
+  },
+  onFalse(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.remove(itemClassList[index]);
+    });
+  }
+});
+
+// dropdown aka submenu
+StateSwitcher({
+  itemList: [
+    document.querySelector('.menu').children[1].children[1],
+    // document.querySelector('.menu').children[1].children[0],
+    document.querySelector('.menu').children[1].children[0].children[1]
+  ],
+  buttonList: [document.querySelector('.menu').children[1].children[0]],
+  state: true,
+  itemClassList: ['opened', 'rotated'],
+  onTrue(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.add(itemClassList[index]);
+    });
+  },
+  onFalse(itemList, itemClassList) {
+    itemList.forEach((item, index) => {
+      item.classList.remove(itemClassList[index]);
+    });
+  }
+});
+
+rewardViewer();
 
 class App {
   constructor() {
