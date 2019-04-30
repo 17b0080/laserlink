@@ -8,11 +8,15 @@
 
   &--product {
     width: rem-calc(350);
-    height: rem-calc(365);
+    height: rem-calc(350);
+
+    @include breakpoint(medium) {
+      width: rem-calc(566);
+      height: rem-calc(566);
+    }
   }
 
   &--project {
-    // width: rem-calc(374);
     width: 100%;
     height: rem-calc(374);
   }
@@ -34,22 +38,33 @@
     transform: rotate(45deg);
 
     &--product {
-      top: rem-calc(65);
-      left: 50%;
+      top: rem-calc(52);
+      left: rem-calc(52);
       width: rem-calc(250);
       height: rem-calc(250);
       border: 2px solid $gold;
-      transform: translateX(-50%) rotate(45deg);
+      transform: rotate(45deg);
+
+      @include breakpoint(medium) {
+        top: rem-calc(85);
+        left: rem-calc(85);
+        width: rem-calc(400);
+        height: rem-calc(400);
+      }
     }
 
     &--project {
       top: 0;
       left: 50%;
-      // width: rem-calc(374);
       width: 100%;
       height: rem-calc(374);
       transform: translateX(-50%) rotate(0deg);
       clip-path: polygon(75% 25%, 100% 50%, 75% 80%, 25% 80%, 0 50%, 25% 25%);
+
+      @include breakpoint(medium) {
+        top: rem-calc(-50);
+        height: rem-calc(555);
+      }
     }
 
     &--small {
@@ -127,8 +142,6 @@
 
   &__video {
     position: absolute;
-    // top: 0;
-    // left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -146,7 +159,17 @@
     }
 
     &--product {
-      max-height: rem-calc(350);
+      top: rem-calc(84);
+      max-width: rem-calc(180);
+      max-height: rem-calc(180);
+      transform: translateX(-50%) translateY(0);
+      clip-path: none;
+
+      @include breakpoint(medium) {
+        top: rem-calc(180);
+        max-width: rem-calc(250);
+        max-height: rem-calc(250);
+      }
     }
   }
 

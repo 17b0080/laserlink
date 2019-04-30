@@ -1,5 +1,17 @@
 body[data-page='product'] {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   color: $secondary-color;
   font-size: rem-calc(14);
   background: $light-dark;
+}
+
+.product {
+  display: flex;
+  flex: 1;
+
+  &__content {
+    flex: 1;
+  }
 }
