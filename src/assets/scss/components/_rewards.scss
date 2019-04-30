@@ -4,6 +4,7 @@
   @include breakpoint(medium) {
     display: flex;
     align-items: flex-end;
+    cursor: pointer;
   }
 
   &__text {

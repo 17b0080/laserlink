@@ -20,8 +20,11 @@
   }
 
   &__hamburger-wrapper {
+    top: rem-calc(30);
+    right: rem-calc(30);
     z-index: z('fullscreen-overlay') + 1;
     display: block;
+    cursor: pointer;
   }
 
   &__hamburger-menu {
