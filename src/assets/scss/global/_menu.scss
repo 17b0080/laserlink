@@ -4,8 +4,8 @@
   @include absolute-center;
 
   z-index: z('header') + 1;
-  display: flex;
-  // display: none;
+  // display: flex;
+  display: none;
   justify-content: space-between;
   min-width: rem-calc(250);
   font-weight: 300;
@@ -65,6 +65,7 @@
 
     top: 0;
     left: 0;
+    display: flex;
     justify-content: space-around;
     width: 100%;
     height: rem-calc(44);
