@@ -91,6 +91,10 @@
   &--opened {
     // display: block;
     height: 135px;
+
+    @include breakpoint(medium) {
+      height: 160px;
+    }
   }
 
   @include breakpoint(medium) {
