@@ -316,7 +316,7 @@ class App {
     // даун до 30 фпс
     if (this.counter >= 2 || boolean) {
       this.counter = 0;
-
+      // console.log('render > ');
       //
       if (this.windowWidth >= 990) {
         const projectOnWindow = !this.projectViewer.closed;

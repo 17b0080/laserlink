@@ -164,6 +164,7 @@ body[data-page='index'] {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: z('loader-wrapper');
   display: block;
   width: 100vw;
   height: 100vh;

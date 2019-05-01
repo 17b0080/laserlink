@@ -444,8 +444,12 @@ class ProjectViewer {
     this.content = document.querySelector('.project-viewer__content');
     this.header = document.querySelector('.project-viewer__content__header');
     this.text = document.querySelector('.project-viewer__content__text');
-    this.arrowLeft = document.querySelector('.project-viewer__arrow-placeholder.arrow-placeholder--left');
-    this.arrowRight = document.querySelector('.project-viewer__arrow-placeholder.arrow-placeholder--right');
+    this.arrowLeft = document.querySelector(
+      '.project-viewer__arrow-placeholder.arrow-placeholder--left'
+    );
+    this.arrowRight = document.querySelector(
+      '.project-viewer__arrow-placeholder.arrow-placeholder--right'
+    );
     this.orderButton = document.querySelector(
       '.project-viewer__order-button-wrapper'
     );
@@ -588,6 +592,7 @@ class ProjectViewer {
       this.projectWrapper.style.visibility = 'hidden';
     } else if (this.order) {
       this.projectWrapper.style.visibility = 'hidden';
+      console.log('closed');
       this.closed = true;
       this.order = false;
       window.scrollTo({
@@ -602,9 +607,13 @@ class ProjectViewer {
         behavior: 'smooth'
       });
     } else {
+      console.log('wow');
       this.next = false;
       this.prev = false;
+      console.log(this.closed);
       this.open(this.indexToOpen);
+      console.log(this.closed);
+      console.log('end wow');
     }
   }
 
@@ -628,6 +637,7 @@ class ProjectViewer {
   }
 
   render() {
+    // console.log('viewer render boi');
     this.context.fillStyle = '#0d0a14';
     this.context.fillRect(0, 0, this.windowWidth, this.windowHeight);
     if (this.loaded) {
