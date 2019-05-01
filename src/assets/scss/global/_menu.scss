@@ -91,15 +91,7 @@
 
   &--opened {
     // display: block;
-<<<<<<< HEAD
-    height: 135px;
-
-    @include breakpoint(medium) {
-      height: 160px;
-    }
-=======
     height: 150px;
->>>>>>> 9b3fd4e009c6b1f4fe1a6a2bc8cbe25db132a200
   }
 
   @include breakpoint(medium) {
