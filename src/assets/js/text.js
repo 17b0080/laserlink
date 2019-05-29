@@ -1,4 +1,11 @@
 /* globals document, window */
+function scrollTo(top) {
+  window.scrollTo({
+    top,
+    behavior: 'smooth'
+  });
+}
+
 function getShowRhombuses(that) {
   const showText = [];
 
@@ -73,6 +80,7 @@ class Text {
   constructor(opts) {
     window.text = this;
     this.parent = opts.parent;
+    this.windowWidth = this.parent.windowWidth;
     this.scale = this.parent.scale;
     this.spacing = this.parent.spacing;
     this.showLines = this.parent.blocks.showLines;
@@ -86,6 +94,9 @@ class Text {
     this.productLinesHeight = this.productLines.height;
 
     this.content = document.querySelector('div.content');
+
+    this.menu = document.querySelectorAll('.menu__item');
+    this.subMenu = document.querySelectorAll('.sub-menu__item');
 
     this.firstBlock = {
       h: document.querySelector('.js-first-block__main-header'),
@@ -129,6 +140,68 @@ class Text {
   }
 
   applyStyles() {
+    if (this.windowWidth >= 990) {
+      document.body.style.height = `${(4593 +
+        this.showLinesHeight +
+        872 +
+        this.partnerLinesHeight +
+        900 +
+        this.productLinesHeight +
+        900) *
+        this.scale}px`;
+      this.menu[0].onclick = e => {
+        e.preventDefault();
+        scrollTo(0);
+      };
+
+      this.menu[1].onclick = function(e) {
+        e.preventDefault();
+      };
+      this.menu[1].children[1].children[0].onclick = e => {
+        e.preventDefault();
+        scrollTo(1013 * this.scale);
+      };
+      this.menu[1].children[1].children[1].onclick = e => {
+        e.preventDefault();
+        scrollTo(1740 * this.scale);
+      };
+      this.menu[1].children[1].children[2].onclick = e => {
+        e.preventDefault();
+        scrollTo(2600 * this.scale);
+      };
+      this.menu[1].children[1].children[3].onclick = e => {
+        e.preventDefault();
+        scrollTo(3400 * this.scale);
+      };
+
+      this.menu[2].onclick = e => {
+        e.preventDefault();
+        scrollTo((4593 + this.showLinesHeight + 572) * this.scale);
+      };
+
+      this.menu[3].onclick = e => {
+        e.preventDefault();
+        scrollTo(
+          (4593 + this.showLinesHeight + 872 + this.partnerLinesHeight + 530) *
+            this.scale
+        );
+      };
+
+      this.menu[4].onclick = e => {
+        e.preventDefault();
+        scrollTo(
+          (4593 +
+            this.showLinesHeight +
+            872 +
+            this.partnerLinesHeight +
+            900 +
+            this.productLinesHeight +
+            900) *
+            this.scale
+        );
+      };
+    }
+
     changeTranslate(this.firstBlock.h, 36 * this.scale, 842 * this.scale);
     changeTranslate(this.firstBlock.p, 413 * this.scale, 453 * this.scale);
 
