@@ -5,7 +5,7 @@ import {
   ShowLines,
   PartnerLines,
   ProductLines
-} from './rhombus';
+} from '../partials/rhombus';
 
 class Blocks {
   constructor(opts) {
