@@ -23,6 +23,13 @@
       margin: 0 rem-calc(10) 0 rem-calc(10);
       color: transparentize($color: $primary-color, $amount: 0.25);
     }
+    &--hiden-mobile {
+      display: none;
+      
+      @include breakpoint(medium) {
+         display: inline-block;
+      }
+    }
   }
 
   &__icons {

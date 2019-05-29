@@ -1,5 +1,7 @@
 .contact {
   margin-top: rem-calc(200);
+  padding-bottom: rem-calc(50);
+  // overflow: hidden;
 
   @include breakpoint(large) {
     @include xy-grid-container($width: rem-calc(480));

@@ -1,9 +1,11 @@
 .email-form {
-  // display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  
   @include breakpoint(large) {
-    position: absolute;
-    left: 0;
-    width: 432px;
+   
     margin-top: 45px;
   }
 
