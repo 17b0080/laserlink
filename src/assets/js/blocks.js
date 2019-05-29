@@ -194,16 +194,6 @@ class Blocks {
     });
 
     this.works = [this.work1, this.work2, this.work3, this.work4];
-
-    document.querySelector('body').style.height = `${(4593 +
-      this.showLines.height +
-      892 +
-      this.partnerLines.height +
-      883 +
-      this.productLines.height +
-      622 +
-      1000) *
-      this.scale}px`;
     this.parent.onBlockReady();
   }
 
