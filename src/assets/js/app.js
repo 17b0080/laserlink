@@ -31,19 +31,7 @@ if (!window.requestAnimationFrame) {
   };
 }
 
-// eslint-disable-next-line no-new
-// new StateSwitcher({
-//   item: document.querySelector('.rewards-frame'),
-//   button: document.querySelector('.rewards'),
-//   defaultState: true,
-//   onTrue() {
-//     this.item.classList.add('rewards-frame--opened');
-//   },
-//   onFalse() {
-//     this.item.classList.remove('rewards-frame--opened');
-//   }
-// });
-
+// rewards opener
 StateSwitcher({
   itemList: [
     document.querySelector('.rewards-frame-wrapper'),
@@ -64,6 +52,7 @@ StateSwitcher({
   }
 });
 
+// menu opener [mob]
 StateSwitcher({
   itemList: [
     document.querySelector('.header'),
@@ -108,6 +97,25 @@ StateSwitcher({
 });
 
 rewardViewer();
+
+const input = new Input([
+  {
+    input: getChildren(get('label[for=email-name]'), 0),
+    placeholder: getChildren(get('label[for=email-name]'), 2)
+  },
+  {
+    input: getChildren(get('label[for=email-mail]'), 0),
+    placeholder: getChildren(get('label[for=email-mail]'), 2)
+  },
+  {
+    input: getChildren(get('div.email-form__textarea'), 0),
+    placeholder: getChildren(get('div.email-form__textarea'), 2)
+  }
+]);
+const inputSwitcher = new InputSwitcher({
+  phone: getChildren(get('.contact__buttons'), 0),
+  mail: getChildren(get('.contact__buttons'), 1)
+});
 
 class App {
   constructor() {
@@ -237,24 +245,6 @@ class App {
       this.projectViewer = new ProjectViewer({ parent: this });
       this.productViewer = new ProductViewer({ parent: this });
       // this.gradients = new Gradients({ parent: this });
-      this.input = new Input([
-        {
-          input: getChildren(get('label[for=email-name]'), 0),
-          placeholder: getChildren(get('label[for=email-name]'), 2)
-        },
-        {
-          input: getChildren(get('label[for=email-mail]'), 0),
-          placeholder: getChildren(get('label[for=email-mail]'), 2)
-        },
-        {
-          input: getChildren(get('div.email-form__textarea'), 0),
-          placeholder: getChildren(get('div.email-form__textarea'), 2)
-        }
-      ]);
-      this.inputSwitcher = new InputSwitcher({
-        phone: getChildren(get('.contact__buttons'), 0),
-        mail: getChildren(get('.contact__buttons'), 1)
-      });
       this.lines = new Lines({ parent: this });
       this.text = new Text({ parent: this });
       this.textTrigger = new TextTriggers({ parent: this });
