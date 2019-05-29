@@ -476,6 +476,7 @@ class ProductViewer {
     this.tbody = document
       .querySelector('.table--desktop')
       .querySelector('tbody');
+    // console.log('tbd', this.tbody);
     this.image = document.createElement('img');
     this.backgroundImage = document.createElement('img');
 
@@ -581,7 +582,7 @@ class ProductViewer {
     this.content.style.visibility = 'hidden';
     this.content.style.height = '';
     this.text.innerHTML = this.data[this.index].text;
-    for (let i = 0; i < 7; i += 1) {
+    for (let i = 0; i < this.data[this.index].table.length; i += 1) {
       this.tbody.children[i].innerHTML = `<td class="table__cell">${
         this.data[this.index].table[i]
       }</td>`;
