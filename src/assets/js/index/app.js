@@ -31,96 +31,96 @@ if (!window.requestAnimationFrame) {
   };
 }
 
-// rewards opener
-StateSwitcher({
-  itemList: [
-    document.querySelector('.rewards-frame-wrapper'),
-    document.querySelector('.rewards__icon')
-  ],
-  itemClassList: ['opened', 'rotated'],
-  buttonList: [document.querySelector('.rewards')],
-  state: true,
-  onTrue(itemList, itemClassList) {
-    itemList.forEach((item, index) => {
-      item.classList.add(itemClassList[index]);
-    });
-  },
-  onFalse(itemList, itemClassList) {
-    itemList.forEach((item, index) => {
-      item.classList.remove(itemClassList[index]);
-    });
-  }
-});
-
-// menu opener [mob]
-StateSwitcher({
-  itemList: [
-    document.querySelector('.header'),
-    document.querySelector('.hamburger'),
-    document.querySelector('.menu')
-  ],
-  itemClassList: ['opened', 'animated', 'opened'],
-  buttonList: [document.querySelector('.hamburger-wrapper')],
-  state: true,
-  onTrue(itemList, itemClassList) {
-    itemList.forEach((item, index) => {
-      item.classList.add(itemClassList[index]);
-    });
-  },
-  onFalse(itemList, itemClassList) {
-    itemList.forEach((item, index) => {
-      item.classList.remove(itemClassList[index]);
-    });
-  }
-});
-
-// dropdown aka submenu
-StateSwitcher({
-  itemList: [
-    document.querySelector('.menu').children[1].children[1],
-    // document.querySelector('.menu').children[1].children[0],
-    document.querySelector('.menu').children[1].children[0].children[1]
-  ],
-  buttonList: [document.querySelector('.menu').children[1].children[0]],
-  state: true,
-  itemClassList: ['opened', 'rotated'],
-  onTrue(itemList, itemClassList) {
-    itemList.forEach((item, index) => {
-      item.classList.add(itemClassList[index]);
-    });
-  },
-  onFalse(itemList, itemClassList) {
-    itemList.forEach((item, index) => {
-      item.classList.remove(itemClassList[index]);
-    });
-  }
-});
-
-rewardViewer();
-
-// eslint-disable-next-line no-new
-new Input([
-  {
-    input: getChildren(get('label[for=email-name]'), 0),
-    placeholder: getChildren(get('label[for=email-name]'), 2)
-  },
-  {
-    input: getChildren(get('label[for=email-mail]'), 0),
-    placeholder: getChildren(get('label[for=email-mail]'), 2)
-  },
-  {
-    input: getChildren(get('div.email-form__textarea'), 0),
-    placeholder: getChildren(get('div.email-form__textarea'), 2)
-  }
-]);
-// eslint-disable-next-line no-new
-new InputSwitcher({
-  phone: getChildren(get('.contact__buttons'), 0),
-  mail: getChildren(get('.contact__buttons'), 1)
-});
-
 class App {
   constructor() {
+    // rewards opener
+    StateSwitcher({
+      itemList: [
+        document.querySelector('.rewards-frame-wrapper'),
+        document.querySelector('.rewards__icon')
+      ],
+      itemClassList: ['opened', 'rotated'],
+      buttonList: [document.querySelector('.rewards')],
+      state: true,
+      onTrue(itemList, itemClassList) {
+        itemList.forEach((item, index) => {
+          item.classList.add(itemClassList[index]);
+        });
+      },
+      onFalse(itemList, itemClassList) {
+        itemList.forEach((item, index) => {
+          item.classList.remove(itemClassList[index]);
+        });
+      }
+    });
+
+    // menu opener [mob]
+    StateSwitcher({
+      itemList: [
+        document.querySelector('.header'),
+        document.querySelector('.hamburger'),
+        document.querySelector('.menu')
+      ],
+      itemClassList: ['opened', 'animated', 'opened'],
+      buttonList: [document.querySelector('.hamburger-wrapper')],
+      state: true,
+      onTrue(itemList, itemClassList) {
+        itemList.forEach((item, index) => {
+          item.classList.add(itemClassList[index]);
+        });
+      },
+      onFalse(itemList, itemClassList) {
+        itemList.forEach((item, index) => {
+          item.classList.remove(itemClassList[index]);
+        });
+      }
+    });
+
+    // dropdown aka submenu
+    StateSwitcher({
+      itemList: [
+        document.querySelector('.menu').children[1].children[1],
+        // document.querySelector('.menu').children[1].children[0],
+        document.querySelector('.menu').children[1].children[0].children[1]
+      ],
+      buttonList: [document.querySelector('.menu').children[1].children[0]],
+      state: true,
+      itemClassList: ['opened', 'rotated'],
+      onTrue(itemList, itemClassList) {
+        itemList.forEach((item, index) => {
+          item.classList.add(itemClassList[index]);
+        });
+      },
+      onFalse(itemList, itemClassList) {
+        itemList.forEach((item, index) => {
+          item.classList.remove(itemClassList[index]);
+        });
+      }
+    });
+
+    rewardViewer();
+
+    // eslint-disable-next-line no-new
+    new Input([
+      {
+        input: getChildren(get('label[for=email-name]'), 0),
+        placeholder: getChildren(get('label[for=email-name]'), 2)
+      },
+      {
+        input: getChildren(get('label[for=email-mail]'), 0),
+        placeholder: getChildren(get('label[for=email-mail]'), 2)
+      },
+      {
+        input: getChildren(get('div.email-form__textarea'), 0),
+        placeholder: getChildren(get('div.email-form__textarea'), 2)
+      }
+    ]);
+    // eslint-disable-next-line no-new
+    new InputSwitcher({
+      phone: getChildren(get('.contact__buttons'), 0),
+      mail: getChildren(get('.contact__buttons'), 1)
+    });
+
     // Выделение памяти под переменные
     this.windowWidth = window.innerWidth;
     this.windowHeight = window.innerHeight;

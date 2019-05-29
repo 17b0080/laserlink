@@ -1,0 +1,22 @@
+body[data-page='confidentiality'] {
+  font-size: rem-calc(14);
+  background-image: url('../img/Components/Pattern/Image.png');
+
+  @include breakpoint(medium) {
+    font-size: rem-calc(18);
+    line-height: rem-calc(21);
+  }
+
+  @include breakpoint(large) {
+    background-image: none;
+  }
+
+  .content {
+    max-width: 1024px;
+    text-align: justify;
+
+    h2 {
+      font-size: 16pt;
+    }
+  }
+}

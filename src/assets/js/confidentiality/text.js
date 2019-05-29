@@ -32,67 +32,7 @@ class Text {
   }
 
   applyStyles() {
-    if (this.windowWidth >= 990) {
-      document.body.style.height = `${(4593 +
-        this.showLinesHeight +
-        872 +
-        this.partnerLinesHeight +
-        900 +
-        this.productLinesHeight +
-        900) *
-        this.scale}px`;
-      this.menu[0].onclick = e => {
-        e.preventDefault();
-        scrollTo(0);
-      };
-
-      this.menu[1].onclick = function(e) {
-        e.preventDefault();
-      };
-      this.menu[1].children[1].children[0].onclick = e => {
-        e.preventDefault();
-        scrollTo(1013 * this.scale);
-      };
-      this.menu[1].children[1].children[1].onclick = e => {
-        e.preventDefault();
-        scrollTo(1740 * this.scale);
-      };
-      this.menu[1].children[1].children[2].onclick = e => {
-        e.preventDefault();
-        scrollTo(2600 * this.scale);
-      };
-      this.menu[1].children[1].children[3].onclick = e => {
-        e.preventDefault();
-        scrollTo(3400 * this.scale);
-      };
-
-      this.menu[2].onclick = e => {
-        e.preventDefault();
-        scrollTo((4593 + this.showLinesHeight + 572) * this.scale);
-      };
-
-      this.menu[3].onclick = e => {
-        e.preventDefault();
-        scrollTo(
-          (4593 + this.showLinesHeight + 872 + this.partnerLinesHeight + 530) *
-            this.scale
-        );
-      };
-
-      this.menu[4].onclick = e => {
-        e.preventDefault();
-        scrollTo(
-          (4593 +
-            this.showLinesHeight +
-            872 +
-            this.partnerLinesHeight +
-            900 +
-            this.productLinesHeight +
-            900) *
-            this.scale
-        );
-      };
-    }
+    document.body.style.height = `${this.content.clientHeight + 100}px`;
   }
 
   render() {
