@@ -26,6 +26,10 @@
   }
   &__policy {
     display: none;
+   
+    &--shown-mobile {
+      display: inline-block;
+    }
     
     @include breakpoint(medium) {
       color: transparentize($color: $primary-color, $amount: 0.25);

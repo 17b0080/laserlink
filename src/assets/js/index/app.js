@@ -12,6 +12,32 @@ import InputSwitcher from './InputSwitcher';
 import StateSwitcher from './stateSwitcher';
 import rewardViewer from './rewards';
 
+function getCoords(elem) {
+  // (1)
+  const box = elem.getBoundingClientRect();
+
+  const { body } = document;
+  const docEl = document.documentElement;
+
+  // (2)
+  const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+
+  // (3)
+  const clientTop = docEl.clientTop || body.clientTop || 0;
+
+  // (4)
+  const top = box.top + scrollTop - clientTop;
+
+  return top;
+}
+
+function scrollTo(top) {
+  window.scrollTo({
+    top,
+    behavior: 'smooth'
+  });
+}
+
 function get(str) {
   return document.querySelector(str);
 }
@@ -243,6 +269,13 @@ class App {
   onBlockReady() {
     // this.ready();
     this.gradients = new Gradients({ parent: this });
+    if (document.URL.indexOf('down=true') !== -1) {
+      if (this.windowWidth < 990) {
+        scrollTo(
+          getCoords(document.querySelector('div.contact-form-wrapper')) - 100
+        );
+      }
+    }
   }
 
   ready() {

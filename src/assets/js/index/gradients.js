@@ -209,9 +209,11 @@ class GradientBlock {
         this.triggered = true;
         for (let i = 0; i < this.parent.gradients.length; i += 1) {
           if (i !== this.i) {
-            this.parent.gradients[i].triggered = false;
-            this.parent.gradients[i].animated = false;
-            this.parent.gradients[i].k = 0;
+            if (!((this.i === 0 && i === 1) || (this.i === 1 && i === 0))) {
+              this.parent.gradients[i].triggered = false;
+              this.parent.gradients[i].animated = false;
+              this.parent.gradients[i].k = 0;
+            }
           }
         }
       }
