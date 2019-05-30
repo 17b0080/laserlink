@@ -34,25 +34,25 @@ if (!window.requestAnimationFrame) {
 class App {
   constructor() {
     // rewards opener
-    StateSwitcher({
-      itemList: [
-        document.querySelector('.rewards-frame-wrapper'),
-        document.querySelector('.rewards__icon')
-      ],
-      itemClassList: ['opened', 'rotated'],
-      buttonList: [document.querySelector('.rewards')],
-      state: true,
-      onTrue(itemList, itemClassList) {
-        itemList.forEach((item, index) => {
-          item.classList.add(itemClassList[index]);
-        });
-      },
-      onFalse(itemList, itemClassList) {
-        itemList.forEach((item, index) => {
-          item.classList.remove(itemClassList[index]);
-        });
-      }
-    });
+    // StateSwitcher({
+    //  itemList: [
+    //    document.querySelector('.rewards-frame-wrapper'),
+    //    document.querySelector('.rewards__icon')
+    //  ],
+    //  itemClassList: ['opened', 'rotated'],
+    //  buttonList: [document.querySelector('.rewards')],
+    //  state: true,
+    //  onTrue(itemList, itemClassList) {
+    //    itemList.forEach((item, index) => {
+    //      item.classList.add(itemClassList[index]);
+    //    });
+    //  },
+    //  onFalse(itemList, itemClassList) {
+    //    itemList.forEach((item, index) => {
+    //      item.classList.remove(itemClassList[index]);
+    //    });
+    //  }
+    // });
 
     // menu opener [mob]
     StateSwitcher({
@@ -98,7 +98,7 @@ class App {
       }
     });
 
-    rewardViewer();
+    // rewardViewer();
 
     // eslint-disable-next-line no-new
     new Input([
