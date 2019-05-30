@@ -16,6 +16,11 @@
   }
 
   &__item {
+    &--mobile-only {
+      @include breakpoint(medium) {
+        display: none !important; 
+      }
+    }
   }
 
   &__link {

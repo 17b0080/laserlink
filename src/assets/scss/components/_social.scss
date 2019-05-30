@@ -1,6 +1,7 @@
 .social {
   display: flex;
   justify-content: space-around;
+  align-items: center;
   color: transparentize($color: $primary-color, $amount: 0.25);
 
   &__phone {

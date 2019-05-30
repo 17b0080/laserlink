@@ -24,4 +24,12 @@
       font-family: 'Trajan Pro';
     }
   }
+  &__policy {
+    display: none;
+    
+    @include breakpoint(medium) {
+      color: transparentize($color: $primary-color, $amount: 0.25);
+      display: block;
+    }
+  }
 }
