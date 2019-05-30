@@ -113,8 +113,13 @@ class App {
       {
         input: getChildren(get('div.email-form__textarea'), 0),
         placeholder: getChildren(get('div.email-form__textarea'), 2)
+      },
+      {
+        input: getChildren(get('label[for=phone-number]'), 0),
+        placeholder: getChildren(get('label[for=phone-number]'), 2)
       }
     ]);
+
     // eslint-disable-next-line no-new
     new InputSwitcher({
       phone: getChildren(get('.contact__buttons'), 0),

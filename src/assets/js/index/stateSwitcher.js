@@ -27,14 +27,14 @@ export default function StateSwitcher(opts) {
         opts.itemClassList[index]
       }`
   );
-  console.log(itemClassList);
 
   const { onTrue } = opts;
   const { onFalse } = opts;
 
   let { state } = opts;
 
-  function handleClick() {
+  function handleClick(e) {
+    e.preventDefault();
     state === true
       ? onTrue(itemList, itemClassList)
       : onFalse(itemList, itemClassList);

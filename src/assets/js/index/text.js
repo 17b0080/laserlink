@@ -1,4 +1,24 @@
 /* globals document, window */
+
+function getCoords(elem) {
+  // (1)
+  const box = elem.getBoundingClientRect();
+
+  const { body } = document;
+  const docEl = document.documentElement;
+
+  // (2)
+  const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+
+  // (3)
+  const clientTop = docEl.clientTop || body.clientTop || 0;
+
+  // (4)
+  const top = box.top + scrollTop - clientTop;
+
+  return top;
+}
+
 function scrollTo(top) {
   window.scrollTo({
     top,
@@ -140,6 +160,9 @@ class Text {
   }
 
   applyStyles() {
+    console.log(
+      getCoords(document.querySelector('div.show-wrapper').children[3])
+    );
     if (this.windowWidth >= 990) {
       document.body.style.height = `${(4593 +
         this.showLinesHeight +
@@ -154,9 +177,9 @@ class Text {
         scrollTo(0);
       };
 
-      this.menu[1].onclick = function(e) {
-        e.preventDefault();
-      };
+      // this.menu[1].onclick = e => {
+      //   e.preventDefault();
+      // };
       this.menu[1].children[1].children[0].onclick = e => {
         e.preventDefault();
         scrollTo(1013 * this.scale);
@@ -198,6 +221,43 @@ class Text {
             this.productLinesHeight +
             900) *
             this.scale
+        );
+      };
+    } else {
+      this.menu[1].children[1].children[0].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        document.querySelector('.hamburger-wrapper').onclick(e);
+        scrollTo(
+          getCoords(document.querySelector('div.show-wrapper').children[1]) -
+            100
+        );
+      };
+      this.menu[1].children[1].children[1].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        document.querySelector('.hamburger-wrapper').onclick(e);
+        scrollTo(
+          getCoords(document.querySelector('div.show-wrapper').children[2]) -
+            100
+        );
+      };
+      this.menu[1].children[1].children[2].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        document.querySelector('.hamburger-wrapper').onclick(e);
+        scrollTo(
+          getCoords(document.querySelector('div.show-wrapper').children[3]) -
+            100
+        );
+      };
+      this.menu[1].children[1].children[3].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        document.querySelector('.hamburger-wrapper').onclick(e);
+        scrollTo(
+          getCoords(document.querySelector('div.show-wrapper').children[4]) -
+            100
         );
       };
     }
@@ -266,8 +326,8 @@ class Text {
         j += 1;
         k = 0;
       }
-      const dx = this.showLines.showBlocks[j].dx;
-      const dy = this.showLines.showBlocks[j].dy;
+      const { dx } = this.showLines.showBlocks[j];
+      const { dy } = this.showLines.showBlocks[j];
       const x = dx * this.scale;
       const y = dy * this.scale;
       changeTranslate(
