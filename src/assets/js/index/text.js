@@ -160,9 +160,6 @@ class Text {
   }
 
   applyStyles() {
-    console.log(
-      getCoords(document.querySelector('div.show-wrapper').children[3])
-    );
     if (this.windowWidth >= 990) {
       document.body.style.height = `${(4593 +
         this.showLinesHeight +
@@ -177,9 +174,6 @@ class Text {
         scrollTo(0);
       };
 
-      // this.menu[1].onclick = e => {
-      //   e.preventDefault();
-      // };
       this.menu[1].children[1].children[0].onclick = e => {
         e.preventDefault();
         scrollTo(1013 * this.scale);
@@ -224,6 +218,14 @@ class Text {
         );
       };
     } else {
+      this.menu[0].onclick = e => {
+        e.preventDefault();
+        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
+          this.menu[1].children[0].onclick(e);
+        }
+        document.querySelector('.hamburger-wrapper').onclick(e);
+        scrollTo(0);
+      };
       this.menu[1].children[1].children[0].onclick = e => {
         e.preventDefault();
         this.menu[1].children[0].onclick(e);
@@ -258,6 +260,35 @@ class Text {
         scrollTo(
           getCoords(document.querySelector('div.show-wrapper').children[4]) -
             100
+        );
+      };
+      // партнеры - 2
+      this.menu[2].onclick = e => {
+        e.preventDefault();
+        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
+          this.menu[1].children[0].onclick(e);
+        }
+        document.querySelector('.hamburger-wrapper').onclick(e);
+        scrollTo(getCoords(document.querySelector('div.partners')) - 100);
+      };
+      // оборудование - 3
+      this.menu[3].onclick = e => {
+        e.preventDefault();
+        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
+          this.menu[1].children[0].onclick(e);
+        }
+        document.querySelector('.hamburger-wrapper').onclick(e);
+        scrollTo(getCoords(document.querySelector('div.products')) - 100);
+      };
+      // контакты - 4
+      this.menu[4].onclick = e => {
+        e.preventDefault();
+        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
+          this.menu[1].children[0].onclick(e);
+        }
+        document.querySelector('.hamburger-wrapper').onclick(e);
+        scrollTo(
+          getCoords(document.querySelector('div.contact-form-wrapper')) - 100
         );
       };
     }
