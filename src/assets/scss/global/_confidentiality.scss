@@ -14,9 +14,17 @@ body[data-page='confidentiality'] {
   .content {
     max-width: 1024px;
     text-align: justify;
+    padding-top: rem-calc(45);
+    padding-bottom: rem-calc(25);
+    
 
     h2 {
       font-size: 16pt;
+    }
+
+    @include xy-grid-container;
+    @include breakpoint(large) {
+      position: fixed;
     }
   }
 }
