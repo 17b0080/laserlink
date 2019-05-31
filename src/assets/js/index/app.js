@@ -203,8 +203,35 @@ class App {
       document.querySelector('.js-product-images').getAttribute('data-src')
     );
 
-    this.projectData = JSON.parse(
-      document.querySelector('.js-project-data').getAttribute('data')
+    /*
+    1. Видеомаппинг             Video mapping       video-mapping
+    2. Лазерное шоу             Laser show          laser-show
+    3. Мультимедийное шоу       Multimedia show     multimedia-show
+    4. Постановочные номера     Staging numbers     staging-numbers
+    5. Общее                    Сommon              commin
+    */
+    this.videoMappingData = JSON.parse(
+      document
+        .querySelector('.js-project-data--video-mapping')
+        .getAttribute('data')
+    );
+    this.laserShowData = JSON.parse(
+      document
+        .querySelector('.js-project-data--laser-show')
+        .getAttribute('data')
+    );
+    this.multimediaShowData = JSON.parse(
+      document
+        .querySelector('.js-project-data--multimedia-show')
+        .getAttribute('data')
+    );
+    this.stagingNumbersData = JSON.parse(
+      document
+        .querySelector('.js-project-data--staging-numbers')
+        .getAttribute('data')
+    );
+    this.commonData = JSON.parse(
+      document.querySelector('.js-project-data--common').getAttribute('data')
     );
 
     this.productData = JSON.parse(

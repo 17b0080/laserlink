@@ -364,9 +364,15 @@ class Text {
       4012 * this.scale
     );
 
+    const types = [
+      'video-mapping',
+      'laser-show',
+      'multimedia-show',
+      'staging-numbers'
+    ];
     for (let i = 0; i < 4; i += 1) {
       this.workBlocks[i].a.onclick = () => {
-        this.parent.projectViewer.open(i);
+        this.parent.projectViewer.open(0, types[i]);
       };
       this.workBlocks[i].a.style.width = `${128 * this.scale}px`;
       this.workBlocks[i].a.style.height = `${128 * this.scale}px`;
@@ -400,7 +406,7 @@ class Text {
         y
       );
       this.showRhombuses[i].a.onclick = () => {
-        this.parent.projectViewer.open(i);
+        this.parent.projectViewer.open(i, 'common');
       };
       this.showRhombuses[i].a.style.width = `${220 * this.scale}px`;
       this.showRhombuses[i].a.style.height = `${220 * this.scale}px`;
