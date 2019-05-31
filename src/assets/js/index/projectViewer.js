@@ -1,4 +1,4 @@
-/* globals document */
+/* globals document, window */
 function getWidthAndHeight(width, height, dW, dH) {
   let scale = 1;
   let w = width;
@@ -424,7 +424,7 @@ class ProjectViewer {
     this.parent = opts.parent;
 
     // JSON с информацией о всех шоу
-    this.data = this.parent.projectData;
+    this.data = undefined;
 
     //
     this.scale = this.parent.scale;
@@ -474,7 +474,6 @@ class ProjectViewer {
 
     //
     this.orderButton.onclick = () => {
-      console.log('click');
       this.next = false;
       this.prev = false;
       this.order = true;
@@ -540,6 +539,7 @@ class ProjectViewer {
   }
 
   loadData() {
+    console.log('load data', this.data, this.index);
     this.loadState = 0;
     this.loaded = false;
     this.video.src = this.data[this.index].video;
@@ -574,8 +574,23 @@ class ProjectViewer {
     this.arrowRight.style.visibility = 'visible';
   }
 
-  open(index) {
+  open(index, type = undefined) {
     if (!this.opened) {
+      console.log(type);
+      if (type !== undefined) {
+        if (type === 'video-mapping') {
+          this.data = this.parent.videoMappingData;
+        } else if (type === 'laser-show') {
+          this.data = this.parent.laserShowData;
+        } else if (type === 'multimedia-show') {
+          this.data = this.parent.multimediaShowData;
+        } else if (type === 'staging-numbers') {
+          this.data = this.parent.stagingNumbersData;
+        } else if (type === 'common') {
+          this.data = this.parent.commonData;
+        }
+      }
+      console.log(this.data);
       this.projectWrapper.style.visibility = 'visible';
       this.closed = false;
       this.index = index;
@@ -592,7 +607,6 @@ class ProjectViewer {
       this.projectWrapper.style.visibility = 'hidden';
     } else if (this.order) {
       this.projectWrapper.style.visibility = 'hidden';
-      console.log('closed');
       this.closed = true;
       this.order = false;
       window.scrollTo({
@@ -607,13 +621,9 @@ class ProjectViewer {
         behavior: 'smooth'
       });
     } else {
-      console.log('wow');
       this.next = false;
       this.prev = false;
-      console.log(this.closed);
       this.open(this.indexToOpen);
-      console.log(this.closed);
-      console.log('end wow');
     }
   }
 
