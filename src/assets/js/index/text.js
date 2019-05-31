@@ -77,6 +77,28 @@ function getProductRhombuses(that) {
   return productRhombuses;
 }
 
+function getPartnerRhombuses(that) {
+  const partnerRhombuses = [];
+  console.log(that.parent.blocks.partnerLines.partnerBlocks);
+  that.parent.blocks.partnerLines.partnerBlocks.forEach(
+    (partnerBlock, partnerBlockIndex) => {
+      partnerBlock.rhombuses.forEach(
+        (partnerBlockRhombus, partnerBlockRhombusIndex) => {
+          console.log(partnerBlockRhombus);
+          partnerRhombuses.push({
+            dom: document.querySelectorAll(
+              '.js-partner-block__rhombus__button'
+            )[partnerBlockRhombusIndex],
+            x: partnerBlockRhombus.x,
+            y: partnerBlockRhombus.y
+          });
+        }
+      );
+    }
+  );
+  return partnerRhombuses;
+}
+
 function getWorkText() {
   const workBlocks = [];
 
@@ -130,6 +152,8 @@ class Text {
       p: document.querySelector('.js-show-block__text')
     };
     this.showRhombuses = getShowRhombuses(this);
+
+    this.partnerRhombuses = getPartnerRhombuses(this);
 
     this.partnerBlock = {
       h: document.querySelectorAll('.js-partner-block__sub-header'),
@@ -399,6 +423,12 @@ class Text {
       114 * this.scale,
       (4593 + 307 + this.showLinesHeight) * this.scale
     );
+    console.log(this.scale);
+    this.partnerRhombuses.forEach(rhombus => {
+      rhombus.dom.style.width = `${220 * this.scale}px`;
+      rhombus.dom.style.height = `${220 * this.scale}px`;
+      changeTranslate(rhombus.dom, rhombus.x, rhombus.y);
+    });
 
     changeTranslate(
       this.productBlock.h[0],

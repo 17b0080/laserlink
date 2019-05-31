@@ -7,13 +7,13 @@ body[data-page='index'] {
     @include breakpoint(small) {
       display: none;
     }
-  
+
     @include breakpoint(medium) {
       display: block;
     }
-  
+
     position: fixed;
-  
+
     &__main-header {
       position: absolute;
       top: 25px;
@@ -28,13 +28,13 @@ body[data-page='index'] {
       letter-spacing: normal;
       opacity: 0;
       transition: opacity 300ms, top 1000ms;
-  
+
       &--fade-in {
         top: 0;
         opacity: 1;
       }
     }
-  
+
     &__sub-header {
       position: absolute;
       top: 25px;
@@ -49,13 +49,13 @@ body[data-page='index'] {
       letter-spacing: normal;
       opacity: 0;
       transition: opacity 300ms, top 1000ms;
-  
+
       &--fade-in {
         top: 0;
         opacity: 1;
       }
     }
-  
+
     &__text {
       position: absolute;
       top: 25px;
@@ -70,16 +70,20 @@ body[data-page='index'] {
       letter-spacing: normal;
       opacity: 0;
       transition: opacity 300ms, top 1000ms;
-  
+
       &--fade-in {
         top: 0;
         opacity: 1;
       }
     }
-  
-    &__button {
-      position: absolute;
+
+    .js-work-block__button {
       top: 10px;
+    }
+
+    .content__button {
+      position: absolute;
+      // top: 10px;
       color: #f5f4ea;
       font-weight: normal;
       font-size: 14px;
@@ -91,31 +95,30 @@ body[data-page='index'] {
       opacity: 0;
       transition: opacity 300ms, top 1000ms;
       clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  
+
       &--fade-in {
         top: 0;
         opacity: 1;
       }
     }
-  
+
     &__sub-text {
       position: absolute;
       top: 25px;
       text-align: center;
       opacity: 0;
       transition: opacity 300ms, top 1000ms;
-  
+
       &--fade-in {
         top: 0;
         opacity: 1;
       }
     }
-  
+
     .sub-text--upper {
       text-transform: uppercase;
     }
   }
-
 
   @include breakpoint(medium) {
     font-size: rem-calc(18);
@@ -160,8 +163,6 @@ body[data-page='index'] {
     position: fixed;
   }
 }
-
-
 
 .loader-wrapper {
   position: fixed;
