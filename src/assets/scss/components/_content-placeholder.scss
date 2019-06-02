@@ -79,6 +79,7 @@
     position: absolute;
     top: rem-calc(23);
     right: rem-calc(101);
+    font-size: 15px;
     z-index: z('content-wrapper') + 2;
 
     &::before {
