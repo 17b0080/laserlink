@@ -468,7 +468,6 @@ class ProductViewer {
       .querySelector('tbody');
     // console.log('tbd', this.tbody);
     this.image = document.createElement('img');
-    this.backgroundImage = document.createElement('img');
 
     document.querySelector('.product-viewer__close-button').onclick = () => {
       this.close();
@@ -514,11 +513,6 @@ class ProductViewer {
       this.onLoadEnd();
     };
 
-    // Привяжем callback загрузки к фотографии заднего фона
-    this.backgroundImage.onload = () => {
-      this.onLoadEnd();
-    };
-
     this.loadState = 0;
     this.loaded = false;
     this.closed = true;
@@ -540,22 +534,17 @@ class ProductViewer {
   }
 
   onLoadEnd() {
-    this.loadState += 1;
-
-    if (this.loadState === 2) {
-      this.background.open();
-      this.imageRhombus.open();
-      this.rhombus.open();
-      this.loaded = true;
-      this.closeLoader();
-    }
+    this.background.open();
+    this.imageRhombus.open();
+    this.rhombus.open();
+    this.loaded = true;
+    this.closeLoader();
   }
 
   loadData() {
     this.loadState = 0;
     this.loaded = false;
     this.image.src = this.data[this.index].image;
-    this.backgroundImage.src = this.data[this.index].background;
   }
 
   openLoader() {
