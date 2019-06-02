@@ -46,7 +46,7 @@
     @include breakpoint(medium) {
       position: absolute;
       top: 0;
-      left: rem-calc(-15);
+      left: rem-calc(-17);
       display: block;
       font-size: rem-calc(12);
     }
@@ -54,7 +54,7 @@
 
   &__icon {
     position: absolute;
-    top: 0;
+    top: -1px;
     width: rem-calc(16);
     height: rem-calc(16);
     margin-left: rem-calc(5);

@@ -85,7 +85,7 @@ $white: #f5f4ea;
 $light-white: #fefefe;
 $body-background: $black;
 $body-font-color: $white;
-$body-font-family: CocogooseClassic, 'Helvetica Neue', Helvetica, Roboto, Arial,
+$body-font-family: 'Cocogoose Classic', 'Helvetica Neue', Helvetica, Roboto, Arial,
   sans-serif;
 $body-antialiased: true;
 $global-margin: 1rem;
@@ -146,16 +146,16 @@ $header-margin-bottom: 0.5rem;
 $header-styles: (
   small: (
     'h1': (
-      'font-size': 24,
+      'font-size': 30,
       'font-family': 'CocogooseClassic',
       'font-weight': 300,
-      ' line-height': 29
+      'line-height': 32
     ),
     'h2': (
-      'font-size': 20,
+      'font-size': 28,
       'font-family': 'CocogooseClassic',
       'font-weight': 300,
-      ' line-height': 24
+      'line-height': 30
     ),
     'h3': (
       'font-size': 19,

@@ -13,7 +13,7 @@
     // height: rem-calc(100);
 
     &--cell {
-      @include xy-cell($gutter-position: left right top);
+      @include xy-cell($gutter-position: left right top, $size: shrink);
 
       display: flex;
       align-items: center;
@@ -23,6 +23,7 @@
 
   &__title {
     text-align: center;
+    font-size: 28px;
   }
 
   &__image {
