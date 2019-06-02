@@ -134,9 +134,9 @@ class VideoRhombus {
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
-    this.width = 718;
+    this.width = 1000; //718
     this.halfWidth = this.width / 2;
-    this.height = 718;
+    this.height = 1000;
     this.halfHeight = this.height / 2;
 
     this.canvas = document.createElement('canvas');

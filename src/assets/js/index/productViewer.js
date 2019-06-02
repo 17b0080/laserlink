@@ -207,14 +207,6 @@ class ImageRhombus {
   }
 
   updateDots() {
-    // const x0 =
-    //   this.halfWidth - this.currentFrame * this.speed > 0
-    //     ? this.halfWidth - this.currentFrame * this.speed
-    //     : 0;
-    // const y1 =
-    //   this.halfHeight - this.currentFrame * this.speed > 0
-    //     ? this.halfHeight - this.currentFrame * this.speed
-    //     : 0;
     this.framedDots = {
       x0: this.halfWindowWidth - this.currentFrame * this.speed - this.currentX,
       x1: this.halfWindowWidth - this.currentX,
@@ -266,12 +258,21 @@ class ImageRhombus {
     this.parent.context.lineWidth = 4; // половина срезается клипом
     this.parent.context.strokeStyle = '#CCA75C';
 
+    let imageHeight = this.height;
+    let dx = this.halfWindowWidth - this.halfWidth - this.currentX;
+    let dy = this.halfWindowHeight - 650;
+    if (this.windowHeight <= 900) {
+      imageHeight -= 150;
+      dx += 75;
+      dy += 100;
+    }
+
     this.parent.context.drawImage(
       this.parent.image,
-      this.halfWindowWidth - this.halfWidth - this.currentX,
-      this.halfWindowHeight - 650,
-      this.width,
-      this.height
+      dx,
+      dy,
+      imageHeight,
+      imageHeight
     );
     this.parent.context.stroke();
     this.parent.context.restore();
@@ -319,9 +320,9 @@ class ProjectRhombus {
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
     this.width = 1400;
-    this.halfWidth = 700;
+    this.halfWidth = this.width / 2;
     this.height = 1400;
-    this.halfHeight = 700;
+    this.halfHeight = this.height / 2;
 
     this.time = 250;
     this.currentFrame = 0;
