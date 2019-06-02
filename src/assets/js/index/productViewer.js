@@ -261,10 +261,16 @@ class ImageRhombus {
     let imageHeight = this.height;
     let dx = this.halfWindowWidth - this.halfWidth - this.currentX;
     let dy = this.halfWindowHeight - 650;
+
     if (this.windowHeight <= 900) {
-      imageHeight -= 150;
-      dx += 75;
+      imageHeight -= 100;
+      dx += 50;
       dy += 100;
+      if (this.windowHeight <= 800) {
+        imageHeight -= 100;
+        dx += 50;
+        dy += 75;
+      }
     }
 
     this.parent.context.drawImage(
