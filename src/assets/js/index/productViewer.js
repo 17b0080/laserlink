@@ -32,7 +32,6 @@ function changeTranslate(item, x, y) {
 class Background {
   constructor(opts) {
     this.parent = opts.parent;
-    this.image = undefined;
 
     this.windowWidth = this.parent.windowWidth;
     this.windowHeight = this.parent.windowHeight;
@@ -47,18 +46,6 @@ class Background {
   }
 
   open() {
-    this.image = this.parent.backgroundImage;
-
-    const { w, h } = getWidthAndHeight(
-      this.image.width,
-      this.image.height,
-      this.windowWidth,
-      this.windowHeight
-    );
-
-    this.imageWidth = w;
-    this.imageHeight = h;
-
     this.openRequest = true;
     this.closed = false;
     this.request = true;
@@ -101,13 +88,9 @@ class Background {
   drawFrame() {
     this.parent.context.save();
     this.parent.context.globalAlpha = this.alpha;
-    this.parent.context.drawImage(
-      this.image,
-      0,
-      0,
-      this.imageWidth,
-      this.imageHeight
-    );
+    this.parent.context.fillStyle = '#222222';
+    this.parent.context.rect(0, 0, this.windowWidth, this.windowHeight);
+    this.parent.context.fill();
     this.parent.context.restore();
   }
 
