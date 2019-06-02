@@ -77,13 +77,13 @@
 
   &__number {
     position: absolute;
-    top: rem-calc(20);
+    top: rem-calc(23);
     right: rem-calc(101);
     z-index: z('content-wrapper') + 2;
 
     &::before {
       position: absolute;
-      top: 0;
+      top: -3px;
       right: rem-calc(-2);
       width: rem-calc(23);
       height: rem-calc(2);
@@ -198,7 +198,7 @@
       // text-transform: uppercase;
 
       &--small {
-        font-size: rem-calc(14);
+        font-size: rem-calc(16);
         text-transform: none;
       }
     }
