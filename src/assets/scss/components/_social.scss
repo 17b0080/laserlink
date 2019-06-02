@@ -31,6 +31,13 @@
          display: inline-block;
       }
     }
+    &--hiden-tablet {
+      display: none;
+      
+      @include breakpoint(large) {
+         display: inline-block;
+      }
+    }
   }
 
   &__icons {
