@@ -8,16 +8,26 @@ class Gradient {
     this.currentX = this.parent.currentX;
     this.currentY = this.parent.currentY;
     this.alpha = 0;
+    this.rotate = opts.rotate;
 
     this.request = false;
 
-    this.dots = {
-      x: opts.x0 * this.scale + opts.dx,
-      y: opts.y0 * this.scale + opts.dy,
-      x0: opts.x0 * this.scale,
-      y0: opts.y0 * this.scale,
+    this.defDots = {
+      x0: opts.x0,
+      y0: opts.y0,
+      x: opts.x,
+      y: opts.y,
       dx: opts.dx,
       dy: opts.dy
+    };
+
+    this.dots = {
+      x: this.defDots.x0 * this.scale + this.defDots.dx,
+      y: this.defDots.y0 * this.scale + this.defDots.dy,
+      x0: this.defDots.x0 * this.scale,
+      y0: this.defDots.y0 * this.scale,
+      dx: this.defDots.dx,
+      dy: this.defDots.dy
     };
 
     this.windowHeight = this.parent.windowHeight;
@@ -29,8 +39,9 @@ class Gradient {
     this.canvas.height = 989 * this.scale;
 
     this.context = this.canvas.getContext('2d');
+    this.context.save();
     this.context.translate(this.canvas.width / 2, this.canvas.height / 2);
-    this.context.rotate((opts.rotate * Math.PI) / 180);
+    this.context.rotate((this.rotate * Math.PI) / 180);
     this.context.drawImage(
       this.image,
       -this.canvas.width / 2,
@@ -38,6 +49,7 @@ class Gradient {
       this.canvas.width,
       this.canvas.height
     );
+    this.context.restore();
   }
 
   updateXY() {
@@ -50,16 +62,33 @@ class Gradient {
     this.windowWidth = this.parent.windowWidth;
     this.windowHeight = this.parent.windowHeight;
 
+    this.dots = {
+      x: this.defDots.x0 * this.scale + this.defDots.dx,
+      y: this.defDots.y0 * this.scale + this.defDots.dy,
+      x0: this.defDots.x0 * this.scale,
+      y0: this.defDots.y0 * this.scale,
+      dx: this.defDots.dx,
+      dy: this.defDots.dy
+    };
+
     this.dots.x =
       this.spacing + this.dots.x0 + this.dots.dx * (1 - this.g) - this.currentX;
     this.dots.y = this.dots.y0 + this.dots.dy * (1 - this.g) - this.currentY;
 
     this.spacing = this.parent.spacing;
-    this.canvas.width = this.windowWidth;
-    this.canvas.height = this.windowHeight;
-    this.canvas
-      .getContext('2d')
-      .drawImage(this.image, 0, 0, this.canvas.width, this.canvas.height);
+    this.canvas.width = 989 * this.scale;
+    this.canvas.height = 989 * this.scale;
+    this.context.save();
+    this.context.translate(this.canvas.width / 2, this.canvas.height / 2);
+    this.context.rotate((this.rotate * Math.PI) / 180);
+    this.context.drawImage(
+      this.image,
+      -this.canvas.width / 2,
+      -this.canvas.height / 2,
+      this.canvas.width,
+      this.canvas.height
+    );
+    this.context.restore();
   }
 
   newTick() {
@@ -162,6 +191,17 @@ class GradientBlock {
     this.g = 1;
 
     this.delay = 450;
+  }
+
+  handleResize() {
+    this.windowWidth = this.parent.windowWidth;
+    this.windowHeight = this.parent.windowHeight;
+    this.scale = this.parent.scale;
+    this.spacing = this.parent.spacing;
+
+    this.gradients.forEach(gradient => {
+      gradient.handleResize();
+    });
   }
 
   updateXY() {

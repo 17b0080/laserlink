@@ -276,6 +276,7 @@ class App {
     this.blocks.handleResize(this.windowWidth, this.windowHeight, this.scale);
     this.lines.handleResize();
     this.text.handleResize();
+    this.gradients.handleResize();
   }
 
   handleScroll() {

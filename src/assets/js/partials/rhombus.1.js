@@ -282,7 +282,6 @@ class FirstBlock {
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
     this.scale = this.parent.scale;
-    this.spacing = this.parent.spacing;
 
     this.x = this.dx * this.scale - this.currentX + this.spacing;
     this.y = this.dy * this.scale - this.currentY;
@@ -315,9 +314,7 @@ class FirstBlock {
     if (
       (this.y > -4 && this.y < this.windowHeight + 4) ||
       (this.y + this.rhombus.scaledHeight > -4 &&
-        this.y + this.rhombus.scaledHeight < this.windowHeight + 4) ||
-      (this.y + this.rhombus.scaledHeight / 2 > -4 &&
-        this.y + this.rhombus.scaledHeight / 2 < this.windowHeight)
+        this.y + this.rhombus.scaledHeight < this.windowHeight + 4)
     ) {
       this.onWindow = true;
       // window.trigger(0);
@@ -400,7 +397,6 @@ class WorkRhombus {
     this.halfScaledWidth = this.scaledWidth / 2;
     this.scaledHeight = this.height * this.scale;
     this.halfScaledHeight = this.scaledHeight / 2;
-    this.spacing = this.parent.spacing;
 
     this.x = x;
     this.y = y;
@@ -665,7 +661,6 @@ class HoverRhombus {
     this.halfScaledWidth = this.scaledWidth / 2;
     this.scaledHeight = this.height * this.scale;
     this.halfScaledHeight = this.scaledHeight / 2;
-    this.spacing = this.parent.spacing;
 
     this.x = x;
     this.y = y;
@@ -933,11 +928,7 @@ class WorkBlock {
     if (
       (this.y > -4 && this.y < this.windowHeight + 4) ||
       (this.sy + 13 * this.scale + this.side.height > -4 &&
-        this.sy + 13 * this.scale + this.side.height < this.windowHeight + 4) ||
-      (this.y + (13 * this.scale + this.side.height + this.main.height) / 2 >
-        0 &&
-        this.y + (13 * this.scale + this.side.height + this.main.height) / 2 <
-          this.windowHeight)
+        this.sy + 13 * this.scale + this.side.height < this.windowHeight + 4)
     ) {
       this.onWindow = true;
       // this.trigger(this.gradientIndex);
@@ -950,7 +941,6 @@ class WorkBlock {
     this.windowWidth = this.parent.windowWidth;
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
-    this.spacing = this.parent.spacing;
 
     this.scale = this.parent.scale;
 
@@ -1066,7 +1056,6 @@ class ShowRhombus {
     this.halfScaledWidth = this.scaledWidth / 2;
     this.scaledHeight = this.height * this.scale;
     this.halfScaledHeight = this.scaledHeight / 2;
-    this.spacing = this.parent.spacing;
     this.x = x;
     this.y = y;
 
@@ -2075,6 +2064,7 @@ class PartnerLines {
 
 class ProductRhombus {
   constructor(opts) {
+    window.prodrh = this;
     this.parent = opts.parent;
     this.scale = this.parent.scale;
     this.context = this.parent.context;
@@ -2147,6 +2137,11 @@ class ProductRhombus {
     this.halfScaledHeight = this.scaledHeight / 2;
     this.x = x;
     this.y = y;
+
+    this.canvas
+      .getContext('2d')
+      .drawImage(this.image, 0, 0, this.scaledWidth, this.scaledHeight);
+    this.imagePattern = this.context.createPattern(this.canvas, 'repeat');
 
     this.speed = this.halfScaledWidth / this.counters;
 

@@ -98,15 +98,26 @@
 
   &__arrow {
     position: absolute;
-    top: rem-calc(250);
-    right: 0;
-    z-index: z('product') + 1;
+    // top: rem-calc(250);
+    // right: 0;
     width: rem-calc(48);
     height: rem-calc(48);
 
+    &-wrapper {
+      position: absolute;
+      top: rem-calc(250);
+      right: 0;
+      z-index: z('product') + 10;
+      width: rem-calc(48);
+      height: rem-calc(48);
+
+      &--left {
+        right: auto;
+        left: 0;
+      }
+    }
+
     &--left {
-      right: auto;
-      left: 0;
       transform: rotate(180deg);
     }
   }

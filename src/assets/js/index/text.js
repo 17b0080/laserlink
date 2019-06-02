@@ -200,19 +200,28 @@ class Text {
 
       this.menu[1].children[1].children[0].onclick = e => {
         e.preventDefault();
+        this.menu[1].children[0].onclick(e);
         scrollTo(1013 * this.scale);
       };
       this.menu[1].children[1].children[1].onclick = e => {
         e.preventDefault();
+        this.menu[1].children[0].onclick(e);
         scrollTo(1740 * this.scale);
       };
       this.menu[1].children[1].children[2].onclick = e => {
         e.preventDefault();
+        this.menu[1].children[0].onclick(e);
         scrollTo(2600 * this.scale);
       };
       this.menu[1].children[1].children[3].onclick = e => {
         e.preventDefault();
+        this.menu[1].children[0].onclick(e);
         scrollTo(3400 * this.scale);
+      };
+      this.menu[1].children[1].children[4].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        scrollTo(4146 * this.scale);
       };
 
       this.menu[2].onclick = e => {
@@ -239,6 +248,79 @@ class Text {
             this.productLinesHeight +
             900) *
             this.scale
+        );
+      };
+    } else if (this.windowWidth >= 640 && this.windowWidth < 990) {
+      this.menu[0].onclick = e => {
+        e.preventDefault();
+        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
+          this.menu[1].children[0].onclick(e);
+        }
+        scrollTo(0);
+      };
+      this.menu[1].children[1].children[0].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        scrollTo(
+          getCoords(document.querySelector('div.show-wrapper').children[1]) -
+            100
+        );
+      };
+      this.menu[1].children[1].children[1].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        scrollTo(
+          getCoords(document.querySelector('div.show-wrapper').children[2]) -
+            100
+        );
+      };
+      this.menu[1].children[1].children[2].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        scrollTo(
+          getCoords(document.querySelector('div.show-wrapper').children[3]) -
+            100
+        );
+      };
+      this.menu[1].children[1].children[3].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        scrollTo(
+          getCoords(document.querySelector('div.show-wrapper').children[4]) -
+            100
+        );
+      };
+      this.menu[1].children[1].children[4].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        scrollTo(
+          getCoords(document.querySelectorAll('div.show-wrapper')[1]) - 45
+        );
+      };
+      // партнеры - 2
+      this.menu[2].onclick = e => {
+        e.preventDefault();
+        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
+          this.menu[1].children[0].onclick(e);
+        }
+        scrollTo(getCoords(document.querySelector('div.partners')) - 100);
+      };
+      // оборудование - 3
+      this.menu[3].onclick = e => {
+        e.preventDefault();
+        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
+          this.menu[1].children[0].onclick(e);
+        }
+        scrollTo(getCoords(document.querySelector('div.products')) - 100);
+      };
+      // контакты - 4
+      this.menu[4].onclick = e => {
+        e.preventDefault();
+        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
+          this.menu[1].children[0].onclick(e);
+        }
+        scrollTo(
+          getCoords(document.querySelector('div.contact-form-wrapper')) - 100
         );
       };
     } else {
@@ -284,6 +366,14 @@ class Text {
         scrollTo(
           getCoords(document.querySelector('div.show-wrapper').children[4]) -
             100
+        );
+      };
+      this.menu[1].children[1].children[4].onclick = e => {
+        e.preventDefault();
+        this.menu[1].children[0].onclick(e);
+        document.querySelector('.hamburger-wrapper').onclick(e);
+        scrollTo(
+          getCoords(document.querySelectorAll('div.show-wrapper')[1]) - 45
         );
       };
       // партнеры - 2
