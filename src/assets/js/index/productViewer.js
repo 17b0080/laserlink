@@ -46,12 +46,14 @@ class Background {
   }
 
   open() {
+    this.closeRequest = false;
     this.openRequest = true;
     this.closed = false;
     this.request = true;
   }
 
   close() {
+    this.openRequest = false;
     this.closeRequest = true;
     this.opened = false;
     this.request = true;

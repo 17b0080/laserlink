@@ -60,12 +60,14 @@ class Background {
     this.imageHeight = h;
 
     this.openRequest = true;
+    this.closeRequest = false;
     this.closed = false;
     this.request = true;
   }
 
   close() {
     this.closeRequest = true;
+    this.openRequest = false;
     this.opened = false;
     this.request = true;
   }
@@ -539,7 +541,6 @@ class ProjectViewer {
   }
 
   loadData() {
-    console.log('load data', this.data, this.index);
     this.loadState = 0;
     this.loaded = false;
     this.video.src = this.data[this.index].video;
@@ -548,7 +549,6 @@ class ProjectViewer {
 
   openLoader() {
     this.loader.classList.remove('loader-wrapper--closed');
-    // console.log('opening loader');
   }
 
   closeLoader() {
@@ -576,7 +576,6 @@ class ProjectViewer {
 
   open(index, type = undefined) {
     if (!this.opened) {
-      console.log(type);
       if (type !== undefined) {
         if (type === 'video-mapping') {
           this.data = this.parent.videoMappingData;
@@ -590,7 +589,6 @@ class ProjectViewer {
           this.data = this.parent.commonData;
         }
       }
-      console.log(this.data);
       this.projectWrapper.style.visibility = 'visible';
       this.closed = false;
       this.index = index;
