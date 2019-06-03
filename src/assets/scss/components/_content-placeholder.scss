@@ -160,16 +160,16 @@
     }
 
     &--product {
-      top: rem-calc(84);
-      max-width: rem-calc(180);
-      max-height: rem-calc(180);
+      top: rem-calc(0);
+      max-width: rem-calc(350);
+      max-height: rem-calc(350);
       transform: translateX(-50%) translateY(0);
       clip-path: none;
 
       @include breakpoint(medium) {
-        top: rem-calc(180);
-        max-width: rem-calc(250);
-        max-height: rem-calc(250);
+        top: rem-calc(85);
+        max-width: rem-calc(480);
+        max-height: rem-calc(480);
       }
     }
   }
