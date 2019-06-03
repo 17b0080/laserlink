@@ -29,11 +29,10 @@ function changeTranslate(item, x, y) {
   item.style.transform = `translate(${x}px, ${y}px)`;
 }
 
-class Background {
+class ImageBackground {
   constructor(opts) {
     this.parent = opts.parent;
     this.image = undefined;
-
     this.windowWidth = this.parent.windowWidth;
     this.windowHeight = this.parent.windowHeight;
 
@@ -110,6 +109,86 @@ class Background {
       this.imageWidth,
       this.imageHeight
     );
+    this.parent.context.restore();
+  }
+
+  render() {
+    if (this.openRequest) {
+      this.nextOpenFrame();
+    } else if (this.closeRequest) {
+      this.nextCloseFrame();
+    }
+
+    this.drawFrame();
+
+    this.request = this.openRequest || this.closeRequest;
+  }
+}
+
+class SimpleBackground {
+  constructor(opts) {
+    this.parent = opts.parent;
+
+    this.windowWidth = this.parent.windowWidth;
+    this.windowHeight = this.parent.windowHeight;
+
+    this.maxAlpha = 0.5;
+    this.alpha = 0;
+
+    this.time = 300;
+    this.currentFrame = 0;
+    this.frames = Math.round(this.time / 16.6); // 16.6ms на кадр при 60 кадрах/с
+    this.speed = this.maxAlpha / this.frames;
+  }
+
+  open() {
+    this.closeRequest = false;
+    this.openRequest = true;
+    this.closed = false;
+    this.request = true;
+  }
+
+  close() {
+    this.openRequest = false;
+    this.closeRequest = true;
+    this.opened = false;
+    this.request = true;
+  }
+
+  updateAlpha() {
+    this.alpha = this.speed * this.currentFrame;
+  }
+
+  nextOpenFrame() {
+    this.currentFrame += 1;
+
+    if (this.currentFrame >= this.frames) {
+      this.currentFrame = this.frames;
+      this.opened = true;
+      this.openRequest = false;
+    }
+
+    this.updateAlpha();
+  }
+
+  nextCloseFrame() {
+    this.currentFrame -= 1;
+
+    if (this.currentFrame <= 0) {
+      this.currentFrame = 0;
+      this.closeRequest = false;
+      this.closed = true;
+    }
+
+    this.updateAlpha();
+  }
+
+  drawFrame() {
+    this.parent.context.save();
+    this.parent.context.globalAlpha = this.alpha;
+    this.parent.context.fillStyle = '#222222';
+    this.parent.context.rect(0, 0, this.windowWidth, this.windowHeight);
+    this.parent.context.fill();
     this.parent.context.restore();
   }
 
@@ -468,7 +547,9 @@ class ProjectViewer {
     this.canvas.height = this.windowHeight;
     this.context = this.canvas.getContext('2d');
 
-    this.background = new Background({ parent: this });
+    this.background = undefined;
+    this.imageBackground = new ImageBackground({ parent: this });
+    this.simpleBackground = new SimpleBackground({ parent: this });
     this.rhombus = new ProjectRhombus({ parent: this });
     this.videoRhombus = new VideoRhombus({ parent: this });
 
@@ -541,10 +622,18 @@ class ProjectViewer {
   }
 
   loadData() {
-    this.loadState = 0;
+    // console.log(this.data[this.index].background_boolean);
+    if (this.data[this.index].background_boolean) {
+      this.loadState = 0;
+      this.background = this.imageBackground;
+      this.backgroundImage.src = this.data[this.index].background;
+    } else {
+      this.loadState = 1;
+      this.background = this.simpleBackground;
+    }
+
     this.loaded = false;
     this.video.src = this.data[this.index].video;
-    this.backgroundImage.src = this.data[this.index].background;
   }
 
   openLoader() {
