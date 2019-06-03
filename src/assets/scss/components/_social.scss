@@ -8,6 +8,7 @@
     display: flex;
     justify-content: space-around;
     font-size: rem-calc(16);
+    align-items: center;
 
     @include breakpoint(medium) {
       margin-top: 0;
@@ -32,7 +33,11 @@
       }
     }
     &--hiden-tablet {
-      display: none;
+      display: inline-block;
+      
+      @include breakpoint(medium) {
+        display: none;
+      }
       
       @include breakpoint(large) {
          display: inline-block;
