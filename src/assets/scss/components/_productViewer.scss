@@ -15,6 +15,14 @@
     overflow: hidden;
     transition: height 500ms 1000ms;
 
+    @media (min-height: 900px) and (max-height: 1000px) {
+      top: 45vh;
+    }
+
+    @media (min-height: 1000px) {
+      top: 48vh;
+    }
+
     &__header {
       margin-bottom: 30px;
       color: #0d0a14;
