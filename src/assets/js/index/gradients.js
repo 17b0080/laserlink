@@ -294,7 +294,7 @@ class Gradients {
     this.context.globalAlpha = 1;
 
     this.showLinesHeight = this.parent.blocks.showLines.height;
-    this.partnerLinesHeight = this.parent.blocks.productLines.height;
+    this.partnerLinesHeight = this.parent.blocks.partnerLines.height;
     this.productLinesHeight = this.parent.blocks.productLines.height;
 
     this.imagesStates = 0;
@@ -420,9 +420,9 @@ class Gradients {
         i: 5,
         dots: {
           x0: 167,
-          y0: 4593 + this.showLinesHeight + this.partnerLinesHeight + 776,
+          y0: 4593 + this.showLinesHeight + this.partnerLinesHeight + 1180,
           x2: -177,
-          y2: 4593 + this.showLinesHeight + this.partnerLinesHeight + 790
+          y2: 4593 + this.showLinesHeight + this.partnerLinesHeight + 1200
         },
         images: [this.images[1], this.images[1]],
         triggerY: 4393 + this.showLinesHeight + this.partnerLinesHeight + 999
