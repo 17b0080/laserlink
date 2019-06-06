@@ -19,6 +19,7 @@
     display: inline-block;
     margin: 0 rem-calc(5) 0 rem-calc(5);
     color: transparentize($color: $primary-color, $amount: 0.25);
+    
 
     @include breakpoint(medium) {
       display: inline-block;
