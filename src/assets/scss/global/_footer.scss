@@ -28,6 +28,7 @@
     display: none;
    
     &--shown-mobile {
+      font-size: rem-calc(16);
       display: inline-block;
     }
     
