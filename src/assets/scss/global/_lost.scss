@@ -1,0 +1,11 @@
+.lost {
+  text-align: center;
+  padding-top: rem-calc(150);
+  &__error {
+      font-size: rem-calc(40);
+  }
+
+  &__title {
+    font-size: rem-calc(38);
+  }
+}
