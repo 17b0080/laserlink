@@ -479,9 +479,9 @@ class WorkRhombus {
     );
 
     // затемнение
-    // this.context.globalAlpha = 0.7;
-    // this.context.fillStyle = '#0D0A14';
-    // this.context.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
+    this.context.globalAlpha = 0.35;
+    this.context.fillStyle = '#0D0A14';
+    this.context.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
 
     this.context.globalAlpha = this.imageAlpha;
     this.context.drawImage(
@@ -1089,9 +1089,9 @@ class ShowRhombus {
     );
 
     // затемнение
-    // this.context.globalAlpha = 0.7;
-    // this.context.fillStyle = '#0D0A14';
-    // this.context.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
+    this.context.globalAlpha = 0.35;
+    this.context.fillStyle = '#0D0A14';
+    this.context.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
 
     if (this.imageReady && this.showMoreAlpha > 0) {
       this.context.globalAlpha = this.showMoreAlpha;
