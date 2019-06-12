@@ -3,7 +3,6 @@
 
 class FirstRhombus {
   constructor(opts) {
-    window.firstrhombus = this;
     this.parent = opts.parent;
     this.scale = this.parent.scale;
     this.context = this.parent.context;
@@ -340,7 +339,6 @@ class FirstBlock {
 // 3 - сверху
 class WorkRhombus {
   constructor(opts) {
-    window.a1 = this;
     this.parent = opts.parent;
     this.scale = this.parent.scale;
     this.context = this.parent.context;
@@ -480,15 +478,11 @@ class WorkRhombus {
       this.scaledHeight
     );
 
-    this.context.globalAlpha = 0.7;
-    this.context.fillStyle = '#0D0A14';
-    this.context.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
+    // затемнение
+    // this.context.globalAlpha = 0.7;
+    // this.context.fillStyle = '#0D0A14';
+    // this.context.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
 
-    // if (this.imageReady) {
-    //   this.context.globalAlpha = 1;
-    // } else {
-    // this.context.globalAlpha = this.imageAlpha;
-    // }
     this.context.globalAlpha = this.imageAlpha;
     this.context.drawImage(
       this.downImage,
@@ -847,7 +841,6 @@ class HoverRhombus {
 // 4 - шум
 class WorkBlock {
   constructor(opts) {
-    window.workblock = this;
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.scale = this.parent.scale;
@@ -1095,9 +1088,10 @@ class ShowRhombus {
       this.scaledHeight
     );
 
-    this.context.globalAlpha = 0.7;
-    this.context.fillStyle = '#0D0A14';
-    this.context.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
+    // затемнение
+    // this.context.globalAlpha = 0.7;
+    // this.context.fillStyle = '#0D0A14';
+    // this.context.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
 
     if (this.imageReady && this.showMoreAlpha > 0) {
       this.context.globalAlpha = this.showMoreAlpha;
@@ -1428,7 +1422,6 @@ class ShowBlock {
 
 class ShowLines {
   constructor(opts) {
-    window.Showlines = this;
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.spacing = this.parent.spacing;
@@ -1546,7 +1539,6 @@ class ShowLines {
 
 class PartnerRhombus {
   constructor(opts) {
-    window.showrh = this;
     this.parent = opts.parent;
     this.scale = this.parent.scale;
     this.context = this.parent.context;
@@ -1957,7 +1949,6 @@ class PartnerBlock {
 
 class PartnerLines {
   constructor(opts) {
-    window.PartnerLines = this;
     this.gradientIndex = opts.gradientIndex;
     this.parent = opts.parent;
     this.context = this.parent.context;
@@ -2338,7 +2329,6 @@ class ProductRhombus {
 
   checkRequest() {
     let request = false;
-    // console.log(this.showMoreAlpha);
     if (
       (this.upCounter !== 0 && !this.ready) ||
       (this.ready && !this.imageReady) ||
@@ -2352,7 +2342,6 @@ class ProductRhombus {
 
 class ProductBlock {
   constructor(opts) {
-    window.prbl = this;
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.scale = this.parent.scale;
@@ -2510,7 +2499,6 @@ class ProductBlock {
 
 class ProductLines {
   constructor(opts) {
-    window.prdlines = this;
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.spacing = this.parent.spacing;
