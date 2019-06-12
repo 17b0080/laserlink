@@ -107,7 +107,7 @@ class App {
       itemList: [
         document.querySelector('.menu').children[1].children[1],
         // document.querySelector('.menu').children[1].children[0],
-        document.querySelector('.menu').children[1].children[0].children[1]
+        document.querySelector('.menu').children[1].children[0].children[0]
       ],
       buttonList: [document.querySelector('.menu').children[1].children[0]],
       state: true,
