@@ -79,23 +79,19 @@ function getProductRhombuses(that) {
 
 function getPartnerRhombuses(that) {
   const partnerRhombuses = [];
-  console.log(that.parent.blocks.partnerLines.partnerBlocks);
-  that.parent.blocks.partnerLines.partnerBlocks.forEach(
-    (partnerBlock, partnerBlockIndex) => {
-      partnerBlock.rhombuses.forEach(
-        (partnerBlockRhombus, partnerBlockRhombusIndex) => {
-          console.log(partnerBlockRhombus);
-          partnerRhombuses.push({
-            dom: document.querySelectorAll(
-              '.js-partner-block__rhombus__button'
-            )[partnerBlockRhombusIndex],
-            x: partnerBlockRhombus.x,
-            y: partnerBlockRhombus.y
-          });
-        }
-      );
-    }
-  );
+  that.parent.blocks.partnerLines.partnerBlocks.forEach(partnerBlock => {
+    partnerBlock.rhombuses.forEach(
+      (partnerBlockRhombus, partnerBlockRhombusIndex) => {
+        partnerRhombuses.push({
+          dom: document.querySelectorAll('.js-partner-block__rhombus__button')[
+            partnerBlockRhombusIndex
+          ],
+          x: partnerBlockRhombus.x,
+          y: partnerBlockRhombus.y
+        });
+      }
+    );
+  });
   return partnerRhombuses;
 }
 
@@ -519,7 +515,6 @@ class Text {
       114 * this.scale,
       (4593 + 307 + this.showLinesHeight) * this.scale
     );
-    console.log(this.scale);
     this.partnerRhombuses.forEach(rhombus => {
       rhombus.dom.style.width = `${220 * this.scale}px`;
       rhombus.dom.style.height = `${220 * this.scale}px`;

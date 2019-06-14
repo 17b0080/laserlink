@@ -1,11 +1,9 @@
 /* globals window, document */
-import {
-  FirstBlock,
-  WorkBlock,
-  ShowLines,
-  PartnerLines,
-  ProductLines
-} from '../partials/rhombus';
+import FirstBlock from '../partials/firstBlock';
+import WorkBlock from '../partials/workBlock';
+import ShowLines from '../partials/showLines';
+import PartnerLines from '../partials/partnerLines';
+import ProductLines from '../partials/productLines';
 
 class Blocks {
   constructor(opts) {

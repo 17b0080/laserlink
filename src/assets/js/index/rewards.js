@@ -1,5 +1,4 @@
-import StateSwitcher from './stateSwitcher';
-
+/* globals document */
 export default function rewardViewer() {
   const image = document.querySelector('.rewards-fullscreen__image');
 
@@ -12,16 +11,15 @@ export default function rewardViewer() {
 
   const thumbnails = document.querySelectorAll('.rewards-frame__hover-wrapper');
 
-  thumbnails.forEach(
-    (thumbnail, index) =>
-      (thumbnail.onclick = () => {
-        image.src = imagesSrc[index];
-        image.alt = imagesAlt[index];
-        document
-          .querySelector('.rewards-fullscreen')
-          .classList.add('rewards-fullscreen--opened');
-      })
-  );
+  thumbnails.forEach((thumbnail, index) => {
+    thumbnail.onclick = () => {
+      image.src = imagesSrc[index];
+      image.alt = imagesAlt[index];
+      document
+        .querySelector('.rewards-fullscreen')
+        .classList.add('rewards-fullscreen--opened');
+    };
+  });
   document.querySelector(
     '.rewards-fullscreen__hamburger-menu'
   ).onclick = () => {
