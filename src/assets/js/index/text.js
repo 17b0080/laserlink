@@ -181,14 +181,10 @@ class Text {
 
   applyStyles() {
     if (this.windowWidth >= 990) {
-      document.body.style.height = `${(4593 +
-        this.showLinesHeight +
-        872 +
-        this.partnerLinesHeight +
-        900 +
-        this.productLinesHeight +
-        900) *
-        this.scale}px`;
+      document.body.style.height = `${this.showLines.height +
+        this.partnerLines.height +
+        this.productLines.height +
+        (4593 + 892 + 883 + 300 + 900 + 35) * this.scale}px`;
       this.menu[0].onclick = e => {
         e.preventDefault();
         scrollTo(0);
@@ -236,14 +232,10 @@ class Text {
       this.menu[4].onclick = e => {
         e.preventDefault();
         scrollTo(
-          (4593 +
-            this.showLinesHeight +
-            872 +
+          this.showLinesHeight +
             this.partnerLinesHeight +
-            900 +
             this.productLinesHeight +
-            900) *
-            this.scale
+            (4593 + 892 + 883 + 300) * this.scale
         );
       };
     } else if (this.windowWidth >= 640 && this.windowWidth < 990) {
@@ -578,17 +570,15 @@ class Text {
   render() {
     changeTranslate(this.content, this.spacing - this.currentX, -this.currentY);
     // console.log(this.form);
+    // console.log(this.scale);
+    // console.log(this.showLines.height);
     changeTranslate(
       this.form,
       this.spacing - this.currentX,
-      (4593 +
-        this.showLines.height +
-        892 +
+      this.showLines.height +
         this.partnerLines.height +
-        883 +
         this.productLines.height +
-        100) *
-        this.scale -
+        (4593 + 892 + 883 + 300) * this.scale -
         this.currentY
     );
   }
