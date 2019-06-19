@@ -241,27 +241,9 @@ class Background {
 
     this.linesContext.closePath();
     this.linesContext.stroke();
-    console.log('stroke');
   }
 
   drawDots() {
-    console.log('draw dots');
-    // this.dotsContext.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    // this.dotsContext.beginPath();
-    // this.dotsContext.moveTo(0, 0);
-    // this.dotsContext.arc(0, 0, 3, 0, 2 * Math.PI, true);
-
-    // this.dotsContext.moveTo(100, 0);
-    // this.dotsContext.arc(100, 0, 3, 0, 2 * Math.PI, true);
-
-    // this.dotsContext.moveTo(0, 100);
-    // this.dotsContext.arc(0, 100, 3, 0, 2 * Math.PI, true);
-
-    // this.dotsContext.moveTo(100, 100);
-    // this.dotsContext.arc(100, 100, 3, 0, 2 * Math.PI, true);
-
-    // this.dotsContext.closePath();
-    // this.dotsContext.fill();
     this.dotsContext.fillStyle = 'rgba(255, 255, 255, 0.2)';
     this.dotsContext.beginPath();
     this.dotsContext.moveTo(0, 0);
@@ -288,7 +270,6 @@ class Background {
   }
 
   drawMicroDots() {
-    console.log('draw micro dots');
     this.microDotsContext.fillStyle = 'rgba(255, 255, 255, 0.2)';
     this.microDotsContext.beginPath();
     this.microDotsContext.moveTo(0, 50 * this.scale);
