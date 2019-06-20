@@ -45,6 +45,11 @@ class Background {
     this.speed = this.maxAlpha / this.frames;
   }
 
+  handleResize() {
+    this.windowWidth = this.parent.windowWidth;
+    this.windowHeight = this.parent.windowHeight;
+  }
+
   open() {
     this.closeRequest = false;
     this.openRequest = true;
@@ -189,6 +194,15 @@ class ImageRhombus {
     this.parent.context.lineTo(this.framedDots.x2, this.framedDots.y2);
     this.parent.context.lineTo(this.framedDots.x3, this.framedDots.y3);
     this.parent.context.closePath();
+  }
+
+  handleResize() {
+    this.windowWidth = this.parent.windowWidth;
+    this.halfWindowWidth = this.parent.halfWindowWidth;
+    this.windowHeight = this.parent.windowHeight;
+    this.halfWindowHeight = this.parent.halfWindowHeight;
+    this.speed = this.halfWidth / this.frames;
+    this.updateDots();
   }
 
   updateDots() {
@@ -345,6 +359,16 @@ class ProjectRhombus {
     this.closed = true;
   }
 
+  handleResize() {
+    this.windowWidth = this.parent.windowWidth;
+    this.halfWindowWidth = this.parent.halfWindowWidth;
+    this.windowHeight = this.parent.windowHeight;
+    this.halfWindowHeight = this.parent.halfWindowHeight;
+    this.speed = this.halfWidth / this.frames;
+    this.speedY = this.halfWindowHeight / this.frames;
+    this.updateDots();
+  }
+
   open() {
     this.openRequest = true;
     this.closeRequest = false;
@@ -468,7 +492,6 @@ class ProductViewer {
     this.tbody = document
       .querySelector('.table--desktop')
       .querySelector('tbody');
-    // console.log('tbd', this.tbody);
     this.image = document.createElement('img');
 
     document.querySelector('.product-viewer__close-button').onclick = () => {
@@ -489,7 +512,6 @@ class ProductViewer {
 
     //
     this.orderButton.onclick = () => {
-      console.log('click');
       this.next = false;
       this.prev = false;
       this.order = true;
@@ -524,6 +546,13 @@ class ProductViewer {
   }
 
   handleResize() {
+    this.windowWidth = this.parent.windowWidth;
+    this.halfWindowWidth = this.parent.halfWindowWidth;
+    this.windowHeight = this.parent.windowHeight;
+    this.halfWindowHeight = this.parent.halfWindowHeight;
+    this.canvas.width = this.windowWidth;
+    this.canvas.height = this.windowHeight;
+
     this.background.handleResize();
     this.rhombus.handleResize();
     this.imageRhombus.handleResize();
@@ -551,12 +580,10 @@ class ProductViewer {
 
   openLoader() {
     this.loader.classList.remove('loader-wrapper--closed');
-    // console.log('opening loader');
   }
 
   closeLoader() {
     this.loader.classList.add('loader-wrapper--closed');
-    // console.log('closing loader');
   }
 
   onOpened() {
@@ -672,17 +699,17 @@ class ProductViewer {
       );
 
       // КНОПКА
-      if (this.rhombus.height > this.windowHeight) {
+      if (this.rhombus.height / 2 - 89 < this.halfWindowHeight) {
         changeTranslate(
           this.orderButton,
           -this.currentX + this.halfWindowWidth - 58,
-          this.windowHeight - 80
+          this.halfWindowHeight + this.rhombus.height / 2 - 179
         );
       } else {
         changeTranslate(
           this.orderButton,
           -this.currentX + this.halfWindowWidth - 58,
-          this.halfWindowHeight + 700 - 116 - 50
+          this.windowHeight - 90
         );
       }
 

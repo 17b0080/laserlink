@@ -281,8 +281,11 @@ class App {
     this.text.handleResize();
     this.gradients.handleResize();
 
-    this.projectViewer.handleResize();
-    // this.productViewer.handleResize();
+    if (!this.projectViewer.closed) {
+      this.projectViewer.handleResize();
+    } else if (!this.productViewer.closed) {
+      this.productViewer.handleResize();
+    }
 
     this.request = true;
   }
@@ -415,7 +418,7 @@ class App {
           if (this.gradients.request && !gradientRendered) {
             this.gradients.render();
           }
-        } else if (projectOnWindow || this.request) {
+        } else if (projectOnWindow) {
           let projectRendered = false;
           if (
             this.clientX !== this.currentX ||
@@ -425,10 +428,13 @@ class App {
             this.projectViewer.render();
             projectRendered = true;
           }
-          if (!projectRendered && this.projectViewer.request) {
+          if (
+            (!projectRendered && this.projectViewer.request) ||
+            this.request
+          ) {
             this.projectViewer.render();
           }
-        } else if (productOnWindow || this.request) {
+        } else if (productOnWindow) {
           let productRendered = false;
           if (
             this.clientX !== this.currentX ||
@@ -438,7 +444,10 @@ class App {
             this.productViewer.render();
             productRendered = true;
           }
-          if (!productRendered && this.productViewer.request) {
+          if (
+            (!productRendered && this.productViewer.request) ||
+            this.request
+          ) {
             this.productViewer.render();
           }
         }
