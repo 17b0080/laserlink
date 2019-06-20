@@ -164,6 +164,7 @@ class App {
     this.scale = 1;
 
     this.counter = 0;
+    this.request = false;
 
     this.loader = document.querySelector('.loader-wrapper');
 
@@ -277,6 +278,7 @@ class App {
     this.lines.handleResize();
     this.text.handleResize();
     this.gradients.handleResize();
+    this.request = true;
   }
 
   handleScroll() {
@@ -371,7 +373,7 @@ class App {
 
     this.counter += 1;
     // даун до 30 фпс
-    if (this.counter >= 2 || boolean) {
+    if (this.counter >= 2 || boolean || this.request) {
       this.counter = 0;
       //
       if (this.windowWidth >= 990) {
@@ -384,7 +386,8 @@ class App {
           if (
             this.clientX !== this.currentX ||
             this.clientY !== this.currentY ||
-            boolean
+            boolean ||
+            this.request
           ) {
             this.updateXY();
             this.background.render();
@@ -406,7 +409,7 @@ class App {
           if (this.gradients.request && !gradientRendered) {
             this.gradients.render();
           }
-        } else if (projectOnWindow) {
+        } else if (projectOnWindow || this.request) {
           let projectRendered = false;
           if (
             this.clientX !== this.currentX ||
@@ -419,7 +422,7 @@ class App {
           if (!projectRendered && this.projectViewer.request) {
             this.projectViewer.render();
           }
-        } else if (productOnWindow) {
+        } else if (productOnWindow || this.request) {
           let productRendered = false;
           if (
             this.clientX !== this.currentX ||
@@ -434,6 +437,7 @@ class App {
           }
         }
       }
+      if (this.request === true) this.request = false;
     }
   }
 }
