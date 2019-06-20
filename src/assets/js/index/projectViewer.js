@@ -45,6 +45,23 @@ class ImageBackground {
     this.speed = this.maxAlpha / this.frames;
   }
 
+  handleResize() {
+    this.windowWidth = this.parent.windowWidth;
+    this.halfWindowWidth = this.parent.halfWindowWidth;
+    this.windowHeight = this.parent.windowHeight;
+    this.halfWindowHeight = this.parent.halfWindowHeight;
+
+    const { w, h } = getWidthAndHeight(
+      this.image.width,
+      this.image.height,
+      this.windowWidth,
+      this.windowHeight
+    );
+
+    this.imageWidth = w;
+    this.imageHeight = h;
+  }
+
   open() {
     this.image = this.parent.backgroundImage;
 
@@ -141,6 +158,13 @@ class SimpleBackground {
     this.speed = this.maxAlpha / this.frames;
   }
 
+  handleResize() {
+    this.windowWidth = this.parent.windowWidth;
+    this.halfWindowWidth = this.parent.halfWindowWidth;
+    this.windowHeight = this.parent.windowHeight;
+    this.halfWindowHeight = this.parent.halfWindowHeight;
+  }
+
   open() {
     this.closeRequest = false;
     this.openRequest = true;
@@ -215,7 +239,7 @@ class VideoRhombus {
     this.windowHeight = this.parent.windowHeight;
     this.halfWindowHeight = this.parent.halfWindowHeight;
 
-    this.width = 1000; //718
+    this.width = 1000; // 718
     this.halfWidth = this.width / 2;
     this.height = 1000;
     this.halfHeight = this.height / 2;
@@ -251,6 +275,13 @@ class VideoRhombus {
     this.opened = false;
     this.closeRequest = false;
     this.closed = true;
+  }
+
+  handleResize() {
+    this.windowWidth = this.parent.windowWidth;
+    this.halfWindowWidth = this.parent.halfWindowWidth;
+    this.windowHeight = this.parent.windowHeight;
+    this.halfWindowHeight = this.parent.halfWindowHeight;
   }
 
   updateXY() {
@@ -431,6 +462,16 @@ class ProjectRhombus {
     this.currentX = this.parent.currentX;
   }
 
+  handleResize() {
+    this.windowWidth = this.parent.windowWidth;
+    this.halfWindowWidth = this.parent.halfWindowWidth;
+    this.windowHeight = this.parent.windowHeight;
+    this.halfWindowHeight = this.parent.halfWindowHeight;
+    this.speed = this.halfWidth / this.frames;
+    this.speedY = this.halfWindowHeight / this.frames;
+    this.updateDots();
+  }
+
   updateDots() {
     this.framedDots = {
       x0: this.halfWindowWidth - this.speed * this.currentFrame - this.currentX,
@@ -598,6 +639,14 @@ class ProjectViewer {
   }
 
   handleResize() {
+    this.windowWidth = this.parent.windowWidth;
+    this.halfWindowWidth = this.parent.halfWindowWidth;
+    this.windowHeight = this.parent.windowHeight;
+    this.halfWindowHeight = this.parent.halfWindowHeight;
+
+    this.canvas.width = this.windowWidth;
+    this.canvas.height = this.windowHeight;
+
     this.background.handleResize();
     this.rhombus.handleResize();
     this.videoRhombus.handleResize();
@@ -768,19 +817,34 @@ class ProjectViewer {
           this.content.getBoundingClientRect().width / 2
       );
 
-      if (this.rhombus.height > this.windowHeight) {
+      // if(this.halfWindowHeight + this.rhombus.height / 2)
+      if (this.rhombus.height / 2 - 89 < this.halfWindowHeight) {
         changeTranslate(
           this.orderButton,
           -this.currentX + this.halfWindowWidth - 58,
-          this.windowHeight - 90
+          this.halfWindowHeight + this.rhombus.height / 2 - 179
         );
       } else {
         changeTranslate(
           this.orderButton,
           -this.currentX + this.halfWindowWidth - 58,
-          this.halfWindowHeight + 380
+          this.windowHeight - 90
         );
       }
+
+      // if (this.rhombus.height > this.windowHeight) {
+      //   changeTranslate(
+      //     this.orderButton,
+      //     -this.currentX + this.halfWindowWidth - 58,
+      //     this.windowHeight - 90
+      //   );
+      // } else {
+      //   changeTranslate(
+      //     this.orderButton,
+      //     -this.currentX + this.halfWindowWidth - 58,
+      //     this.halfWindowHeight + 380
+      //   );
+      // }
 
       // РОМБЫ
       this.rhombus.render();

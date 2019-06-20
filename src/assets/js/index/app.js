@@ -264,7 +264,9 @@ class App {
   handleResize() {
     // Пересчёт размеров
     this.windowWidth = window.innerWidth;
+    this.halfWindowWidth = this.windowWidth / 2;
     this.windowHeight = window.innerHeight;
+    this.halfWindowHeight = this.windowHeight / 2;
     this.clientHeight = document.body.clientHeight;
     this.recalculateScale();
     this.recalculateSpacing();
@@ -278,6 +280,10 @@ class App {
     this.lines.handleResize();
     this.text.handleResize();
     this.gradients.handleResize();
+
+    this.projectViewer.handleResize();
+    // this.productViewer.handleResize();
+
     this.request = true;
   }
 
