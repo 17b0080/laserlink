@@ -35,8 +35,8 @@ function getShowRhombuses(that) {
     let line = 0;
     let item = 0;
     if (i !== 0) {
-      line = Math.floor(i / 4);
-      item = i % 4;
+      line = Math.floor(i / 3);
+      item = i % 3;
     }
 
     a[i].onmouseover = () => {
@@ -61,8 +61,8 @@ function getProductRhombuses(that) {
     let line = 0;
     let item = 0;
     if (i !== 0) {
-      line = Math.floor(i / 3);
-      item = i % 3;
+      line = Math.floor(i / 2);
+      item = i % 2;
     }
 
     a[i].onmouseover = () => {
@@ -225,7 +225,7 @@ class Text {
         e.preventDefault();
         scrollTo(
           (4593 + this.showLinesHeight + 872 + this.partnerLinesHeight + 530) *
-            this.scale
+          this.scale
         );
       };
 
@@ -233,9 +233,9 @@ class Text {
         e.preventDefault();
         scrollTo(
           this.showLinesHeight +
-            this.partnerLinesHeight +
-            this.productLinesHeight +
-            (4593 + 892 + 883 + 300) * this.scale
+          this.partnerLinesHeight +
+          this.productLinesHeight +
+          (4593 + 892 + 883 + 300) * this.scale
         );
       };
     } else if (this.windowWidth >= 640 && this.windowWidth < 990) {
@@ -251,7 +251,7 @@ class Text {
         this.menu[1].children[0].onclick(e);
         scrollTo(
           getCoords(document.querySelector('div.show-wrapper').children[1]) -
-            100
+          100
         );
       };
       this.menu[1].children[1].children[1].onclick = e => {
@@ -259,7 +259,7 @@ class Text {
         this.menu[1].children[0].onclick(e);
         scrollTo(
           getCoords(document.querySelector('div.show-wrapper').children[2]) -
-            100
+          100
         );
       };
       this.menu[1].children[1].children[2].onclick = e => {
@@ -267,7 +267,7 @@ class Text {
         this.menu[1].children[0].onclick(e);
         scrollTo(
           getCoords(document.querySelector('div.show-wrapper').children[3]) -
-            100
+          100
         );
       };
       this.menu[1].children[1].children[3].onclick = e => {
@@ -275,7 +275,7 @@ class Text {
         this.menu[1].children[0].onclick(e);
         scrollTo(
           getCoords(document.querySelector('div.show-wrapper').children[4]) -
-            100
+          100
         );
       };
       this.menu[1].children[1].children[4].onclick = e => {
@@ -326,7 +326,7 @@ class Text {
         document.querySelector('.hamburger-wrapper').onclick(e);
         scrollTo(
           getCoords(document.querySelector('div.show-wrapper').children[1]) -
-            100
+          100
         );
       };
       this.menu[1].children[1].children[1].onclick = e => {
@@ -335,7 +335,7 @@ class Text {
         document.querySelector('.hamburger-wrapper').onclick(e);
         scrollTo(
           getCoords(document.querySelector('div.show-wrapper').children[2]) -
-            100
+          100
         );
       };
       this.menu[1].children[1].children[2].onclick = e => {
@@ -344,7 +344,7 @@ class Text {
         document.querySelector('.hamburger-wrapper').onclick(e);
         scrollTo(
           getCoords(document.querySelector('div.show-wrapper').children[3]) -
-            100
+          100
         );
       };
       this.menu[1].children[1].children[3].onclick = e => {
@@ -353,7 +353,7 @@ class Text {
         document.querySelector('.hamburger-wrapper').onclick(e);
         scrollTo(
           getCoords(document.querySelector('div.show-wrapper').children[4]) -
-            100
+          100
         );
       };
       this.menu[1].children[1].children[4].onclick = e => {
@@ -517,19 +517,19 @@ class Text {
       this.productBlock.h[0],
       114 * this.scale,
       (this.showLinesHeight + 840 + 4593 + this.partnerLinesHeight + 242) *
-        this.scale
+      this.scale
     );
     changeTranslate(
       this.productBlock.h[1],
       418 * this.scale,
       (this.showLinesHeight + 840 + 4593 + this.partnerLinesHeight + 748) *
-        this.scale
+      this.scale
     );
     changeTranslate(
       this.productBlock.p,
       114 * this.scale,
       (this.showLinesHeight + 840 + 4593 + this.partnerLinesHeight + 339) *
-        this.scale
+      this.scale
     );
 
     for (let i = 0, k = 0, j = 0; i < this.productRhombuses.length; i += 1) {
@@ -576,10 +576,10 @@ class Text {
       this.form,
       this.spacing - this.currentX,
       this.showLines.height +
-        this.partnerLines.height +
-        this.productLines.height +
-        (4593 + 892 + 883 + 300) * this.scale -
-        this.currentY
+      this.partnerLines.height +
+      this.productLines.height +
+      (4593 + 892 + 883 + 300) * this.scale -
+      this.currentY
     );
   }
 }

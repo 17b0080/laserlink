@@ -182,7 +182,7 @@ class App {
     this.clientY = window.pageYOffset;
     this.currentY = this.clientY;
 
-    this.logoImageSrc = './assets/img/logoImage.png';
+    this.logoImageSrc = './assets/img/logo-desktop.png';
 
     this.hoverImageSrc = './assets/img/hover.png';
 
@@ -310,9 +310,10 @@ class App {
     this.gradients = new Gradients({ parent: this });
     if (document.URL.indexOf('down=true') !== -1) {
       if (this.windowWidth < 990) {
-        scrollTo(
-          getCoords(document.querySelector('div.contact-form-wrapper')) - 100
-        );
+        // scrollTo(
+        //   getCoords(document.querySelector('div.contact-form-wrapper')) - 100
+        // );
+        document.querySelector('div.contact-form-wrapper').scrollIntoView({ behavior: 'smooth' })
       }
     }
   }
@@ -380,81 +381,81 @@ class App {
   render(boolean = false) {
     requestAnimationFrame(this.render.bind(this, false));
 
-    this.counter += 1;
+    // this.counter += 1;
     // даун до 30 фпс
-    if (this.counter >= 2 || boolean || this.request) {
-      this.counter = 0;
-      //
-      if (this.windowWidth >= 990) {
-        const projectOnWindow = !this.projectViewer.closed;
-        const productOnWindow = !this.productViewer.closed;
-        if (!projectOnWindow && !productOnWindow) {
-          let blockRendered = false;
-          let gradientRendered = false;
-          let textChecked = false;
-          if (
-            this.clientX !== this.currentX ||
-            this.clientY !== this.currentY ||
-            boolean ||
-            this.request
-          ) {
-            this.updateXY();
-            this.background.render();
-            this.blocks.render();
-            this.gradients.render();
-            this.lines.render();
-            this.text.render();
+    // if (this.counter >= 2 || boolean || this.request) {
+    // if (boolean || this.request) {
+    //
+    if (this.windowWidth >= 990) {
+      const projectOnWindow = !this.projectViewer.closed;
+      const productOnWindow = !this.productViewer.closed;
+      if (!projectOnWindow && !productOnWindow) {
+        let blockRendered = false;
+        let gradientRendered = false;
+        let textChecked = false;
+        if (
+          this.clientX !== this.currentX ||
+          this.clientY !== this.currentY ||
+          boolean ||
+          this.request
+        ) {
+          this.updateXY();
+          this.background.render();
+          this.blocks.render();
+          this.gradients.render();
+          this.lines.render();
+          this.text.render();
+          this.textTrigger.check();
+          blockRendered = true;
+          gradientRendered = true;
+          textChecked = true;
+        }
+        if (this.blocks.request && !blockRendered) {
+          this.blocks.render();
+          if (!textChecked) {
             this.textTrigger.check();
-            blockRendered = true;
-            gradientRendered = true;
-            textChecked = true;
-          }
-          if (this.blocks.request && !blockRendered) {
-            this.blocks.render();
-            if (!textChecked) {
-              this.textTrigger.check();
-            }
-          }
-          if (this.gradients.request && !gradientRendered) {
-            this.gradients.render();
-          }
-        } else if (projectOnWindow) {
-          let projectRendered = false;
-          if (
-            this.clientX !== this.currentX ||
-            this.clientY !== this.currentY
-          ) {
-            this.updateXY();
-            this.projectViewer.render();
-            projectRendered = true;
-          }
-          if (
-            (!projectRendered && this.projectViewer.request) ||
-            this.request
-          ) {
-            this.projectViewer.render();
-          }
-        } else if (productOnWindow) {
-          let productRendered = false;
-          if (
-            this.clientX !== this.currentX ||
-            this.clientY !== this.currentY
-          ) {
-            this.updateXY();
-            this.productViewer.render();
-            productRendered = true;
-          }
-          if (
-            (!productRendered && this.productViewer.request) ||
-            this.request
-          ) {
-            this.productViewer.render();
           }
         }
+        if (this.gradients.request && !gradientRendered) {
+          this.gradients.render();
+        }
+      } else if (projectOnWindow) {
+        let projectRendered = false;
+        if (
+          this.clientX !== this.currentX ||
+          this.clientY !== this.currentY
+        ) {
+          this.updateXY();
+          this.projectViewer.render();
+          projectRendered = true;
+        }
+        if (
+          (!projectRendered && this.projectViewer.request) ||
+          this.request
+        ) {
+          this.projectViewer.render();
+        }
+      } else if (productOnWindow) {
+        let productRendered = false;
+        if (
+          this.clientX !== this.currentX ||
+          this.clientY !== this.currentY
+        ) {
+          this.updateXY();
+          this.productViewer.render();
+          productRendered = true;
+        }
+        if (
+          (!productRendered && this.productViewer.request) ||
+          this.request
+        ) {
+          this.productViewer.render();
+        }
       }
-      if (this.request === true) this.request = false;
     }
+    if (this.request === true) this.request = false;
   }
+  // }
 }
 
 export default App;

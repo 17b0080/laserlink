@@ -66,7 +66,8 @@ class TextTriggers {
         parent: this,
         item: document.querySelector('.js-first-block__text'),
         check: () => {
-          return this.parent.blocks.first.rhombus.downCounter === 25;
+          // return this.parent.blocks.first.rhombus.downCounter === 25;
+          return true;
         }
       })
     );
@@ -94,30 +95,46 @@ class TextTriggers {
           parent: this,
           item: workHeaders[i],
           check: () => {
-            return workBlocks[i].main.downCounter === 25;
+            return workBlocks[i].main.counter === 75;
           }
-        })
-      );
-      this.texts.push(
+        }),
         new Text({
           // i work p
           parent: this,
           item: workParagraphs[i],
           check: () => {
-            return workBlocks[i].main.downCounter === 25;
+            return workBlocks[i].main.counter === 75;
           }
         })
-      );
-      this.texts.push(
-        new Text({
+        , new Text({
           // i work a
           parent: this,
           item: workHypers[i],
           check: () => {
-            return workBlocks[i].side.downCounter === 25;
+            return workBlocks[i].main.counter === 75;
           }
         })
       );
+      // this.texts.push(
+      //   new Text({
+      //     // i work p
+      //     parent: this,
+      //     item: workParagraphs[i],
+      //     check: () => {
+      //       return workBlocks[i].main.counter === 75;
+      //     }
+      //   })
+      // );
+      // this.texts.push(
+      //   new Text({
+      //     // i work a
+      //     parent: this,
+      //     item: workHypers[i],
+      //     check: () => {
+      //       return workBlocks[i].main.counter === 75;
+      //     }
+      //   })
+      // );
     }
 
     // Перед шоу
@@ -146,20 +163,20 @@ class TextTriggers {
       '.js-show-block__rhombus__text'
     );
     for (let i = 0, k = 0, j = 0; i < showParagraphs.length; i += 1, k += 1) {
-      if (k === 4) {
+      if (k === 3) {
         j += 1;
         k = 0;
       }
 
       // console.log(j, k);
-      // console.log(showLines.showBlocks[j].rhombuses[k]);
+      console.log(showLines);
       this.texts.push(
         new Text({
           // i work h
           parent: this,
           item: showParagraphs[i],
           check: () => {
-            return showLines.showBlocks[j].rhombuses[k].downCounter === 25;
+            return showLines.showBlocks[j].rhombuses[k].counter === 25;
           }
         })
       );
