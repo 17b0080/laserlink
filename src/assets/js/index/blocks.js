@@ -4,6 +4,7 @@ import WorkBlock from '../partials/workBlock';
 import ShowLines from '../partials/showLines';
 import PartnerLines from '../partials/partnerLines';
 import ProductLines from '../partials/productLines';
+import { LOGO, WORK, PARTNER, SHOW, PRODUCT } from '../settings';
 
 class Blocks {
   constructor(opts) {
@@ -69,35 +70,39 @@ class Blocks {
   }
 
   handleMouseOverWork(index) {
-    this.works[index].side.hovered = true;
+    console.log(`work ${index} hovered`)
   }
 
   handleMouseOutWork(index) {
-    this.works[index].side.hovered = false;
+    console.log(`work ${index} unhovered`)
   }
 
-  handleMouseOverShow(line, item) {
-    this.showLines.showBlocks[line].rhombuses[item].hovered = true;
+  handleMouseOverShow(i, j) {
+    this.showLines.showBlocks[i].rhombuses[j].hovered = true;
+    console.log(`show ${i} ${j} hovered`)
   }
 
-  handleMouseOutShow(line, item) {
-    this.showLines.showBlocks[line].rhombuses[item].hovered = false;
+  handleMouseOutShow(i, j) {
+    this.showLines.showBlocks[i].rhombuses[j].hovered = false;
+    console.log(`show ${i} ${j} unhovered`)
   }
 
-  handleMouseOverProduct(line, item) {
-    this.productLines.productBlocks[line].rhombuses[item].hovered = true;
+  handleMouseOverProduct(i, j) {
+    this.productLines.productBlocks[i].rhombuses[j].hovered = true;
+    console.log(`product ${i} ${j} hovered`)
   }
 
-  handleMouseOutProduct(line, item) {
-    this.productLines.productBlocks[line].rhombuses[item].hovered = false;
+  handleMouseOutProduct(i, j) {
+    this.productLines.productBlocks[i].rhombuses[j].hovered = false;
+    console.log(`product ${i} ${j} unhovered`)
   }
 
   init() {
     this.first = new FirstBlock({
       parent: this,
       context: this.context,
-      dx: 93,
-      dy: 205.5,
+      dx: LOGO.x,
+      dy: LOGO.y,
       image: this.logoImage,
       gradientIndex: 0
     });
@@ -109,8 +114,8 @@ class Blocks {
     this.work1 = new WorkBlock({
       parent: this,
       context: this.context,
-      dx: 107.5,
-      dy: 1191,
+      dx: WORK.positions[0][0],
+      dy: WORK.positions[0][1],
       images: [
         this.workImages[0][0],
         this.workImages[0][1],
@@ -122,8 +127,8 @@ class Blocks {
     this.work2 = new WorkBlock({
       parent: this,
       context: this.context,
-      dx: 556.5,
-      dy: 2009,
+      dx: WORK.positions[1][0],
+      dy: WORK.positions[1][1],
       images: [
         this.workImages[1][0],
         this.workImages[1][1],
@@ -134,8 +139,8 @@ class Blocks {
     this.work3 = new WorkBlock({
       parent: this,
       context: this.context,
-      dx: 111.5,
-      dy: 2827,
+      dx: WORK.positions[2][0],
+      dy: WORK.positions[2][1],
       images: [
         this.workImages[2][0],
         this.workImages[2][1],
@@ -147,8 +152,8 @@ class Blocks {
     this.work4 = new WorkBlock({
       parent: this,
       context: this.context,
-      dx: 556.5,
-      dy: 3645,
+      dx: WORK.positions[3][0],
+      dy: WORK.positions[3][1],
       images: [
         this.workImages[3][0],
         this.workImages[3][1],
@@ -157,22 +162,11 @@ class Blocks {
       ]
     });
 
-    // Шоу
-    this.showLines = new ShowLines({
-      parent: this,
-      gradientIndex: 3,
-      dy: 4593,
-      rhombusWidth: 220,
-      rhombusHeight: 220,
-      spaceBetweenRhombuses: 36,
-      textHeight: 47,
-      images: [this.showImages, this.showMoreHover]
-    });
 
     this.partnerLines = new PartnerLines({
       parent: this,
       gradientIndex: 4,
-      dy: 4593 + this.showLines.height + 883,
+      dy: PARTNER.y,
       rhombusWidth: 220,
       rhombusHeight: 220,
       spaceBetweenRhombuses: 36,
@@ -180,10 +174,22 @@ class Blocks {
       images: [this.partnerImages, this.hoverImage]
     });
 
+    // Шоу
+    this.showLines = new ShowLines({
+      parent: this,
+      gradientIndex: 3,
+      dy: SHOW.y + this.partnerLines.height,
+      rhombusWidth: 220,
+      rhombusHeight: 220,
+      spaceBetweenRhombuses: 36,
+      textHeight: 47,
+      images: [this.showImages, this.showMoreHover]
+    });
+
     this.productLines = new ProductLines({
       parent: this,
       gradientIndex: 5,
-      dy: 4593 + this.showLines.height + 872 + this.partnerLines.height + 892,
+      dy: PRODUCT.y + this.partnerLines.height + this.showLines.height,
       rhombusWidth: 283,
       rhombusHeight: 283,
       spaceBetweenRhombuses: 50,
@@ -324,11 +330,3 @@ class Blocks {
 }
 
 export default Blocks;
-
-/**
- * blocks.render(); ->
- * -> block.render();
- * - - > (1)
- *
- *
- */

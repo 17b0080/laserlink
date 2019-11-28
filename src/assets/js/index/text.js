@@ -1,5 +1,5 @@
 /* globals document, window */
-
+import { PRODUCT, WORK } from '../settings';
 function getCoords(elem) {
   // (1)
   const box = elem.getBoundingClientRect();
@@ -115,56 +115,110 @@ function changeTranslate(item, x, y) {
 }
 
 class Text {
-  constructor(opts) {
+  constructor({ blocks, ...opts }) {
     window.text = this;
+
     this.parent = opts.parent;
     this.windowWidth = this.parent.windowWidth;
     this.scale = this.parent.scale;
     this.spacing = this.parent.spacing;
-    this.showLines = this.parent.blocks.showLines;
-    this.partnerLines = this.parent.blocks.partnerLines;
-    this.productLines = this.parent.blocks.productLines;
 
-    this.halfWindowWidth = this.parent.windowWidth / 2;
 
-    this.showLinesHeight = this.showLines.height;
-    this.partnerLinesHeight = this.partnerLines.height;
-    this.productLinesHeight = this.productLines.height;
+    const {
+      works,
+      partnerLines,
+      showLines,
+      productLines
+    } = blocks;
 
-    this.content = document.querySelector('div.content');
+    this.works = works;
+    this.partnerLines = partnerLines;
+    this.showLines = showLines;
+    this.productLines = productLines;
+
+    for (let i = 0; i < works.length; i += 1) {
+      const { main: { width, height } } = works[i];
+      const a = document.createElement('a');
+      a.style.transform = `translate(${WORK.positions[i][0] * this.scale}px, ${WORK.positions[i][1] * this.scale}px)`;
+      a.style.width = `${width}px`;
+      a.style.height = `${height}px`;
+      a.style.backgroundColor = 'red';
+      a.setAttribute('class', 'content__button');
+      a.style.opacity = '1';
+
+
+      a.addEventListener('mouseover', () => blocks.handleMouseOverWork(i));
+      a.addEventListener('mouseout', () => blocks.handleMouseOutWork(i));
+
+      document.querySelector('.content').appendChild(a);
+    };
+    for (let i = 0; i < partnerLines.partnerBlocks.length; i += 1) {
+      const block = partnerLines.partnerBlocks[i];
+
+      for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const rhombus = block.rhombuses[j];
+        const { x, y, width, height } = rhombus;
+        const a = document.createElement('a');
+        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.width = `${width}px`;
+        a.style.height = `${height}px`;
+        a.style.backgroundColor = 'red';
+        a.setAttribute('class', 'content__button');
+        // a.style.opacity = '1';
+        document.querySelector('.content').appendChild(a);
+
+
+
+      }
+    };
+    for (let i = 0; i < showLines.showBlocks.length; i += 1) {
+      const block = showLines.showBlocks[i];
+
+      for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const rhombus = block.rhombuses[j];
+        const { x, y, width, height } = rhombus;
+        const a = document.createElement('a');
+        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.width = `${width}px`;
+        a.style.height = `${height}px`;
+        a.style.backgroundColor = 'red';
+        a.setAttribute('class', 'content__button');
+        // a.style.opacity = '1';÷
+        document.querySelector('.content').appendChild(a);
+
+
+        a.addEventListener('mouseover', () => blocks.handleMouseOverShow(i, j));
+        a.addEventListener('mouseout', () => blocks.handleMouseOutShow(i, j));
+      }
+    };
+    for (let i = 0; i < productLines.productBlocks.length; i += 1) {
+      const block = productLines.productBlocks[i];
+
+      for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const rhombus = block.rhombuses[j];
+        const { x, y, width, height } = rhombus;
+        const a = document.createElement('a');
+        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.width = `${width}px`;
+        a.style.height = `${height}px`;
+        a.style.backgroundColor = 'red';
+        a.setAttribute('class', 'content__button');
+        // a.style.opacity = '1';
+        document.querySelector('.content').appendChild(a);
+
+        a.addEventListener('mouseover', () => blocks.handleMouseOverProduct(i, j));
+        a.addEventListener('mouseout', () => blocks.handleMouseOutProduct(i, j));
+      }
+    };
 
     this.menu = document.querySelectorAll('.menu__item');
+    this.content = document.querySelector('.content');
     this.subMenu = document.querySelectorAll('.sub-menu__item');
-
-    this.firstBlock = {
-      h: document.querySelector('.js-first-block__main-header'),
-      p: document.querySelector('.js-first-block__text')
-    };
-
-    this.workBlocks = getWorkText();
-
-    this.showBlock = {
-      h: document.querySelector('.js-show-block__sub-header'),
-      p: document.querySelector('.js-show-block__text')
-    };
-    this.showRhombuses = getShowRhombuses(this);
-
-    this.partnerRhombuses = getPartnerRhombuses(this);
-
-    this.partnerBlock = {
-      h: document.querySelectorAll('.js-partner-block__sub-header'),
-      p: document.querySelector('.js-partner-block__text')
-    };
-
-    this.productBlock = {
-      h: document.querySelectorAll('.js-product-block__sub-header'),
-      p: document.querySelector('.js-product-block__text')
-    };
-    this.productRhombuses = getProductRhombuses(this);
-
     this.form = document.querySelector('.contact-form-wrapper');
 
-    this.applyStyles();
+    // this.applyStyles();
+
+    document.body.style.height = `${showLines.height + partnerLines.height + productLines.height + PRODUCT.y * this.scale}px`;
   }
 
   updateXY() {
@@ -175,410 +229,17 @@ class Text {
   handleResize() {
     this.scale = this.parent.scale;
     this.spacing = this.parent.spacing;
-
-    this.applyStyles();
-  }
-
-  applyStyles() {
-    if (this.windowWidth >= 990) {
-      document.body.style.height = `${this.showLines.height +
-        this.partnerLines.height +
-        this.productLines.height +
-        (4593 + 892 + 883 + 300 + 900 + 35) * this.scale}px`;
-      this.menu[0].onclick = e => {
-        e.preventDefault();
-        scrollTo(0);
-      };
-
-      this.menu[1].children[1].children[0].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        scrollTo(1013 * this.scale);
-      };
-      this.menu[1].children[1].children[1].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        scrollTo(1740 * this.scale);
-      };
-      this.menu[1].children[1].children[2].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        scrollTo(2600 * this.scale);
-      };
-      this.menu[1].children[1].children[3].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        scrollTo(3400 * this.scale);
-      };
-      this.menu[1].children[1].children[4].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        scrollTo(4146 * this.scale);
-      };
-
-      this.menu[2].onclick = e => {
-        e.preventDefault();
-        scrollTo((4593 + this.showLinesHeight + 572) * this.scale);
-      };
-
-      this.menu[3].onclick = e => {
-        e.preventDefault();
-        scrollTo(
-          (4593 + this.showLinesHeight + 872 + this.partnerLinesHeight + 530) *
-          this.scale
-        );
-      };
-
-      this.menu[4].onclick = e => {
-        e.preventDefault();
-        scrollTo(
-          this.showLinesHeight +
-          this.partnerLinesHeight +
-          this.productLinesHeight +
-          (4593 + 892 + 883 + 300) * this.scale
-        );
-      };
-    } else if (this.windowWidth >= 640 && this.windowWidth < 990) {
-      this.menu[0].onclick = e => {
-        e.preventDefault();
-        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
-          this.menu[1].children[0].onclick(e);
-        }
-        scrollTo(0);
-      };
-      this.menu[1].children[1].children[0].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        scrollTo(
-          getCoords(document.querySelector('div.show-wrapper').children[1]) -
-          100
-        );
-      };
-      this.menu[1].children[1].children[1].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        scrollTo(
-          getCoords(document.querySelector('div.show-wrapper').children[2]) -
-          100
-        );
-      };
-      this.menu[1].children[1].children[2].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        scrollTo(
-          getCoords(document.querySelector('div.show-wrapper').children[3]) -
-          100
-        );
-      };
-      this.menu[1].children[1].children[3].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        scrollTo(
-          getCoords(document.querySelector('div.show-wrapper').children[4]) -
-          100
-        );
-      };
-      this.menu[1].children[1].children[4].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        scrollTo(
-          getCoords(document.querySelectorAll('div.show-wrapper')[1]) - 45
-        );
-      };
-      // партнеры - 2
-      this.menu[2].onclick = e => {
-        e.preventDefault();
-        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
-          this.menu[1].children[0].onclick(e);
-        }
-        scrollTo(getCoords(document.querySelector('div.partners')) - 100);
-      };
-      // оборудование - 3
-      this.menu[3].onclick = e => {
-        e.preventDefault();
-        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
-          this.menu[1].children[0].onclick(e);
-        }
-        scrollTo(getCoords(document.querySelector('div.products')) - 100);
-      };
-      // контакты - 4
-      this.menu[4].onclick = e => {
-        e.preventDefault();
-        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
-          this.menu[1].children[0].onclick(e);
-        }
-        scrollTo(
-          getCoords(document.querySelector('div.contact-form-wrapper')) - 100
-        );
-      };
-    } else {
-      this.menu[0].onclick = e => {
-        e.preventDefault();
-        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
-          this.menu[1].children[0].onclick(e);
-        }
-        document.querySelector('.hamburger-wrapper').onclick(e);
-        scrollTo(0);
-      };
-      this.menu[1].children[1].children[0].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        document.querySelector('.hamburger-wrapper').onclick(e);
-        scrollTo(
-          getCoords(document.querySelector('div.show-wrapper').children[1]) -
-          100
-        );
-      };
-      this.menu[1].children[1].children[1].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        document.querySelector('.hamburger-wrapper').onclick(e);
-        scrollTo(
-          getCoords(document.querySelector('div.show-wrapper').children[2]) -
-          100
-        );
-      };
-      this.menu[1].children[1].children[2].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        document.querySelector('.hamburger-wrapper').onclick(e);
-        scrollTo(
-          getCoords(document.querySelector('div.show-wrapper').children[3]) -
-          100
-        );
-      };
-      this.menu[1].children[1].children[3].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        document.querySelector('.hamburger-wrapper').onclick(e);
-        scrollTo(
-          getCoords(document.querySelector('div.show-wrapper').children[4]) -
-          100
-        );
-      };
-      this.menu[1].children[1].children[4].onclick = e => {
-        e.preventDefault();
-        this.menu[1].children[0].onclick(e);
-        document.querySelector('.hamburger-wrapper').onclick(e);
-        scrollTo(
-          getCoords(document.querySelectorAll('div.show-wrapper')[1]) - 45
-        );
-      };
-      // партнеры - 2
-      this.menu[2].onclick = e => {
-        e.preventDefault();
-        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
-          this.menu[1].children[0].onclick(e);
-        }
-        document.querySelector('.hamburger-wrapper').onclick(e);
-        scrollTo(getCoords(document.querySelector('div.partners')) - 100);
-      };
-      // оборудование - 3
-      this.menu[3].onclick = e => {
-        e.preventDefault();
-        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
-          this.menu[1].children[0].onclick(e);
-        }
-        document.querySelector('.hamburger-wrapper').onclick(e);
-        scrollTo(getCoords(document.querySelector('div.products')) - 100);
-      };
-      // контакты - 4
-      this.menu[4].onclick = e => {
-        e.preventDefault();
-        if (this.menu[1].children[1].classList.contains('sub-menu--opened')) {
-          this.menu[1].children[0].onclick(e);
-        }
-        document.querySelector('.hamburger-wrapper').onclick(e);
-        scrollTo(
-          getCoords(document.querySelector('div.contact-form-wrapper')) - 100
-        );
-      };
-    }
-
-    changeTranslate(this.firstBlock.h, 36 * this.scale, 842 * this.scale);
-    changeTranslate(this.firstBlock.p, 413 * this.scale, 453 * this.scale);
-
-    changeTranslate(
-      this.workBlocks[0].h,
-      429.6 * this.scale,
-      1439 * this.scale
-    );
-    changeTranslate(
-      this.workBlocks[0].p,
-      429.6 * this.scale,
-      1495 * this.scale
-    );
-    changeTranslate(
-      this.workBlocks[0].a,
-      218.7 * this.scale,
-      1558 * this.scale
-    );
-
-    changeTranslate(this.workBlocks[1].h, 113 * this.scale, 2257 * this.scale);
-    changeTranslate(this.workBlocks[1].p, 113 * this.scale, 2313 * this.scale);
-    changeTranslate(
-      this.workBlocks[1].a,
-      670.2 * this.scale,
-      2376 * this.scale
-    );
-
-    changeTranslate(
-      this.workBlocks[2].h,
-      425.6 * this.scale,
-      3075 * this.scale
-    );
-    changeTranslate(
-      this.workBlocks[2].p,
-      425.6 * this.scale,
-      3162 * this.scale
-    );
-    changeTranslate(this.workBlocks[2].a, 222 * this.scale, 3194 * this.scale);
-
-    changeTranslate(this.workBlocks[3].h, 114 * this.scale, 3893 * this.scale);
-    changeTranslate(this.workBlocks[3].p, 114 * this.scale, 3949 * this.scale);
-    changeTranslate(
-      this.workBlocks[3].a,
-      669.8 * this.scale,
-      4012 * this.scale
-    );
-
-    const types = [
-      'video-mapping',
-      'laser-show',
-      'multimedia-show',
-      'staging-numbers'
-    ];
-    for (let i = 0; i < 4; i += 1) {
-      this.workBlocks[i].a.onclick = () => {
-        this.parent.projectViewer.open(0, types[i]);
-      };
-      this.workBlocks[i].a.style.width = `${128 * this.scale}px`;
-      this.workBlocks[i].a.style.height = `${128 * this.scale}px`;
-      this.workBlocks[i].a.style.lineHeight = `${128 * this.scale}px`;
-    }
-
-    changeTranslate(this.showBlock.h, 427 * this.scale, 4350 * this.scale);
-    changeTranslate(this.showBlock.p, 427 * this.scale, 4415 * this.scale);
-
-    for (let i = 0, k = 0, j = 0; i < this.showRhombuses.length; i += 1) {
-      if (k === 4) {
-        j += 1;
-        k = 0;
-      }
-      const { dx } = this.showLines.showBlocks[j];
-      const { dy } = this.showLines.showBlocks[j];
-      const x = dx * this.scale;
-      const y = dy * this.scale;
-      changeTranslate(
-        this.showRhombuses[i].p,
-        x + (220 + 36) * k * this.scale,
-        y + 220 * this.scale
-      );
-      this.showRhombuses[i].p.style.width = `${220 * this.scale}px`;
-      this.showRhombuses[i].p.style.lineHeight = `${47 * this.scale}px`;
-      this.showRhombuses[i].p.style.height = `${47 * this.scale}px`;
-
-      changeTranslate(
-        this.showRhombuses[i].a,
-        x + (220 + 36) * k * this.scale,
-        y
-      );
-      this.showRhombuses[i].a.onclick = () => {
-        this.parent.projectViewer.open(i, 'common');
-      };
-      this.showRhombuses[i].a.style.width = `${220 * this.scale}px`;
-      this.showRhombuses[i].a.style.height = `${220 * this.scale}px`;
-      this.showRhombuses[i].a.style.lineHeight = `${220 * this.scale}px`;
-      k += 1;
-    }
-
-    changeTranslate(
-      this.partnerBlock.h[0],
-      114 * this.scale,
-      (4593 + 242 + this.showLinesHeight) * this.scale
-    );
-    changeTranslate(
-      this.partnerBlock.h[1],
-      427 * this.scale,
-      (4593 + 739 + this.showLinesHeight) * this.scale
-    );
-    changeTranslate(
-      this.partnerBlock.p,
-      114 * this.scale,
-      (4593 + 307 + this.showLinesHeight) * this.scale
-    );
-    this.partnerRhombuses.forEach(rhombus => {
-      rhombus.dom.style.width = `${220 * this.scale}px`;
-      rhombus.dom.style.height = `${220 * this.scale}px`;
-      changeTranslate(rhombus.dom, rhombus.x, rhombus.y);
-    });
-
-    changeTranslate(
-      this.productBlock.h[0],
-      114 * this.scale,
-      (this.showLinesHeight + 840 + 4593 + this.partnerLinesHeight + 242) *
-      this.scale
-    );
-    changeTranslate(
-      this.productBlock.h[1],
-      418 * this.scale,
-      (this.showLinesHeight + 840 + 4593 + this.partnerLinesHeight + 748) *
-      this.scale
-    );
-    changeTranslate(
-      this.productBlock.p,
-      114 * this.scale,
-      (this.showLinesHeight + 840 + 4593 + this.partnerLinesHeight + 339) *
-      this.scale
-    );
-
-    for (let i = 0, k = 0, j = 0; i < this.productRhombuses.length; i += 1) {
-      if (k === 3) {
-        j += 1;
-        k = 0;
-      }
-      const { dx } = this.productLines.productBlocks[j];
-      const { dy } = this.productLines.productBlocks[j];
-      const x = dx * this.scale;
-      const y = dy * this.scale;
-
-      this.productRhombuses[i].a.onclick = () => {
-        this.parent.productViewer.open(i);
-      };
-
-      changeTranslate(
-        this.productRhombuses[i].p,
-        x + (283 + 50) * k * this.scale,
-        y + 283 * this.scale
-      );
-      this.productRhombuses[i].p.style.width = `${283 * this.scale}px`;
-      this.productRhombuses[i].p.style.lineHeight = `${71 * this.scale}px`;
-      this.productRhombuses[i].p.style.height = `${71 * this.scale}px`;
-
-      changeTranslate(
-        this.productRhombuses[i].a,
-        x + (283 + 50) * k * this.scale,
-        y
-      );
-      this.productRhombuses[i].a.style.width = `${283 * this.scale}px`;
-      this.productRhombuses[i].a.style.height = `${283 * this.scale}px`;
-      this.productRhombuses[i].a.style.lineHeight = `${283 * this.scale}px`;
-      k += 1;
-    }
   }
 
   render() {
     changeTranslate(this.content, this.spacing - this.currentX, -this.currentY);
-    // console.log(this.form);
-    // console.log(this.scale);
-    // console.log(this.showLines.height);
     changeTranslate(
       this.form,
       this.spacing - this.currentX,
       this.showLines.height +
       this.partnerLines.height +
       this.productLines.height +
-      (4593 + 892 + 883 + 300) * this.scale -
+      PRODUCT.y * this.scale -
       this.currentY
     );
   }

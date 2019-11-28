@@ -12,6 +12,9 @@ import InputSwitcher from './InputSwitcher';
 import StateSwitcher from './stateSwitcher';
 import rewardViewer from './rewards';
 
+
+const DEFAULT_WIDTH = 1366;
+
 function getCoords(elem) {
   // (1)
   const box = elem.getBoundingClientRect();
@@ -245,13 +248,13 @@ class App {
     // default width = 1000,    <- scale = 1
     // maximum width = 1156.25, <- scale = 1.15625
     // minimum width = 640.     <- scale = 0.64
-    this.scale = this.windowWidth / 1024;
+    this.scale = this.windowWidth / DEFAULT_WIDTH;
     if (this.scale > 1.15625) this.scale = 1.15625;
     else if (this.scale < 0.64) this.scale = 0.64;
   }
 
   recalculateSpacing() {
-    this.spacing = (this.windowWidth - 1024 * this.scale) / 2;
+    this.spacing = (this.windowWidth - DEFAULT_WIDTH * this.scale) / 2;
     if (this.spacing < 0) {
       this.spacing = 0;
     }
@@ -325,7 +328,7 @@ class App {
       this.productViewer = new ProductViewer({ parent: this });
       // this.gradients = new Gradients({ parent: this });
       this.lines = new Lines({ parent: this });
-      this.text = new Text({ parent: this });
+      this.text = new Text({ parent: this, blocks: this.blocks });
       this.textTrigger = new TextTriggers({ parent: this });
       window.trigger(0);
       this.listen();
@@ -400,10 +403,10 @@ class App {
           this.request
         ) {
           this.updateXY();
-          this.background.render();
+          // this.background.render();
           this.blocks.render();
-          this.gradients.render();
-          this.lines.render();
+          // this.gradients.render();
+          // this.lines.render();
           this.text.render();
           this.textTrigger.check();
           blockRendered = true;
