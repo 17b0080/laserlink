@@ -1,14 +1,10 @@
 /* globals document, window */
 import { PRODUCT, WORK, TEXT } from '../settings';
 
-function translateX(item, x) {
-  item.style.transform = `translateX(${x}px)`;
-}
-
 function changeTranslate(item, x, y) {
   // eslint-disable-next-line no-param-reassign
   item.style.transform = `translate(${x}px, ${y}px)`;
-}
+};
 
 class Text {
   constructor({ projectViewer, productViewer, ...opts }) {
@@ -32,6 +28,9 @@ class Text {
     this.logoButton = document.createElement('a');
     this.logoButton.innerHTML = 'Представляем';
     this.logoButton.setAttribute('class', 'content__button');
+    this.logoButton.addEventListener('click', () => {
+      projectViewer.open(0, 'presentation');
+    })
     document.querySelector('.content').appendChild(this.logoButton);
 
     this.wA = [];

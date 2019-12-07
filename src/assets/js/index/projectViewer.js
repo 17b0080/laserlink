@@ -707,15 +707,29 @@ class ProjectViewer {
       this.content.style.height = `${contentHeight}px`;
     }, 0);
 
-    this.orderButton.style.visibility = 'visible';
-    this.arrowLeft.style.visibility = 'visible';
-    this.arrowRight.style.visibility = 'visible';
+    if (this.type !== 'presentation') {
+      this.orderButton.style.visibility = 'visible';
+      this.arrowLeft.style.visibility = 'visible';
+      this.arrowRight.style.visibility = 'visible';
+    } else {
+      this.orderButton.style.visibility = 'hidden';
+      this.arrowLeft.style.visibility = 'hidden';
+      this.arrowRight.style.visibility = 'hidden';
+    }
   }
 
   open(index, type = undefined) {
     if (!this.opened) {
       if (type !== undefined) {
-        if (type === 'video-mapping') {
+        this.type = type;
+        if (type === 'presentation') {
+          this.data = [{
+            background_boolean: false,
+            header: "video mapping 1",
+            text: "text",
+            video: "./assets/video/presentation.mp4"
+          }]
+        } else if (type === 'video-mapping') {
           this.data = this.parent.videoMappingData;
         } else if (type === 'laser-show') {
           this.data = this.parent.laserShowData;
