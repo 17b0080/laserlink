@@ -1,5 +1,7 @@
 import Figure from './Figure';
-import { SHOW } from '../settings';
+import { SHOW, GRADIENT_LINES_TIME } from '../settings';
+import { TimelineLite } from 'gsap';
+import ScrollMagic from 'scrollmagic';
 
 class ShowRhombus extends Figure {
   constructor({ image, showMore, ...rest }) {
@@ -20,12 +22,20 @@ class ShowRhombus extends Figure {
     this.rendered = false;
     this.ready = false;
     this.opacity = 0;
-    this.counter = 0;
-    this.counters = 100;
+
+    this.attrs = {
+      rendered: { image: false, hover: true },
+      played: { lines: false, image: false, hover: true },
+      dots: Array.from({ length: 5 }, () => ([SHOW.width / 2, 0])).flat(),
+      hovered: false,
+      hoverOpacity: 0,
+      opacity: 1,
+      gradientOffset: 0,
+    };
 
     this.subCanvas = document.createElement('canvas');
-    this.subCanvas.width = 500;
-    this.subCanvas.height = 500;
+    this.subCanvas.width = SHOW.width;
+    this.subCanvas.height = SHOW.height;
     this.subContext = this.subCanvas.getContext('2d');
 
 
@@ -53,77 +63,51 @@ class ShowRhombus extends Figure {
 
     this.subContext.strokeStyle = this.gradient;
     this.subContext.lineWidth = 12;
+
+    this.hoverTl = new TimelineLite({
+      paused: true,
+      onComplete: () => this.attrs.played.hover = true,
+      onReverseComplete: () => this.attrs.played.hover = true,
+    }).to(this.attrs, 1, { opacity: 0, hoverOpacity: 1 })
   }
 
-  calculateDots() {
-    // Движущие точки расширяются
-    if (this.counter > 75) return 0;
-
-    if (this.counter < 25) return this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width / 2 * (1 + this.counter / 25), this.subCanvas.height / 2 * this.counter / 25,
-      0, 0,
-      this.subCanvas.width / 2 * (1 - this.counter / 25), this.subCanvas.height / 2 * this.counter / 25,
-      0, 0,
-    ];
-    if (this.counter >= 25 && this.counter <= 50) return this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width, this.subCanvas.height / 2,
-      this.subCanvas.width * (1 - (this.counter - 25) / 25 / 2), this.subCanvas.height / 2 * (1 + (this.counter - 25) / 25),
-      0, this.subCanvas.height / 2,
-      this.subCanvas.width / 2 * (this.counter - 25) / 25, this.subCanvas.height / 2 * (1 + (this.counter - 25) / 25),
-    ];
-
-    // Движущих точек нет, быстрая вставка
-    if (this.counter >= 50) return this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width, this.subCanvas.height / 2,
-      this.subCanvas.width / 2, this.subCanvas.height,
-      0, this.subCanvas.height / 2,
-    ];
-  }
-
-  updateCounters() {
-    if (this.counter === 75) { this.ready = true; }
-    else if (this.counter === 150) { this.counter = 76; }
-    this.counter += 1;
-
-    if (this.counter > 75) {
-      if (!this.hovered && this.hoverCounter === 0) { return 0; }
-      else if (this.hovered && this.hoverCounter === 25) { return 25; }
-      else if (this.hovered) { this.hoverCounter += 1; this.hoverProcessing = true; }
-      else if (!this.hovered) { this.hoverCounter -= 1; this.hoverProcessing = true; };
-    }
-  }
-
-  calculateDots() {
-    // Движущие точки расширяются
-
-    if (this.counter < 25) this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width / 2 * (1 + this.counter / 25), this.subCanvas.height / 2 * this.counter / 25,
-      0, 0,
-      this.subCanvas.width / 2 * (1 - this.counter / 25), this.subCanvas.height / 2 * this.counter / 25,
-      0, 0,
-    ];
-    if (this.counter >= 25 && this.counter <= 50) this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width, this.subCanvas.height / 2,
-      this.subCanvas.width * (1 - (this.counter - 25) / 25 / 2), this.subCanvas.height / 2 * (1 + (this.counter - 25) / 25),
-      0, this.subCanvas.height / 2,
-      this.subCanvas.width / 2 * (this.counter - 25) / 25, this.subCanvas.height / 2 * (1 + (this.counter - 25) / 25),
-    ];
-
-    // Движущих точек нет, быстрая вставка
-    if (this.counter >= 50) this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width, this.subCanvas.height / 2,
-      this.subCanvas.width / 2, this.subCanvas.height,
-      0, this.subCanvas.height / 2,
-    ];
+  tl = () => {
+    const tl = new TimelineLite();
+    tl.to(this.attrs.dots, 1, [
+      SHOW.width / 2, 0,
+      SHOW.width, SHOW.height / 2,
+      SHOW.width, SHOW.height / 2,
+      0, SHOW.height / 2,
+      0, SHOW.height / 2,
+    ]);
+    tl.to(this.attrs.dots, 1, [
+      SHOW.width / 2, 0,
+      SHOW.width, SHOW.height / 2,
+      SHOW.width / 2, SHOW.height,
+      0, SHOW.height / 2,
+      SHOW.width / 2, SHOW.height,
+    ]);
+    tl.add(() => this.attrs.played.lines = true)
+    tl.from(this.attrs, 1, {
+      opacity: 0,
+      onComplete: () => {
+        this.attrs.played.image = true;
+        if (this.attrs.hovered) {
+          this.attrs.rendered.hover = false;
+          this.hoverTl.play();
+        };
+      }
+    });
+    tl.to(this.attrs, GRADIENT_LINES_TIME, {
+      gradientOffset: 1500,
+      repeat: -1,
+    });
+    return tl;
   }
 
   animate() {
+    const { rendered, dots, played, opacity, hoverOpacity, gradientOffset } = this.attrs;
+
     this.context.save();
     this.context.beginPath();
     this.context.moveTo(this.x + this.width / 2, this.y);
@@ -133,76 +117,27 @@ class ShowRhombus extends Figure {
     this.context.closePath();
     this.context.clip();
 
-    // Поэтапный верх линий ромба
-    if (this.counter <= 25) {
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[2], this.dots[3]);
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[6], this.dots[7]);
-      this.subContext.stroke();
-    }
-    // Верх + поэтапный низ линий ромба
-    else if (this.counter > 25 && this.counter <= 50) {
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[2], this.dots[3]);
-      this.subContext.lineTo(this.dots[4], this.dots[5]);
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[6], this.dots[7]);
-      this.subContext.lineTo(this.dots[8], this.dots[9]);
-      this.subContext.stroke();
-    }
-    // Быстрая вставка линий ромба + изображение
-    else if (this.counter > 50 && this.counter <= 75) {
+    if (!played.lines) {
+      this.subContext.moveTo(dots[0], dots[1]);
+      this.subContext.lineTo(dots[2], dots[3]);
+      this.subContext.lineTo(dots[4], dots[5]);
+      this.subContext.moveTo(dots[0], dots[1]);
+      this.subContext.lineTo(dots[6], dots[7]);
+      this.subContext.lineTo(dots[8], dots[9]);
+    } else {
       this.subContext.beginPath();
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[2], this.dots[3]);
-      this.subContext.lineTo(this.dots[4], this.dots[5]);
-      this.subContext.lineTo(this.dots[6], this.dots[7]);
+      this.subContext.moveTo(dots[0], dots[1]);
+      this.subContext.lineTo(dots[2], dots[3]);
+      this.subContext.lineTo(dots[4], dots[5]);
+      this.subContext.lineTo(dots[6], dots[7]);
       this.subContext.closePath();
-      this.subContext.save();
-      this.subContext.globalAlpha = 1 * (this.counter - 50) / 25;
-      this.subContext.drawImage(
-        this.image,
-        0,
-        0,
-        this.subCanvas.width,
-        this.subCanvas.height
-      );
-      this.subContext.restore();
-      this.subContext.stroke();
-      if (this.counter === 75) this.rendered = true;
-    }
 
-    else if (this.counter > 75) {
-      if (!this.rendered) {
-        this.subContext.save();
-        this.subContext.globalAlpha = 1;
-        this.subContext.drawImage(
-          this.image,
-          0,
-          0,
-          this.subCanvas.width,
-          this.subCanvas.height
-        );
-        this.subContext.restore();
-        this.rendered = true;
-      } else if (this.hoverProcessing) {
-        if (this.hoverCounter === 25) { this.hoverProcessing = false; }
-        else if (this.hoverCounter === 0) { this.hoverProcessing = false; }
-        this.subContext.save();
+      if (!played.image || !rendered.image || !played.hover || !rendered.hover) {
+        if (played.image) this.attrs.rendered.image = true;
+        if (rendered.hover) this.attrs.rendered.hover = true;
         this.subContext.clearRect(0, 0, this.subCanvas.width, this.subCanvas.height);
-        this.subContext.globalAlpha = (25 - this.hoverCounter) / 25;
-        this.subContext.drawImage(
-          this.image,
-          0,
-          0,
-          this.subCanvas.width,
-          this.subCanvas.height
-        );
-        this.subContext.restore();
-
         this.subContext.save();
-        this.subContext.globalAlpha = this.hoverCounter / 25;
+        this.subContext.globalAlpha = hoverOpacity;
         this.subContext.drawImage(
           this.showMore,
           0,
@@ -210,19 +145,22 @@ class ShowRhombus extends Figure {
           this.subCanvas.width,
           this.subCanvas.height
         );
+        this.subContext.globalAlpha = opacity;
+        this.subContext.drawImage(
+          this.image,
+          0,
+          0,
+          this.subCanvas.width,
+          this.subCanvas.height
+        );
         this.subContext.restore();
       }
-      this.subContext.beginPath();
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[2], this.dots[3]);
-      this.subContext.lineTo(this.dots[4], this.dots[5]);
-      this.subContext.lineTo(this.dots[6], this.dots[7]);
-      this.subContext.closePath();
-      this.subContext.save();
-      this.subContext.translate(0, -1000 * (this.counter - 75) / 75);
-      this.subContext.stroke();
-      this.subContext.restore();
-    }
+    };
+
+    this.subContext.save();
+    this.subContext.translate(0, -gradientOffset);
+    this.subContext.stroke();
+    this.subContext.restore();
 
     this.context.drawImage(this.subCanvas, this.x, this.y, this.width, this.height)
     this.context.restore();
@@ -230,27 +168,18 @@ class ShowRhombus extends Figure {
   }
 
   render(onWindow) {
-    if (onWindow) {
-      this.updateCounters();
-      this.calculateDots();
-      this.animate();
-    } else if (this.counter !== 0 && !this.ready) {
-      this.updateCounters();
-    }
+    if (onWindow) this.animate();
   }
 
   checkRequest() {
-    return (
-      this.hovered && this.hoverCounter !== 25 ||
-      !this.hovered && this.hoverCounter !== 0 ||
-      this.counter !== 0 && !this.ready ||
-      this.counter > 75
-    ) ? true : false
+    return true;
   }
 }
 
 class ShowBlock {
   constructor(opts) {
+    this.triggered = false;
+    this.gradients = opts.gradients;
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.scale = this.parent.scale;
@@ -286,20 +215,23 @@ class ShowBlock {
     this.initDots();
     this.calculateDirt();
     this.rhombuses = [];
+
+    this.tl = new TimelineLite({ paused: true });
+
     for (let i = 0; i < this.images.length; i += 1) {
-      this.rhombuses.push(
-        new ShowRhombus({
-          parent: this,
-          context: this.context,
-          scale: this.scale,
-          width: this.width,
-          height: this.height,
-          dx: this.dots[i].x,
-          dy: this.dots[i].y,
-          image: this.images[i],
-          showMore: this.showMoreHover
-        })
-      );
+      const sr = new ShowRhombus({
+        parent: this,
+        context: this.context,
+        scale: this.scale,
+        width: this.width,
+        height: this.height,
+        dx: this.dots[i].x,
+        dy: this.dots[i].y,
+        image: this.images[i],
+        showMore: this.showMoreHover
+      });
+      this.tl.add(sr.tl(), '0');
+      this.rhombuses.push(sr);
     }
     this.cleared = true;
   }
@@ -397,7 +329,10 @@ class ShowBlock {
         this.y + this.scaledHeight < this.windowHeight + 4)
     ) {
       this.onWindow = true;
-      // window.trigger(this.gradientIndex);
+      if (this.triggered) {
+        if (this.tl.progress() === 0) this.tl.play();
+        if (!this.gradients.isTriggered(6)) this.gradients.trigger(6);
+      }
     } else {
       this.onWindow = false;
     }
@@ -405,7 +340,12 @@ class ShowBlock {
 }
 
 class ShowLines {
-  constructor(opts) {
+  constructor({ text, gradients, images, showMoreHover, ...opts }) {
+    [this.svg, this.text] = text;
+    this.gradients = gradients;
+    this.images = images;
+    this.showMoreHover = showMoreHover;
+
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.spacing = this.parent.spacing;
@@ -422,7 +362,6 @@ class ShowLines {
     this.spaceBetweenRhombuses = SHOW.gapX;
     this.textHeight = SHOW.gapY;
 
-    [this.images, this.showMoreHover] = opts.images;
     this.linesWithImages = this.getLines();
 
     if (this.linesWithImages.length > 0) {
@@ -434,6 +373,49 @@ class ShowLines {
     }
 
     this.showBlocks = this.getShowBlocks();
+  }
+
+  svgTl = () => {
+    const { svg } = this;
+    // svg.style.width = svg.getAttribute('viewBox').split(' ')[2] + 'px';
+    const paths = svg.querySelectorAll('path');
+    const image = svg.querySelector('image');
+    const tl = new TimelineLite();
+    paths.forEach((path, i) => {
+      const pTl = new TimelineLite();
+      const length = path.getTotalLength();
+      // console.log(length)
+      const from = { strokeDasharray: length, strokeDashoffset: length };
+      const to = { strokeDasharray: length, strokeDashoffset: 0 };
+      pTl.fromTo(path, .01, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'same')
+      pTl.fromTo(path, 1, { css: from }, { css: to }, 'same');
+      tl.add(pTl, `0+=${.25 * i}`)
+    });
+    tl.fromTo(image, .5, { css: { opacity: 0 } }, { css: { opacity: 1 } });
+    return tl;
+  }
+
+  textTl = () => {
+    const { text } = this;
+    const tl = new TimelineLite();
+    tl.fromTo(text, .5, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'text');
+    tl.fromTo(text, 1, { css: { top: 20 } }, { css: { top: 0 } }, 'text');
+    return tl;
+  }
+
+  scene = () => {
+    const { showBlocks, svgTl, textTl } = this;
+    const tl = new TimelineLite({ paused: true }).add(svgTl(), 'text').add(textTl(), 'text');
+    const scene = new ScrollMagic.Scene({
+      offset: this.dy * this.scale - window.innerHeight / 2
+    });
+
+    scene.on('start', () => {
+      showBlocks.forEach(block => block.triggered = true);
+      tl.play();
+      scene.destroy();
+    });
+    return scene;
   }
 
   updateXY() {
@@ -497,6 +479,7 @@ class ShowLines {
         (this.linesWithImages[i].length - 1) * this.spaceBetweenRhombuses;
       showBlocks.push(
         new ShowBlock({
+          gradients: this.gradients,
           parent: this.parent,
           context: this.context,
           gradientIndex: this.gradientIndex,

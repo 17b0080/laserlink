@@ -1,15 +1,15 @@
 /* globals document */
 import Figure from './Figure';
-import { PARTNER } from '../settings';
+import { PARTNER, GRADIENT_LINES_TIME } from '../settings';
+import { TimelineLite } from 'gsap';
+import ScrollMagic from 'scrollmagic';
+
 class PartnerRhombus extends Figure {
   constructor({ image, noise, ...rest }) {
     super(rest);
-    if (window.pars === undefined) window.prs = [];
-    window.prs.push(this);
     this.width = PARTNER.width;
     this.height = PARTNER.height;
     this.hovered = false;
-    console.log(image, noise);
     this.image = image;
     this.noise = noise;
 
@@ -23,9 +23,18 @@ class PartnerRhombus extends Figure {
     this.counter = 0;
     this.counters = 100;
 
+    this.attrs = {
+      rendered: { image: false },
+      played: { lines: false, image: false },
+      dots: Array.from({ length: 5 }, () => ([PARTNER.width / 2, 0])).flat(),
+      opacity: 1,
+      gradientOffset: 0,
+    }
+
+
     this.subCanvas = document.createElement('canvas');
-    this.subCanvas.width = 500;
-    this.subCanvas.height = 500;
+    this.subCanvas.width = PARTNER.width;
+    this.subCanvas.height = PARTNER.height;
     this.subContext = this.subCanvas.getContext('2d');
 
 
@@ -55,68 +64,37 @@ class PartnerRhombus extends Figure {
     this.subContext.lineWidth = 12;
   }
 
-  calculateDots() {
-    // Движущие точки расширяются
-    if (this.counter > 75) return 0;
-
-    if (this.counter < 25) return this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width / 2 * (1 + this.counter / 25), this.subCanvas.height / 2 * this.counter / 25,
-      0, 0,
-      this.subCanvas.width / 2 * (1 - this.counter / 25), this.subCanvas.height / 2 * this.counter / 25,
-      0, 0,
-    ];
-    if (this.counter >= 25 && this.counter <= 50) return this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width, this.subCanvas.height / 2,
-      this.subCanvas.width * (1 - (this.counter - 25) / 25 / 2), this.subCanvas.height / 2 * (1 + (this.counter - 25) / 25),
-      0, this.subCanvas.height / 2,
-      this.subCanvas.width / 2 * (this.counter - 25) / 25, this.subCanvas.height / 2 * (1 + (this.counter - 25) / 25),
-    ];
-
-    // Движущих точек нет, быстрая вставка
-    if (this.counter >= 50) return this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width, this.subCanvas.height / 2,
-      this.subCanvas.width / 2, this.subCanvas.height,
-      0, this.subCanvas.height / 2,
-    ];
-  }
-
-  updateCounters() {
-    if (this.counter === 75) { this.ready = true; }
-    else if (this.counter === 150) { this.counter = 76; }
-    this.counter += 1;
-  }
-
-  calculateDots() {
-    // Движущие точки расширяются
-
-    if (this.counter < 25) this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width / 2 * (1 + this.counter / 25), this.subCanvas.height / 2 * this.counter / 25,
-      0, 0,
-      this.subCanvas.width / 2 * (1 - this.counter / 25), this.subCanvas.height / 2 * this.counter / 25,
-      0, 0,
-    ];
-    if (this.counter >= 25 && this.counter <= 50) this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width, this.subCanvas.height / 2,
-      this.subCanvas.width * (1 - (this.counter - 25) / 25 / 2), this.subCanvas.height / 2 * (1 + (this.counter - 25) / 25),
-      0, this.subCanvas.height / 2,
-      this.subCanvas.width / 2 * (this.counter - 25) / 25, this.subCanvas.height / 2 * (1 + (this.counter - 25) / 25),
-    ];
-
-    // Движущих точек нет, быстрая вставка
-    if (this.counter >= 50) this.dots = [
-      this.subCanvas.width / 2, 0,
-      this.subCanvas.width, this.subCanvas.height / 2,
-      this.subCanvas.width / 2, this.subCanvas.height,
-      0, this.subCanvas.height / 2,
-    ];
+  tl = () => {
+    const tl = new TimelineLite();
+    tl.to(this.attrs.dots, 1, [
+      PARTNER.width / 2, 0,
+      PARTNER.width, PARTNER.height / 2,
+      PARTNER.width, PARTNER.height / 2,
+      0, PARTNER.height / 2,
+      0, PARTNER.height / 2,
+    ]);
+    tl.to(this.attrs.dots, 1, [
+      PARTNER.width / 2, 0,
+      PARTNER.width, PARTNER.height / 2,
+      PARTNER.width / 2, PARTNER.height,
+      0, PARTNER.height / 2,
+      PARTNER.width / 2, PARTNER.height,
+    ]);
+    tl.add(() => this.attrs.played.lines = true)
+    tl.from(this.attrs, 1, {
+      opacity: 0,
+      onComplete: () => this.attrs.played.image = true
+    });
+    tl.to(this.attrs, GRADIENT_LINES_TIME, {
+      gradientOffset: 1500,
+      repeat: -1,
+    });
+    return tl;
   }
 
   animate() {
+    const { rendered, dots, played, opacity, gradientOffset } = this.attrs;
+
     this.context.save();
     this.context.beginPath();
     this.context.moveTo(this.x + this.width / 2, this.y);
@@ -126,58 +104,33 @@ class PartnerRhombus extends Figure {
     this.context.closePath();
     this.context.clip();
 
-    // Поэтапный верх линий ромба
-    if (this.counter <= 25) {
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[2], this.dots[3]);
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[6], this.dots[7]);
-      this.subContext.stroke();
-    }
-    // Верх + поэтапный низ линий ромба
-    else if (this.counter > 25 && this.counter <= 50) {
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[2], this.dots[3]);
-      this.subContext.lineTo(this.dots[4], this.dots[5]);
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[6], this.dots[7]);
-      this.subContext.lineTo(this.dots[8], this.dots[9]);
-      this.subContext.stroke();
-    }
-    // Быстрая вставка линий ромба + изображение
-    else if (this.counter > 50 && this.counter <= 75) {
+    if (!played.lines) {
+      this.subContext.moveTo(dots[0], dots[1]);
+      this.subContext.lineTo(dots[2], dots[3]);
+      this.subContext.lineTo(dots[4], dots[5]);
+      this.subContext.moveTo(dots[0], dots[1]);
+      this.subContext.lineTo(dots[6], dots[7]);
+      this.subContext.lineTo(dots[8], dots[9]);
+    } else {
       this.subContext.beginPath();
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[2], this.dots[3]);
-      this.subContext.lineTo(this.dots[4], this.dots[5]);
-      this.subContext.lineTo(this.dots[6], this.dots[7]);
+      this.subContext.moveTo(dots[0], dots[1]);
+      this.subContext.lineTo(dots[2], dots[3]);
+      this.subContext.lineTo(dots[4], dots[5]);
+      this.subContext.lineTo(dots[6], dots[7]);
       this.subContext.closePath();
-      this.subContext.save();
-      this.subContext.globalAlpha = 1 * (this.counter - 50) / 25 / 8;
-      this.subContext.drawImage(
-        this.noise,
-        0,
-        0,
-        this.subCanvas.width,
-        this.subCanvas.height
-      );
-      this.subContext.globalAlpha = 1 * (this.counter - 50) / 25;
-      this.subContext.drawImage(
-        this.image,
-        0,
-        0,
-        this.subCanvas.width,
-        this.subCanvas.height
-      );
-      this.subContext.restore();
-      this.subContext.stroke();
-      if (this.counter === 75) this.rendered = true;
-    }
 
-    else if (this.counter > 75) {
-      if (!this.rendered) {
+      if (!played.image || !rendered.image) {
+        if (played.image) this.attrs.rendered.image = true;
+        this.subContext.clearRect(0, 0, this.subCanvas.width, this.subCanvas.height);
         this.subContext.save();
-        this.subContext.globalAlpha = 1;
+        this.subContext.globalAlpha = opacity;
+        this.subContext.drawImage(
+          this.noise,
+          0,
+          0,
+          this.subCanvas.width,
+          this.subCanvas.height
+        );
         this.subContext.drawImage(
           this.image,
           0,
@@ -186,19 +139,13 @@ class PartnerRhombus extends Figure {
           this.subCanvas.height
         );
         this.subContext.restore();
-        this.rendered = true;
       }
-      this.subContext.beginPath();
-      this.subContext.moveTo(this.dots[0], this.dots[1]);
-      this.subContext.lineTo(this.dots[2], this.dots[3]);
-      this.subContext.lineTo(this.dots[4], this.dots[5]);
-      this.subContext.lineTo(this.dots[6], this.dots[7]);
-      this.subContext.closePath();
-      this.subContext.save();
-      this.subContext.translate(0, -1000 * (this.counter - 75) / 75);
-      this.subContext.stroke();
-      this.subContext.restore();
-    }
+    };
+
+    this.subContext.save();
+    this.subContext.translate(0, -gradientOffset);
+    this.subContext.stroke();
+    this.subContext.restore();
 
     this.context.drawImage(this.subCanvas, this.x, this.y, this.width, this.height)
     this.context.restore();
@@ -206,27 +153,18 @@ class PartnerRhombus extends Figure {
   }
 
   render(onWindow) {
-    if (onWindow) {
-      this.updateCounters();
-      this.calculateDots();
-      this.animate();
-    } else if (this.counter !== 0 && !this.ready) {
-      this.updateCounters();
-    }
+    if (onWindow) this.animate();
   }
 
   checkRequest() {
-    return (
-      this.hovered && this.hoverCounter !== 25 ||
-      !this.hovered && this.hoverCounter !== 0 ||
-      this.counter !== 0 && !this.ready ||
-      this.counter > 75
-    ) ? true : false
+    return true;
   }
 }
 
 class PartnerBlock {
   constructor(opts) {
+    this.triggered = false;
+    this.gradients = opts.gradients;
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.scale = this.parent.scale;
@@ -261,20 +199,23 @@ class PartnerBlock {
     this.calculateDirt();
     this.rhombuses = [];
 
+    this.tl = new TimelineLite({ paused: true });
+
+
     for (let i = 0; i < this.images.length; i += 1) {
-      this.rhombuses.push(
-        new PartnerRhombus({
-          parent: this,
-          context: this.context,
-          scale: this.scale,
-          width: this.width,
-          height: this.height,
-          dx: this.dots[i].x,
-          dy: this.dots[i].y,
-          image: this.images[i],
-          noise: this.noise
-        })
-      );
+      const pr = new PartnerRhombus({
+        parent: this,
+        context: this.context,
+        scale: this.scale,
+        width: this.width,
+        height: this.height,
+        dx: this.dots[i].x,
+        dy: this.dots[i].y,
+        image: this.images[i],
+        noise: this.noise
+      })
+      this.rhombuses.push(pr);
+      this.tl.add(pr.tl(), "0");
     }
     this.cleared = true;
   }
@@ -358,13 +299,17 @@ class PartnerBlock {
   }
 
   checkWindow() {
+    const { triggered } = this;
     if (
       (this.y > -4 && this.y < this.windowHeight + 4) ||
       (this.y + this.scaledHeight > -4 &&
         this.y + this.scaledHeight < this.windowHeight + 4)
     ) {
       this.onWindow = true;
-      // window.trigger(this.gradientIndex);
+      if (triggered) {
+        if (this.tl.progress() === 0) this.tl.play();
+        if (!this.gradients.isTriggered(5)) this.gradients.trigger(5);
+      }
     } else {
       this.onWindow = false;
     }
@@ -372,7 +317,11 @@ class PartnerBlock {
 }
 
 class PartnerLines {
-  constructor(opts) {
+  constructor({ text, gradients, images, noise, ...opts }) {
+    [this.svg, this.text] = text;
+    this.gradients = gradients;
+    this.images = images;
+    this.noise = noise;
     this.gradientIndex = opts.gradientIndex;
     this.parent = opts.parent;
     this.context = this.parent.context;
@@ -389,7 +338,6 @@ class PartnerLines {
     this.spaceBetweenRhombuses = PARTNER.gapX;
     this.textHeight = PARTNER.gapY;
 
-    [this.images, this.noise] = opts.images;
     this.linesWithImages = this.getLines();
 
     if (this.linesWithImages.length > 0) {
@@ -401,6 +349,49 @@ class PartnerLines {
     }
 
     this.partnerBlocks = this.getPartnerBlocks();
+  }
+
+  svgTl = () => {
+    const { svg } = this;
+    // svg.style.width = svg.getAttribute('viewBox').split(' ')[2] + 'px';
+    const paths = svg.querySelectorAll('path');
+    const image = svg.querySelector('image');
+    const tl = new TimelineLite();
+    paths.forEach((path, i) => {
+      const pTl = new TimelineLite();
+      const length = path.getTotalLength();
+      // console.log(length)
+      const from = { strokeDasharray: length, strokeDashoffset: length };
+      const to = { strokeDasharray: length, strokeDashoffset: 0 };
+      pTl.fromTo(path, .01, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'same')
+      pTl.fromTo(path, 1, { css: from }, { css: to }, 'same');
+      tl.add(pTl, `0+=${.25 * i}`)
+    });
+    tl.fromTo(image, .5, { css: { opacity: 0 } }, { css: { opacity: 1 } });
+    return tl;
+  }
+
+  textTl = () => {
+    const { text } = this;
+    const tl = new TimelineLite();
+    tl.fromTo(text, .5, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'text');
+    tl.fromTo(text, 1, { css: { top: 20 } }, { css: { top: 0 } }, 'text');
+    return tl;
+  }
+
+  scene = () => {
+    const { partnerBlocks, svgTl, textTl } = this;
+    const tl = new TimelineLite({ paused: true }).add(svgTl(), 'text').add(textTl(), 'text');
+    const scene = new ScrollMagic.Scene({
+      offset: this.dy * this.scale - window.innerHeight / 2
+    });
+
+    scene.on('start', () => {
+      partnerBlocks.forEach(block => block.triggered = true);
+      tl.play();
+      scene.destroy();
+    });
+    return scene;
   }
 
   updateXY() {
@@ -464,6 +455,7 @@ class PartnerLines {
         (this.linesWithImages[i].length - 1) * this.spaceBetweenRhombuses;
       partnerBlocks.push(
         new PartnerBlock({
+          gradients: this.gradients,
           parent: this.parent,
           gradientIndex: this.gradientIndex,
           context: this.context,

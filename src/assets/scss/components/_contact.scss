@@ -46,7 +46,7 @@
       // margin: 0 0 rem-calc(50) 0;
 
       @include breakpoint(large) {
-        position: fixed;
+        // position: fixed;
         width: 100vw;
         max-width: 1184px;
       }

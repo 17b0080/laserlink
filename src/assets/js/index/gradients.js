@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+import { GRADIENT } from '../settings';
+
 class Gradient {
   constructor(opts) {
     this.parent = opts.parent;
@@ -12,6 +14,14 @@ class Gradient {
 
     this.request = false;
 
+    this.attrs = {
+      x: opts.x0,
+      y: opts.y0,
+      dx: opts.dx,
+      dy: opts.dy,
+      opacity: 0,
+    }
+
     this.defDots = {
       x0: opts.x0,
       y0: opts.y0,
@@ -20,6 +30,9 @@ class Gradient {
       dx: opts.dx,
       dy: opts.dy
     };
+
+    this.x = opts.x0;
+    this.y = opts.y0;
 
     this.dots = {
       x: this.defDots.x0 * this.scale + this.defDots.dx,
@@ -104,85 +117,41 @@ class Gradient {
     this.dots.y = this.dots.y0 - this.currentY;
   }
 
+  tl = () => {
+    const tl = new TimelineLite();
+    tl.to(this.attrs, 0.5, { opacity: 1 }, '0');
+    tl.to(this.attrs, 1, { dx: 0, dy: 0 }, '0');
+    return tl;
+  }
+
   draw() {
-    this.parent.context.drawImage(this.canvas, this.dots.x, this.dots.y);
-    this.request = this.g !== 1;
+    const { spacing, currentX, currentY, scale } = this;
+    const { x, y, dx, dy } = this.attrs;
+    // console.log(
+    //   'spacing', spacing,
+    //   'currentX', currentX,
+    //   'currentY', currentY,
+    //   'scale', scale,
+    //   'x', x, 'y', y, 'dx', dx, 'dy', dy
+    // )
+    this.parent.context.drawImage(this.canvas,
+      spacing - currentX + (x + dx) * scale,
+      (y + dy) * scale - currentY
+    );
   }
 }
 
 class GradientBlock {
   constructor(opts) {
-    this.i = opts.i;
-    this.parent = opts.parent;
+    Object.keys(opts).forEach(opt => this[opt] = opts[opt]);
     this.context = this.parent.context;
     this.scale = this.parent.scale;
-
-    this.triggerY = opts.triggerY * this.scale;
 
     this.currentX = this.parent.currentX;
     this.currentY = this.parent.currentY;
     this.spacing = this.parent.spacing;
     this.alpha = 0;
-    this.images = opts.images;
-
-    this.dots = opts.dots;
-
     this.request = false;
-
-    if (this.images.length === 2) {
-      this.gradients = [
-        new Gradient({
-          parent: this,
-          rotate: 0,
-          x0: this.dots.x0,
-          y0: this.dots.y0,
-          dx: -1000,
-          dy: -1000,
-          image: this.images[0]
-        }),
-        // revert
-        new Gradient({
-          parent: this,
-          rotate: 90,
-          x0: this.dots.x2,
-          y0: this.dots.y2,
-          dx: 1000,
-          dy: -1000,
-          image: this.images[1]
-        })
-      ];
-    } else {
-      this.gradients = [
-        new Gradient({
-          parent: this,
-          rotate: 0,
-          x0: this.dots.x0,
-          y0: this.dots.y0,
-          dx: -1000,
-          dy: -1000,
-          image: this.images[0]
-        }),
-        new Gradient({
-          parent: this,
-          rotate: 180,
-          x0: this.dots.x1,
-          y0: this.dots.y1,
-          dx: -1000,
-          dy: -1000,
-          image: this.images[1]
-        }),
-        // revert
-        new Gradient({
-          parent: this,
-          rotate: 90,
-          x0: this.dots.x2,
-          y0: this.dots.y2,
-          dx: 1000,
-          dy: -1000,
-          image: this.images[2]
-        })
-      ];
-    }
 
     this.triggered = false;
     this.animated = false;
@@ -191,6 +160,29 @@ class GradientBlock {
     this.g = 1;
 
     this.delay = 450;
+
+    this.init();
+
+    this.tl = new TimelineLite({ paused: true, onStart: () => this.request = true, onComplete: this.request = false });
+    this.gradients.forEach(gradient => this.tl.add(gradient.tl(), '0'));
+
+    this.hoverTl = new TimelineLite({ paused: true });
+    this.hoverTl.to(this.gradients[0].attrs, 1, { opacity: 0 });
+  }
+
+  init() {
+    this.gradients = [];
+    const { i } = this;
+    this.positions.forEach((position, j) => {
+      const { image } = this;
+      const [x0, y0] = position;
+      const rotate = GRADIENT.rotations[i][j];
+      const [dx, dy] = GRADIENT.offsets[rotate];
+      const gradient = new Gradient({
+        parent: this, rotate, x0, y0, dx, dy, image
+      })
+      this.gradients.push(gradient);
+    })
   }
 
   handleResize() {
@@ -211,64 +203,37 @@ class GradientBlock {
       this.gradients[i].updateXY();
     }
   }
-
-  tick() {
-    for (let i = 0; i < this.gradients.length; i += 1) {
-      this.gradients[i].tick();
-    }
-  }
-
-  newTick() {
-    this.k += 0.005;
-    this.alpha += 0.1;
-    if (this.alpha > 1) {
-      this.alpha = 1;
-    }
-    if (this.k > 1) {
-      this.k = 1;
-      this.animated = true;
-    }
-    this.g = 1 - (1 - this.k) ** 5;
-    for (let i = 0; i < this.gradients.length; i += 1) {
-      this.gradients[i].newTick();
-    }
-  }
-
   draw() {
     for (let i = 0; i < this.gradients.length; i += 1) {
       this.gradients[i].draw();
     }
   }
 
-  render() {
-    if (!this.triggered) {
-      if (
-        this.triggerY - this.currentY < 0 &&
-        this.triggerY + 100 - this.currentY > 0
-      ) {
-        this.triggered = true;
-        for (let i = 0; i < this.parent.gradients.length; i += 1) {
-          if (i !== this.i) {
-            if (!((this.i === 0 && i === 1) || (this.i === 1 && i === 0))) {
-              this.parent.gradients[i].triggered = false;
-              this.parent.gradients[i].animated = false;
-              this.parent.gradients[i].k = 0;
-            }
-          }
+  untrigger = () => {
+    this.triggered = false;
+    this.tl.reverse();
+  }
+
+  trigger = () => {
+    this.tl.play();
+    for (let i = 0; i < this.parent.gradients.length; i += 1) {
+      if (i !== this.i) {
+        if (!((this.i === 0 && i === 1) || (this.i === 1 && i === 0))) {
+          this.parent.gradients[i].untrigger();
         }
       }
     }
+  }
 
-    if (this.triggered === true && this.animated === false) {
+  render() {
+    const { opacity } = this.gradients[0].attrs;
+    if (opacity >= 0) {
       this.context.save();
-      this.context.globalAlpha = this.alpha;
-      this.newTick();
+      this.context.globalAlpha = opacity;
       this.draw();
       this.context.restore();
-
       this.request = true;
-    } else if (this.animated === true) {
-      this.tick();
+    } else if (opacity === 1) {
       this.draw();
       this.request = false;
     }
@@ -276,7 +241,8 @@ class GradientBlock {
 }
 
 class Gradients {
-  constructor(opts) {
+  constructor({ images, ...opts }) {
+    this.images = images;
     window.gradients = this;
     window.trigger = this.trigger.bind(this);
     this.parent = opts.parent;
@@ -293,154 +259,37 @@ class Gradients {
     this.context = this.canvas.getContext('2d');
     this.context.globalAlpha = 1;
 
-    this.showLinesHeight = this.parent.blocks.showLines.height;
-    this.partnerLinesHeight = this.parent.blocks.partnerLines.height;
-    this.productLinesHeight = this.parent.blocks.productLines.height;
-
-    this.imagesStates = 0;
-    this.images = [];
-
     this.request = false;
-    this.initImages();
   }
 
-  initImages() {
-    this.images.push(document.createElement('img')); // gradient 1
-    this.images.push(document.createElement('img')); // gradient 2
-    this.images.push(document.createElement('img')); // gradient 3
-    this.images.push(document.createElement('img')); // gradient 4
+  isTriggered = (i) => {
+    return this.gradients[i].triggered;
+  }
 
-    for (let i = 0; i < this.images.length; i += 1) {
-      this.images[i].onload = () => {
-        this.imagesStates += 1;
-        if (this.imagesStates === this.images.length) {
-          this.init();
-        }
+  init = (partnersHeight, commonsHeight) => {
+    this.gradients = [];
+    this.images.forEach((image, i) => {
+      const positions = GRADIENT.positions[i];
+      if (i === 6) {
+        positions[0][1] += partnersHeight;
+        positions[1][1] += partnersHeight;
+      } else if (i === 7) {
+        positions[0][1] += partnersHeight + commonsHeight;
+        positions[1][1] += partnersHeight + commonsHeight;
       };
-    }
-
-    this.images[0].src = './assets/img/Gradients/gradient1.png';
-    this.images[1].src = './assets/img/Gradients/gradient2.png';
-    this.images[2].src = './assets/img/Gradients/gradient3.png';
-    this.images[3].src = './assets/img/Gradients/gradient4.png';
-  }
-
-  init() {
-    this.gradients = [
-      new GradientBlock({
-        parent: this,
-        i: 0,
-        dots: {
-          x0: 55,
-          y0: -132,
-          x1: -284,
-          y1: -30,
-          x2: -299.5,
-          y2: -133.5
-        },
-        images: [this.images[3], this.images[3], this.images[3]],
-        triggerY: 0
-      }),
-      new GradientBlock({
-        parent: this,
-        i: 1,
-        dots: {
-          x0: 64,
-          y0: 777,
-          x1: -300,
-          y1: 860,
-          x2: -245,
-          y2: 760
-        },
-        images: [this.images[2], this.images[2], this.images[2]],
-        triggerY: 741
-      }),
-      new GradientBlock({
-        parent: this,
-        i: 2,
-        dots: {
-          x0: 218,
-          y0: 2294,
-          x1: -190,
-          y1: 2365,
-          x2: -201,
-          y2: 2353
-        },
-        images: [this.images[1], this.images[1], this.images[1]],
-        triggerY: 2325
-      }),
-      // шоу
-      new GradientBlock({
-        parent: this,
-        i: 3,
-        dots: {
-          x0: 35,
-          y0: 4050,
-          x1: -337,
-          y1: 4148,
-          x2: -277,
-          y2: 4062
-        },
-        images: [this.images[1], this.images[1], this.images[1]],
-        triggerY: 3950
-      }),
-      // Партнёры
-
-      new GradientBlock({
-        parent: this,
-        i: 4,
-        dots: {
-          x0: 230,
-          y0: 4593 + this.showLinesHeight + 331 + 34,
-          // x1: -183,
-          // y1: 4593 + this.showLinesHeight + 431 + 39,
-          x2: -134,
-          y2: 4593 + this.showLinesHeight + 281 + 34
-        },
-        images: [this.images[3], this.images[3]],
-        triggerY: 4393 + this.showLinesHeight + 606
-      }),
-      // new GradientBlock({
-      //   parent: this,
-      //   dots: {
-      //     x0: 227,
-      //     y0: 4593 + this.showLinesHeight + 331 + 39,
-      //     x1: -183,
-      //     y1: 4593 + this.showLinesHeight + 431 + 39,
-      //     x2: -137,
-      //     y2: 4593 + this.showLinesHeight + 281 + 39
-      //   },
-      //   images: [this.images[1], this.images[1], this.images[1]],
-      //   triggerY: 4393 + this.showLinesHeight + 606
-      // }),
-      // Продукция
-
-      new GradientBlock({
-        parent: this,
-        i: 5,
-        dots: {
-          x0: 167,
-          y0: 4593 + this.showLinesHeight + this.partnerLinesHeight + 1180,
-          x2: -177,
-          y2: 4593 + this.showLinesHeight + this.partnerLinesHeight + 1200
-        },
-        images: [this.images[1], this.images[1]],
-        triggerY: 4393 + this.showLinesHeight + this.partnerLinesHeight + 999
-      })
-    ];
-    this.parent.ready();
+      const gradientBlock = new GradientBlock({ parent: this, i, positions, image })
+      this.gradients.push(gradientBlock);
+    });
   }
 
   trigger(index) {
-    this.gradients[index].triggered = true;
+    this.gradients[index].trigger();
   }
 
   updateXY() {
     this.currentX = this.parent.currentX / 10;
     this.currentY = this.parent.currentY;
-    for (let i = 0; i < this.gradients.length; i += 1) {
-      this.gradients[i].updateXY();
-    }
+    for (let i = 0; i < this.gradients.length; i += 1) this.gradients[i].updateXY();
   }
 
   handleResize() {

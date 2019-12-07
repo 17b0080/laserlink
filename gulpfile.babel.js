@@ -1,19 +1,20 @@
 'use strict';
 
-import plugins       from 'gulp-load-plugins';
-import yargs         from 'yargs';
-import browser       from 'browser-sync';
-import gulp          from 'gulp';
-import panini        from 'panini';
-import rimraf        from 'rimraf';
-import sherpa        from 'style-sherpa';
-import yaml          from 'js-yaml';
-import fs            from 'fs';
+import path from 'path';
+import plugins from 'gulp-load-plugins';
+import yargs from 'yargs';
+import browser from 'browser-sync';
+import gulp from 'gulp';
+import panini from 'panini';
+import rimraf from 'rimraf';
+import sherpa from 'style-sherpa';
+import yaml from 'js-yaml';
+import fs from 'fs';
 import webpackStream from 'webpack-stream';
-import webpack2      from 'webpack';
-import named         from 'vinyl-named';
-import uncss         from 'uncss';
-import autoprefixer  from 'autoprefixer';
+import webpack2 from 'webpack';
+import named from 'vinyl-named';
+import uncss from 'uncss';
+import autoprefixer from 'autoprefixer';
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
@@ -113,19 +114,43 @@ function sass() {
     .pipe($.if(PRODUCTION, $.cleanCss({ compatibility: 'ie11' })))
     .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
     .pipe(gulp.dest(`${PATHS.dist}/assets/css`))
-    .pipe(browser.reload({ stream: true })); 
-    //.pipe(browser.stream());
+    .pipe(browser.reload({ stream: true }));
+  //.pipe(browser.stream());
 }
 
 const webpackConfig = {
   mode: PRODUCTION ? 'production' : 'development',
+  resolve: {
+    alias: {
+      // "TweenLite": path.resolve('node_modules', 'gsap/src/uncompressed/TweenLite.js'),
+      // "TweenMax": path.resolve('node_modules', 'gsap/src/uncompressed/TweenMax.js'),
+      // "TimelineLite": path.resolve('node_modules', 'gsap/src/uncompressed/TimelineLite.js'),
+      // "TimelineMax": path.resolve('node_modules', 'gsap/src/uncompressed/TimelineMax.js'),
+      // "ScrollMagic": path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js'),
+      "animation.gsap": path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap.js'),
+      "debug.addIndicators": path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js')
+    }
+  },
   module: {
     rules: [
       {
         test: /\.js$/,
+        exclude: /node_modules/,
         use: {
+
           loader: 'babel-loader',
           options: {
+
+            plugins: [
+              '@babel/plugin-transform-async-to-generator',
+              '@babel/plugin-proposal-class-properties',
+              ["@babel/plugin-transform-runtime",
+                {
+                  "regenerator": true
+                }
+              ]
+              // '@babel/plugin-transform-runtime',
+            ],
             presets: ['@babel/preset-env'],
             compact: false
           }

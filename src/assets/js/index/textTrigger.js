@@ -271,10 +271,10 @@ class TextTriggers {
 
   check() {
     // console.log(this.texts);
-    for (let i = 0; i < this.texts.length; i += 1) {
-      this.texts[i].updateXY();
-      this.texts[i].checkMe();
-    }
+    // for (let i = 0; i < this.texts.length; i += 1) {
+    //   this.texts[i].updateXY();
+    //   this.texts[i].checkMe();
+    // }
   }
 }
 

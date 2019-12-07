@@ -813,8 +813,8 @@ class ProjectViewer {
       changeTranslateX(
         this.content,
         -this.currentX * 2.5 +
-          this.halfWindowWidth -
-          this.content.getBoundingClientRect().width / 2
+        this.halfWindowWidth -
+        this.content.getBoundingClientRect().width / 2
       );
 
       // if(this.halfWindowHeight + this.rhombus.height / 2)

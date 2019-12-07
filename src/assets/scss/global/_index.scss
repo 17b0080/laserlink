@@ -3,6 +3,10 @@ body[data-page='index'] {
   font-size: rem-calc(14);
   background-image: url('../img/Components/Pattern/Image.png');
 
+  .js-text {
+    position: absolute;
+  }
+
   .content {
     @include breakpoint(small) {
       display: none;
@@ -13,6 +17,7 @@ body[data-page='index'] {
     }
 
     position: fixed;
+    top: 0px;
 
     &__main-header {
       position: absolute;
@@ -69,12 +74,11 @@ body[data-page='index'] {
       line-height: 1;
       letter-spacing: normal;
       opacity: 0;
-      transition: opacity 300ms, top 1000ms;
+    }
 
-      &--fade-in {
-        top: 0;
-        opacity: 1;
-      }
+    .text--multi {
+      width: auto;
+      height: auto;
     }
 
     .js-work-block__button {
@@ -90,14 +94,17 @@ body[data-page='index'] {
       font-stretch: normal;
       letter-spacing: normal;
       text-align: center;
-      opacity: 0;
-      transition: opacity 300ms, top 1000ms;
       clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    }
 
-      &--fade-in {
-        top: 0;
-        opacity: 1;
-      }
+    .work-button {
+      font-size: 36px;
+    }
+
+    &__header {
+      position: absolute;
+      color: black;
+      font-size: 48px;
     }
 
     &__sub-text {
@@ -137,8 +144,8 @@ body[data-page='index'] {
     display: block;
   }
 
-  position: fixed;
-  width: 100vw;
+  // position: fixed;
+  // width: 100vw;
   height: 100vh;
 
   &__project {

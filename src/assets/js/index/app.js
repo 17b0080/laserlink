@@ -11,9 +11,55 @@ import Input from './Input';
 import InputSwitcher from './InputSwitcher';
 import StateSwitcher from './stateSwitcher';
 import rewardViewer from './rewards';
-
+import { IMAGES, TEXT, PRODUCT } from '../settings';
+import ScrollMagic from 'scrollmagic';
+import { TweenLite } from 'gsap';
 
 const DEFAULT_WIDTH = 1366;
+
+const loadImages = (data) => new Promise((resolve, reject) => {
+  let n = 0;
+  let m = 0;
+  const result = JSON.parse(JSON.stringify(data));;
+
+  function handleImageLoad() {
+    this.removeEventListener('load', handleImageLoad);
+    m += 1;
+    if (n === m) resolve(result);
+  };
+
+  data.forEach(item => {
+    if (item instanceof String || typeof item === 'string') {
+      n += 1;
+    } else if (item instanceof Array) {
+      n += item.length;
+    }
+  });
+
+  data.forEach((item, i) => {
+    if (item instanceof String || typeof item === 'string') {
+      const image = new Image();
+      image.addEventListener('load', handleImageLoad);
+      image.src = item;
+      result[i] = image;
+    } else if (item instanceof Array) {
+      item.forEach((subItem, j) => {
+        if (subItem instanceof String || typeof subItem === 'string') {
+          const image = new Image();
+          image.addEventListener('load', handleImageLoad);
+          image.src = subItem;
+          result[i][j] = image;
+        } else {
+          const image = new Image();
+          image.addEventListener('load', handleImageLoad);
+          image.src = subItem.image;
+          result[i][j].image = image;
+        }
+      })
+    }
+  })
+})
+
 
 function getCoords(elem) {
   // (1)
@@ -60,29 +106,9 @@ if (!window.requestAnimationFrame) {
   };
 }
 
-class App {
+class App extends Object {
   constructor() {
-    // rewards opener
-    // StateSwitcher({
-    //  itemList: [
-    //    document.querySelector('.rewards-frame-wrapper'),
-    //    document.querySelector('.rewards__icon')
-    //  ],
-    //  itemClassList: ['opened', 'rotated'],
-    //  buttonList: [document.querySelector('.rewards')],
-    //  state: true,
-    //  onTrue(itemList, itemClassList) {
-    //    itemList.forEach((item, index) => {
-    //      item.classList.add(itemClassList[index]);
-    //    });
-    //  },
-    //  onFalse(itemList, itemClassList) {
-    //    itemList.forEach((item, index) => {
-    //      item.classList.remove(itemClassList[index]);
-    //    });
-    //  }
-    // });
-
+    super();
     // menu opener [mob]
     StateSwitcher({
       itemList: [
@@ -185,25 +211,35 @@ class App {
     this.clientY = window.pageYOffset;
     this.currentY = this.clientY;
 
-    this.logoImageSrc = './assets/img/logo-desktop.png';
+    // this.logoImageSrc = './assets/img/logo-desktop.png';
 
-    this.hoverImageSrc = './assets/img/hover.png';
+    // this.hoverImageSrc = './assets/img/hover.png';
 
-    this.workImagesSrc = JSON.parse(
-      document.querySelector('.js-work-images').getAttribute('data-src')
-    );
+    // this.workImagesSrc = JSON.parse(
+    //   document.querySelector('.js-work-images').getAttribute('data-src')
+    // );
 
-    this.showImagesSrc = JSON.parse(
+    // this.showImagesSrc = JSON.parse(
+    //   document.querySelector('.js-show-images').getAttribute('data-src')
+    // );
+
+    // this.showMoreHoverSrc = './assets/img/showRhombusHoverMore.png';
+
+    // this.partnerImagesSrc = JSON.parse(
+    //   document.querySelector('.js-partner-images').getAttribute('data-src')
+    // );
+
+    // this.productImagesSrc = JSON.parse(
+    //   document.querySelector('.js-product-images').getAttribute('data-src')
+    // );
+
+    IMAGES.shows = JSON.parse(
       document.querySelector('.js-show-images').getAttribute('data-src')
     );
-
-    this.showMoreHoverSrc = './assets/img/showRhombusHoverMore.png';
-
-    this.partnerImagesSrc = JSON.parse(
+    IMAGES.partners = JSON.parse(
       document.querySelector('.js-partner-images').getAttribute('data-src')
     );
-
-    this.productImagesSrc = JSON.parse(
+    IMAGES.products = JSON.parse(
       document.querySelector('.js-product-images').getAttribute('data-src')
     );
 
@@ -241,6 +277,9 @@ class App {
     this.productData = JSON.parse(
       document.querySelector('.js-product-data').getAttribute('data')
     );
+
+
+    this.smController = new ScrollMagic.Controller();
     this.init();
   }
 
@@ -310,7 +349,6 @@ class App {
 
   onBlockReady() {
     // this.ready();
-    this.gradients = new Gradients({ parent: this });
     if (document.URL.indexOf('down=true') !== -1) {
       if (this.windowWidth < 990) {
         // scrollTo(
@@ -324,40 +362,80 @@ class App {
   ready() {
     this.readyState += 1;
     if (this.readyState === 1) {
-      this.projectViewer = new ProjectViewer({ parent: this });
-      this.productViewer = new ProductViewer({ parent: this });
-      // this.gradients = new Gradients({ parent: this });
-      this.lines = new Lines({ parent: this });
-      this.text = new Text({ parent: this, blocks: this.blocks });
-      this.textTrigger = new TextTriggers({ parent: this });
-      window.trigger(0);
-      this.listen();
-      this.render(true);
-      this.loader.classList.add('loader-wrapper--closed');
+
     }
   }
 
-  init() {
+
+
+  init = async () => {
+    const { smController } = this;
+    const [logo, hover, showMoreHover, works, shows, partners, products, gradients] = await loadImages([
+      IMAGES.logo,
+      IMAGES.hover,
+      IMAGES.showMoreHover,
+      IMAGES.works,
+      IMAGES.shows,
+      IMAGES.partners,
+      IMAGES.products,
+      IMAGES.gradients
+    ]);
+
     // Получим значение скалирования
     this.recalculateScale();
     this.recalculateSpacing();
     this.background = new Background({ parent: this });
+    this.projectViewer = new ProjectViewer({ parent: this });
+    this.productViewer = new ProductViewer({ parent: this });
+    this.gradients = new Gradients({ parent: this, images: gradients });
+    this.text = new Text({ parent: this, projectViewer: this.projectViewer, productViewer: this.productViewer });
+
+
     this.blocks = new Blocks({
+      text: [this.text.text, this.text.wA],
+      smController,
       parent: this,
-      logoImageSrc: this.logoImageSrc,
-
-      hoverImageSrc: this.hoverImageSrc,
-
-      workImagesSrc: this.workImagesSrc,
-
-      showImagesSrc: this.showImagesSrc,
-
-      showMoreHoverSrc: this.showMoreHoverSrc,
-
-      partnerImagesSrc: this.partnerImagesSrc,
-
-      productImagesSrc: this.productImagesSrc
+      gradients: this.gradients,
+      images: { logo, hover, works, shows, showMoreHover, partners, products }
     });
+    const partnersHeight = this.blocks.getHeight('partnerLines');
+    const commonsHeight = this.blocks.getHeight('showLines');
+    const productsHeight = this.blocks.getHeight('productLines');
+
+
+    this.lines = new Lines({ parent: this });
+    this.textTrigger = new TextTriggers({ parent: this });
+
+    this.lines.init(partnersHeight, commonsHeight);
+    this.gradients.init(partnersHeight, commonsHeight, productsHeight);
+    this.text.init(
+      this.blocks,
+      this.blocks.works,
+      this.blocks.partnerLines,
+      this.blocks.showLines,
+      this.blocks.productLines,
+      partnersHeight, commonsHeight, productsHeight
+    );
+
+    const ttt = new TimelineLite({ paused: true });
+    ttt.fromTo(this.text.text[3], .5, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'text');
+    ttt.fromTo(this.text.text[3], 1, { css: { top: 20 } }, { css: { top: 0 } }, 'text');
+
+    smController.addScene(new ScrollMagic.Scene({ offset: (TEXT.positions[3][1] - window.innerHeight / 2) * this.scale }).on('start', function () {
+      ttt.play();
+      this.destroy();
+    }))
+    smController.addScene(this.blocks.scenes());
+
+    // document.body.style.height = `${(commonsHeight + partnersHeight + productsHeight + PRODUCT.y) * this.scale}px`;
+    document.querySelector('.background').style.height = `${(commonsHeight + partnersHeight + productsHeight + PRODUCT.y) * this.scale}px`;
+    this.listen();
+    this.render(true);
+
+
+    this.gradients.trigger(0);
+    this.loader.classList.add('loader-wrapper--closed');
+
   }
 
   updateXY() {
@@ -382,13 +460,6 @@ class App {
   }
 
   render(boolean = false) {
-    requestAnimationFrame(this.render.bind(this, false));
-
-    // this.counter += 1;
-    // даун до 30 фпс
-    // if (this.counter >= 2 || boolean || this.request) {
-    // if (boolean || this.request) {
-    //
     if (this.windowWidth >= 990) {
       const projectOnWindow = !this.projectViewer.closed;
       const productOnWindow = !this.productViewer.closed;
@@ -403,10 +474,10 @@ class App {
           this.request
         ) {
           this.updateXY();
-          // this.background.render();
+          this.background.render();
           this.blocks.render();
-          // this.gradients.render();
-          // this.lines.render();
+          this.gradients.render();
+          this.lines.render();
           this.text.render();
           this.textTrigger.check();
           blockRendered = true;
@@ -457,6 +528,7 @@ class App {
       }
     }
     if (this.request === true) this.request = false;
+    requestAnimationFrame(this.render.bind(this, false));
   }
   // }
 }

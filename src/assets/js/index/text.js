@@ -1,112 +1,8 @@
 /* globals document, window */
-import { PRODUCT, WORK } from '../settings';
-function getCoords(elem) {
-  // (1)
-  const box = elem.getBoundingClientRect();
+import { PRODUCT, WORK, TEXT } from '../settings';
 
-  const { body } = document;
-  const docEl = document.documentElement;
-
-  // (2)
-  const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-
-  // (3)
-  const clientTop = docEl.clientTop || body.clientTop || 0;
-
-  // (4)
-  const top = box.top + scrollTop - clientTop;
-
-  return top;
-}
-
-function scrollTo(top) {
-  window.scrollTo({
-    top,
-    behavior: 'smooth'
-  });
-}
-
-function getShowRhombuses(that) {
-  const showText = [];
-
-  const a = document.querySelectorAll('.js-show-block__rhombus__button');
-  const p = document.querySelectorAll('.js-show-block__rhombus__text');
-  for (let i = 0; i < a.length; i += 1) {
-    let line = 0;
-    let item = 0;
-    if (i !== 0) {
-      line = Math.floor(i / 3);
-      item = i % 3;
-    }
-
-    a[i].onmouseover = () => {
-      that.parent.blocks.handleMouseOverShow(line, item);
-    };
-    a[i].onmouseout = () => {
-      that.parent.blocks.handleMouseOutShow(line, item);
-    };
-    showText.push({ p: p[i], a: a[i] });
-  }
-
-  return showText;
-}
-
-function getProductRhombuses(that) {
-  const productRhombuses = [];
-
-  const p = document.querySelectorAll('.js-product-block__rhombus__text');
-  const a = document.querySelectorAll('.js-product-block__rhombus__button');
-
-  for (let i = 0; i < a.length; i += 1) {
-    let line = 0;
-    let item = 0;
-    if (i !== 0) {
-      line = Math.floor(i / 2);
-      item = i % 2;
-    }
-
-    a[i].onmouseover = () => {
-      that.parent.blocks.handleMouseOverProduct(line, item);
-    };
-    a[i].onmouseout = () => {
-      that.parent.blocks.handleMouseOutProduct(line, item);
-    };
-    productRhombuses.push({ p: p[i], a: a[i] });
-  }
-
-  return productRhombuses;
-}
-
-function getPartnerRhombuses(that) {
-  const partnerRhombuses = [];
-  that.parent.blocks.partnerLines.partnerBlocks.forEach(partnerBlock => {
-    partnerBlock.rhombuses.forEach(
-      (partnerBlockRhombus, partnerBlockRhombusIndex) => {
-        partnerRhombuses.push({
-          dom: document.querySelectorAll('.js-partner-block__rhombus__button')[
-            partnerBlockRhombusIndex
-          ],
-          x: partnerBlockRhombus.x,
-          y: partnerBlockRhombus.y
-        });
-      }
-    );
-  });
-  return partnerRhombuses;
-}
-
-function getWorkText() {
-  const workBlocks = [];
-
-  const h2 = document.querySelectorAll('.js-work-block__sub-header');
-  const p = document.querySelectorAll('.js-work-block__text');
-  const a = document.querySelectorAll('.js-work-block__button');
-
-  for (let i = 0; i < 4; i += 1) {
-    workBlocks.push({ h: h2[i], p: p[i], a: a[i] });
-  }
-
-  return workBlocks;
+function translateX(item, x) {
+  item.style.transform = `translateX(${x}px)`;
 }
 
 function changeTranslate(item, x, y) {
@@ -115,110 +11,118 @@ function changeTranslate(item, x, y) {
 }
 
 class Text {
-  constructor({ blocks, ...opts }) {
+  constructor({ projectViewer, productViewer, ...opts }) {
     window.text = this;
 
     this.parent = opts.parent;
     this.windowWidth = this.parent.windowWidth;
     this.scale = this.parent.scale;
     this.spacing = this.parent.spacing;
+    this.projectViewer = projectViewer;
+    this.productViewer = productViewer;
+    this.currentX = this.parent.currentX;
 
-
-    const {
-      works,
-      partnerLines,
-      showLines,
-      productLines
-    } = blocks;
-
-    this.works = works;
-    this.partnerLines = partnerLines;
-    this.showLines = showLines;
-    this.productLines = productLines;
-
-    for (let i = 0; i < works.length; i += 1) {
-      const { main: { width, height } } = works[i];
-      const a = document.createElement('a');
-      a.style.transform = `translate(${WORK.positions[i][0] * this.scale}px, ${WORK.positions[i][1] * this.scale}px)`;
-      a.style.width = `${width}px`;
-      a.style.height = `${height}px`;
-      a.style.backgroundColor = 'red';
-      a.setAttribute('class', 'content__button');
-      a.style.opacity = '1';
-
-
-      a.addEventListener('mouseover', () => blocks.handleMouseOverWork(i));
-      a.addEventListener('mouseout', () => blocks.handleMouseOutWork(i));
-
-      document.querySelector('.content').appendChild(a);
-    };
-    for (let i = 0; i < partnerLines.partnerBlocks.length; i += 1) {
-      const block = partnerLines.partnerBlocks[i];
-
-      for (let j = 0; j < block.rhombuses.length; j += 1) {
-        const rhombus = block.rhombuses[j];
-        const { x, y, width, height } = rhombus;
-        const a = document.createElement('a');
-        a.style.transform = `translate(${x}px, ${y}px)`;
-        a.style.width = `${width}px`;
-        a.style.height = `${height}px`;
-        a.style.backgroundColor = 'red';
-        a.setAttribute('class', 'content__button');
-        // a.style.opacity = '1';
-        document.querySelector('.content').appendChild(a);
-
-
-
-      }
-    };
-    for (let i = 0; i < showLines.showBlocks.length; i += 1) {
-      const block = showLines.showBlocks[i];
-
-      for (let j = 0; j < block.rhombuses.length; j += 1) {
-        const rhombus = block.rhombuses[j];
-        const { x, y, width, height } = rhombus;
-        const a = document.createElement('a');
-        a.style.transform = `translate(${x}px, ${y}px)`;
-        a.style.width = `${width}px`;
-        a.style.height = `${height}px`;
-        a.style.backgroundColor = 'red';
-        a.setAttribute('class', 'content__button');
-        // a.style.opacity = '1';÷
-        document.querySelector('.content').appendChild(a);
-
-
-        a.addEventListener('mouseover', () => blocks.handleMouseOverShow(i, j));
-        a.addEventListener('mouseout', () => blocks.handleMouseOutShow(i, j));
-      }
-    };
-    for (let i = 0; i < productLines.productBlocks.length; i += 1) {
-      const block = productLines.productBlocks[i];
-
-      for (let j = 0; j < block.rhombuses.length; j += 1) {
-        const rhombus = block.rhombuses[j];
-        const { x, y, width, height } = rhombus;
-        const a = document.createElement('a');
-        a.style.transform = `translate(${x}px, ${y}px)`;
-        a.style.width = `${width}px`;
-        a.style.height = `${height}px`;
-        a.style.backgroundColor = 'red';
-        a.setAttribute('class', 'content__button');
-        // a.style.opacity = '1';
-        document.querySelector('.content').appendChild(a);
-
-        a.addEventListener('mouseover', () => blocks.handleMouseOverProduct(i, j));
-        a.addEventListener('mouseout', () => blocks.handleMouseOutProduct(i, j));
-      }
-    };
+    this.text = document.querySelectorAll('.js-text');
 
     this.menu = document.querySelectorAll('.menu__item');
     this.content = document.querySelector('.content');
     this.subMenu = document.querySelectorAll('.sub-menu__item');
     this.form = document.querySelector('.contact-form-wrapper');
 
-    // this.applyStyles();
+    this.wA = [];
+    for (let i = 0; i < 4; i += 1) {
+      const a = document.createElement('a');
+      a.innerHTML = 'ПОДРОБНЕЕ';
+      document.querySelector('.content').appendChild(a);
+      this.wA.push(a);
+    };
+  }
 
-    document.body.style.height = `${showLines.height + partnerLines.height + productLines.height + PRODUCT.y * this.scale}px`;
+  init = (blocks, works, partnerLines, showLines, productLines, partnersHeight, commonsHeight) => {
+    const { projectViewer, productViewer } = this;
+    this.paLA = [];
+    this.sLA = [];
+    this.prLA = [];
+    for (let i = 0; i < works.length; i += 1) {
+      const { main: { width, height }, handleMouseMove } = works[i];
+      const a = this.wA[i];
+      a.style.transform = `translate(${WORK.positions[i][0] * this.scale}px, ${WORK.positions[i][1] * this.scale}px)`;
+      a.style.width = `${width}px`;
+      a.style.height = `${height}px`;
+      a.style.lineHeight = `${height}px`;
+      a.setAttribute('class', 'content__button work-button');
+      a.addEventListener('mousemove', handleMouseMove);
+      a.addEventListener('mouseover', () => blocks.handleMouseOverWork(i));
+      a.addEventListener('mouseout', () => blocks.handleMouseOutWork(i));
+      a.addEventListener('click', () => projectViewer.open(0, WORK.types[i]));
+      document.querySelector('.content').appendChild(a);
+    };
+    for (let i = 0; i < partnerLines.partnerBlocks.length; i += 1) {
+      const block = partnerLines.partnerBlocks[i];
+      for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const rhombus = block.rhombuses[j];
+        const { x, y, width, height } = rhombus;
+        const a = document.createElement('a');
+        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.width = `${width}px`;
+        a.style.height = `${height}px`;
+        a.setAttribute('class', 'content__button');
+        document.querySelector('.content').appendChild(a);
+        this.paLA.push(a);
+      }
+    };
+    for (let i = 0; i < showLines.showBlocks.length; i += 1) {
+      const block = showLines.showBlocks[i];
+      for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const rhombus = block.rhombuses[j];
+        const { x, y, width, height } = rhombus;
+        const a = document.createElement('a');
+        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.width = `${width}px`;
+        a.style.height = `${height}px`;
+        a.setAttribute('class', 'content__button');
+        document.querySelector('.content').appendChild(a);
+        a.addEventListener('mouseover', () => blocks.handleMouseOverShow(i, j));
+        a.addEventListener('mouseout', () => blocks.handleMouseOutShow(i, j));
+        a.addEventListener('click', () => projectViewer.open(i + j, 'common'));
+        this.sLA.push(a);
+      }
+    };
+    for (let i = 0; i < productLines.productBlocks.length; i += 1) {
+      const block = productLines.productBlocks[i];
+      for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const rhombus = block.rhombuses[j];
+        const { x, y, width, height } = rhombus;
+        const a = document.createElement('a');
+        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.width = `${width}px`;
+        a.style.height = `${height}px`;
+        a.setAttribute('class', 'content__button');
+        document.querySelector('.content').appendChild(a);
+        a.addEventListener('mouseover', () => blocks.handleMouseOverProduct(i, j));
+        a.addEventListener('mouseout', () => blocks.handleMouseOutProduct(i, j));
+        a.addEventListener('click', () => productViewer.open(i + j));
+        this.prLA.push(a);
+      }
+    };
+    TEXT.positions[14][1] += partnersHeight;
+    TEXT.positions[15][1] += partnersHeight;
+    TEXT.positions[16][1] += partnersHeight + commonsHeight;
+    TEXT.positions[17][1] += partnersHeight + commonsHeight;
+
+    this.blocks = blocks;
+    this.works = works;
+    this.showLines = showLines;
+    this.partnerLines = partnerLines;
+    this.productLines = productLines;
+
+
+    this.text.forEach((text, i) => changeTranslate(
+      text,
+      TEXT.positions[i][0] * this.scale,
+      TEXT.positions[i][1] * this.scale
+    ));
+
   }
 
   updateXY() {
@@ -227,8 +131,63 @@ class Text {
   }
 
   handleResize() {
+    const { works, partnerLines, showLines, productLines, wA, paLA, sLA, prLA } = this;
     this.scale = this.parent.scale;
     this.spacing = this.parent.spacing;
+
+
+    for (let i = 0; i < works.length; i += 1) {
+      const { main: { width, height } } = works[i];
+      const a = wA[i];
+      a.style.transform = `translate(${WORK.positions[i][0] * this.scale}px, ${WORK.positions[i][1] * this.scale}px)`;
+      a.style.width = `${width}px`;
+      a.style.height = `${height}px`;
+      a.style.lineHeight = `${height}px`;
+    };
+    for (let i = 0; i < partnerLines.partnerBlocks.length; i += 1) {
+      const block = partnerLines.partnerBlocks[i];
+      for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const rhombus = block.rhombuses[j];
+        const { x, y, width, height } = rhombus;
+        const a = paLA[i];
+        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.width = `${width}px`;
+        a.style.height = `${height}px`;
+      }
+    };
+    for (let i = 0; i < showLines.showBlocks.length; i += 1) {
+      const block = showLines.showBlocks[i];
+      for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const rhombus = block.rhombuses[j];
+        const { x, y, width, height } = rhombus;
+        const a = sLA[i];
+        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.width = `${width}px`;
+        a.style.height = `${height}px`;
+      }
+    };
+    for (let i = 0; i < productLines.productBlocks.length; i += 1) {
+      const block = productLines.productBlocks[i];
+      for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const rhombus = block.rhombuses[j];
+        const { x, y, width, height } = rhombus;
+        const a = prLA[i];
+        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.width = `${width}px`;
+        a.style.height = `${height}px`;
+      }
+    };
+
+
+
+    this.text.forEach((text, i) => changeTranslate(
+      text,
+      TEXT.positions[i][0] * this.scale,
+      TEXT.positions[i][1] * this.scale
+    ));
+
+
+
   }
 
   render() {
@@ -236,10 +195,10 @@ class Text {
     changeTranslate(
       this.form,
       this.spacing - this.currentX,
-      this.showLines.height +
-      this.partnerLines.height +
-      this.productLines.height +
-      PRODUCT.y * this.scale -
+      (this.showLines.height +
+        this.partnerLines.height +
+        this.productLines.height +
+        PRODUCT.y) * this.scale -
       this.currentY
     );
   }

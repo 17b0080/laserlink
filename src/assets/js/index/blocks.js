@@ -7,7 +7,11 @@ import ProductLines from '../partials/productLines';
 import { LOGO, WORK, PARTNER, SHOW, PRODUCT } from '../settings';
 
 class Blocks {
-  constructor(opts) {
+  constructor({ text, images, ...opts }) {
+    this.gradients = opts.parent.gradients;
+    this.images = images;
+    [this.text, this.wA] = text;
+
     window.Blocks = this;
     window.handleMouseOverWork = this.handleMouseOverWork.bind(this);
     window.handleMouseOutWork = this.handleMouseOutWork.bind(this);
@@ -35,75 +39,89 @@ class Blocks {
 
     this.request = false;
 
-    this.imagesStates = 0;
-    this.images = [];
-
-    // Картинки
-    this.logoImage = undefined;
-    this.workImages = [];
-    this.hoverImage = undefined;
-    this.showMoreHover = undefined;
-    this.showImages = [];
-    this.partnerImages = [];
-    this.productImages = [];
-
-    //
-    this.logoImageSrc = opts.logoImageSrc;
-    this.workImagesSrc = opts.workImagesSrc;
-    this.hoverImageSrc = opts.hoverImageSrc;
-    this.showMoreHoverSrc = opts.showMoreHoverSrc;
-    this.showImagesSrc = opts.showImagesSrc;
-    this.partnerImagesSrc = opts.partnerImagesSrc;
-    this.productImagesSrc = opts.productImagesSrc;
-
-    this.imagesReadyCounter = 0;
-    this.imagesCounter =
-      1 +
-      this.workImagesSrc.length +
-      1 +
-      1 +
-      this.showImagesSrc.length +
-      this.partnerImagesSrc.length +
-      this.productImagesSrc.length;
-
-    this.initImages();
+    this.init();
   }
 
-  handleMouseOverWork(index) {
-    console.log(`work ${index} hovered`)
+  getHeight(blockName) {
+    return this[blockName].height;
   }
 
-  handleMouseOutWork(index) {
-    console.log(`work ${index} unhovered`)
+  handleMouseOverWork(i) {
+    const work = this.works[i];
+    work.main.attrs.hovered = true;
+    if (work.attrs.animated) {
+      // document.body.style.overflow = 'hidden';
+      work.main.attrs.rendered.hover = false;
+      work.hoverTl.play();
+      this.gradients.gradients[i + 1].hoverTl.play();
+    }
+  }
+
+  handleMouseOutWork(i) {
+    const work = this.works[i];
+    work.main.attrs.hovered = false;
+    if (work.attrs.animated) {
+      // document.body.style.overflow = '';
+      work.main.attrs.rendered.hover = false;
+      work.hoverTl.reverse();
+      this.gradients.gradients[i + 1].hoverTl.reverse();
+    }
   }
 
   handleMouseOverShow(i, j) {
-    this.showLines.showBlocks[i].rhombuses[j].hovered = true;
     console.log(`show ${i} ${j} hovered`)
+    const rhombus = this.showLines.showBlocks[i].rhombuses[j];
+    rhombus.attrs.hovered = true;
+    if (rhombus.attrs.rendered.image) {
+      rhombus.attrs.rendered.hover = false;
+      rhombus.hoverTl.play();
+    }
+
   }
 
   handleMouseOutShow(i, j) {
-    this.showLines.showBlocks[i].rhombuses[j].hovered = false;
     console.log(`show ${i} ${j} unhovered`)
+    const rhombus = this.showLines.showBlocks[i].rhombuses[j];
+    rhombus.attrs.hovered = false;
+    if (rhombus.attrs.rendered.image) {
+      rhombus.attrs.rendered.hover = false;
+      rhombus.hoverTl.reverse();
+    }
+
   }
 
   handleMouseOverProduct(i, j) {
-    this.productLines.productBlocks[i].rhombuses[j].hovered = true;
+    const rhombus = this.productLines.productBlocks[i].rhombuses[j];
     console.log(`product ${i} ${j} hovered`)
+    rhombus.attrs.hovered = true;
+    if (rhombus.attrs.rendered.image) {
+      rhombus.attrs.rendered.hover = false;
+      rhombus.hoverTl.play();
+    }
   }
 
   handleMouseOutProduct(i, j) {
-    this.productLines.productBlocks[i].rhombuses[j].hovered = false;
+    const rhombus = this.productLines.productBlocks[i].rhombuses[j];
     console.log(`product ${i} ${j} unhovered`)
+    rhombus.attrs.hovered = false;
+    if (rhombus.attrs.rendered.image) {
+      rhombus.attrs.rendered.hover = false;
+      rhombus.hoverTl.reverse();
+    }
   }
 
   init() {
     this.first = new FirstBlock({
+      text: [
+        this.text[0],
+        this.text[1],
+        this.text[2]
+      ],
       parent: this,
       context: this.context,
       dx: LOGO.x,
       dy: LOGO.y,
-      image: this.logoImage,
+      image: this.images.logo,
       gradientIndex: 0
     });
 
@@ -111,59 +129,32 @@ class Blocks {
     // 2 - снизу
     // 3 - сверху
     // 4 - шум
-    this.work1 = new WorkBlock({
-      parent: this,
-      context: this.context,
-      dx: WORK.positions[0][0],
-      dy: WORK.positions[0][1],
-      images: [
-        this.workImages[0][0],
-        this.workImages[0][1],
-        this.workImages[0][2],
-        this.hoverImage
-      ],
-      gradientIndex: 1
-    });
-    this.work2 = new WorkBlock({
-      parent: this,
-      context: this.context,
-      dx: WORK.positions[1][0],
-      dy: WORK.positions[1][1],
-      images: [
-        this.workImages[1][0],
-        this.workImages[1][1],
-        this.workImages[1][2],
-        this.hoverImage
-      ]
-    });
-    this.work3 = new WorkBlock({
-      parent: this,
-      context: this.context,
-      dx: WORK.positions[2][0],
-      dy: WORK.positions[2][1],
-      images: [
-        this.workImages[2][0],
-        this.workImages[2][1],
-        this.workImages[2][2],
-        this.hoverImage
-      ],
-      gradientIndex: 2
-    });
-    this.work4 = new WorkBlock({
-      parent: this,
-      context: this.context,
-      dx: WORK.positions[3][0],
-      dy: WORK.positions[3][1],
-      images: [
-        this.workImages[3][0],
-        this.workImages[3][1],
-        this.workImages[3][2],
-        this.hoverImage
-      ]
-    });
-
+    for (let i = 0, j = 4; i < 4; i += 1, j += 2) {
+      if (this.works === undefined) this.works = [];
+      const work = new WorkBlock({
+        radialGradient: WORK.radial.gradients[i],
+        text: [
+          this.text[j],
+          this.text[j + 1],
+          this.wA[i]
+        ],
+        gradients: this.gradients,
+        i,
+        parent: this,
+        context: this.context,
+        dx: WORK.positions[i][0],
+        dy: WORK.positions[i][1],
+        image: this.images.works[i],
+      });
+      this.works.push(work);
+    }
 
     this.partnerLines = new PartnerLines({
+      text: [
+        this.text[12],
+        this.text[13]
+      ],
+      gradients: this.gradients,
       parent: this,
       gradientIndex: 4,
       dy: PARTNER.y,
@@ -171,11 +162,17 @@ class Blocks {
       rhombusHeight: 220,
       spaceBetweenRhombuses: 36,
       textHeight: 47,
-      images: [this.partnerImages, this.hoverImage]
+      images: this.images.partners,
+      noise: this.images.hover
     });
 
     // Шоу
     this.showLines = new ShowLines({
+      text: [
+        this.text[14],
+        this.text[15]
+      ],
+      gradients: this.gradients,
       parent: this,
       gradientIndex: 3,
       dy: SHOW.y + this.partnerLines.height,
@@ -183,10 +180,16 @@ class Blocks {
       rhombusHeight: 220,
       spaceBetweenRhombuses: 36,
       textHeight: 47,
-      images: [this.showImages, this.showMoreHover]
+      images: this.images.shows,
+      showMoreHover: this.images.showMoreHover
     });
 
     this.productLines = new ProductLines({
+      text: [
+        this.text[16],
+        this.text[17]
+      ],
+      gradients: this.gradients,
       parent: this,
       gradientIndex: 5,
       dy: PRODUCT.y + this.partnerLines.height + this.showLines.height,
@@ -194,73 +197,12 @@ class Blocks {
       rhombusHeight: 283,
       spaceBetweenRhombuses: 50,
       textHeight: 71,
-      images: [this.productImages, this.hoverImage, this.showMoreHover]
+      images: this.images.products,
+      noise: this.images.hover,
+      showMoreHover: this.images.showMoreHover
     });
 
-    this.works = [this.work1, this.work2, this.work3, this.work4];
     this.parent.onBlockReady();
-  }
-
-  readyImage() {
-    this.imagesReadyCounter += 1;
-    if (this.imagesReadyCounter === this.imagesCounter) {
-      this.init();
-    }
-  }
-
-  initImages() {
-    this.logoImage = document.createElement('img');
-    this.logoImage.onload = () => {
-      this.readyImage();
-    };
-    this.logoImage.src = this.logoImageSrc;
-
-    for (let i = 0; i < this.workImagesSrc.length; i += 1) {
-      this.workImages.push([]);
-      for (let j = 0; j < this.workImagesSrc[i].length; j += 1) {
-        this.workImages[i].push(document.createElement('img'));
-        this.workImages[i][j].onload = () => {
-          this.readyImage();
-        };
-        this.workImages[i][j].src = this.workImagesSrc[i][j];
-      }
-    }
-
-    this.hoverImage = document.createElement('img');
-    this.hoverImage.onload = () => {
-      this.readyImage();
-    };
-    this.hoverImage.src = this.hoverImageSrc;
-
-    this.showMoreHover = document.createElement('img');
-    this.showMoreHover.onload = () => {
-      this.readyImage();
-    };
-    this.showMoreHover.src = this.showMoreHoverSrc;
-
-    for (let i = 0; i < this.showImagesSrc.length; i += 1) {
-      this.showImages.push(document.createElement('img'));
-      this.showImages[i].onload = () => {
-        this.readyImage();
-      };
-      this.showImages[i].src = this.showImagesSrc[i];
-    }
-
-    for (let i = 0; i < this.partnerImagesSrc.length; i += 1) {
-      this.partnerImages.push(document.createElement('img'));
-      this.partnerImages[i].onload = () => {
-        this.readyImage();
-      };
-      this.partnerImages[i].src = this.partnerImagesSrc[i];
-    }
-
-    for (let i = 0; i < this.productImagesSrc.length; i += 1) {
-      this.productImages.push(document.createElement('img'));
-      this.productImages[i].onload = () => {
-        this.readyImage();
-      };
-      this.productImages[i].src = this.productImagesSrc[i];
-    }
   }
 
   checkRequest() {
@@ -326,6 +268,17 @@ class Blocks {
     this.productLines.render();
 
     this.checkRequest();
+  }
+
+  scenes = () => {
+    const scenes = [];
+    this.works.forEach(work => {
+      scenes.push(work.scene())
+    });
+    scenes.push(this.partnerLines.scene());
+    scenes.push(this.showLines.scene());
+    scenes.push(this.productLines.scene());
+    return scenes;
   }
 }
 

@@ -1,82 +1,171 @@
 /* eslint-disable no-undef */
 /* eslint-disable prefer-destructuring */
-
-import { LOGO_RECT, LOGO_IMAGE } from '../settings';
+import { TimelineLite } from 'gsap';
+import { LOGO, LOGO_RECT, LOGO_IMAGE, LOGO_MORE } from '../settings';
 import Figure from './Figure';
+
+class MoreRhombus extends Figure {
+  constructor({ parent, image, ...rest }) {
+    super(rest);
+    this.width = LOGO_MORE.width * this.scale;
+    this.height = LOGO_MORE.height * this.scale;
+    this.attrs = {
+      x: LOGO_MORE.x * this.scale,
+      y: LOGO_MORE.y * this.scale,
+      played: { lines: false },
+      dots: Array.from({ length: 5 }, () => ([LOGO_MORE.width / 2, 0])).flat()
+    };
+    this.parent = parent;
+    this.width = LOGO_MORE.width * this.scale;
+    this.height = LOGO_MORE.height * this.scale;
+
+    this.subCanvas = document.createElement('canvas');
+    this.subCanvas.width = LOGO_MORE.width * this.scale;
+    this.subCanvas.height = LOGO_MORE.height * this.scale;
+    this.subContext = this.subCanvas.getContext('2d');
+    this.subContext.lineWidth = 8;
+    this.subContext.strokeStyle = 'white';
+  }
+
+  tl = (opts) => {
+    const tl = new TimelineLite(opts);
+    tl.to(this.attrs.dots, 1, [
+      LOGO_MORE.width / 2, 0,
+      LOGO_MORE.width, LOGO_MORE.height / 2,
+      LOGO_MORE.width, LOGO_MORE.height / 2,
+      0, LOGO_MORE.height / 2,
+      0, LOGO_MORE.height / 2,
+    ]);
+    tl.to(this.attrs.dots, 1, [
+      LOGO_MORE.width / 2, 0,
+      LOGO_MORE.width, LOGO_MORE.height / 2,
+      LOGO_MORE.width / 2, LOGO_MORE.height,
+      0, LOGO_MORE.height / 2,
+      LOGO_MORE.width / 2, LOGO_MORE.height,
+    ]);
+    tl.add(() => this.attrs.played.lines = true)
+    return tl;
+  }
+
+  animate() {
+    const { width, height, x: dx, y: dy } = this;
+    const { played, x, y, dots } = this.attrs;
+
+    this.context.save();
+    this.context.beginPath();
+    this.context.moveTo(dx + x + width / 2, dy + y);
+    this.context.lineTo(dx + x + width, dy + y + height / 2);
+    this.context.lineTo(dx + x + width / 2, dy + y + height);
+    this.context.lineTo(dx + x, dy + y + height / 2);
+    this.context.closePath();
+    this.context.clip();
+    if (!played.lines) {
+      this.subContext.moveTo(dots[0], dots[1]);
+      this.subContext.lineTo(dots[2], dots[3]);
+      this.subContext.lineTo(dots[4], dots[5]);
+      this.subContext.moveTo(dots[0], dots[1]);
+      this.subContext.lineTo(dots[6], dots[7]);
+      this.subContext.lineTo(dots[8], dots[9]);
+    } else {
+      this.subContext.beginPath();
+      this.subContext.moveTo(dots[0], dots[1]);
+      this.subContext.lineTo(dots[2], dots[3]);
+      this.subContext.lineTo(dots[4], dots[5]);
+      this.subContext.lineTo(dots[6], dots[7]);
+      this.subContext.closePath();
+    };
+    this.subContext.stroke();
+    this.context.drawImage(this.subCanvas, dx + x, dy + y, width, height)
+    this.context.restore();
+    this.parent.cleared = false;
+
+  }
+
+  render(onWindow) {
+    if (onWindow) this.animate();
+  }
+
+  checkRequest() {
+    return true;
+  }
+};
 
 class Rect extends Figure {
   constructor(opts) {
     super(opts);
 
     this.request = false;
-    this.dots = {
-      // x: this.x + LOGO_RECT.x * scale,
-      // y: this.y + LOGO_RECT.y * scale,
-      x: this.x + LOGO_RECT.x,
-      y: this.y + LOGO_RECT.y,
-      w: 0,
-      h: LOGO_RECT.h * this.scale,
-    };
-    this.counter = 0;
-    this.counters = 25;
+
+    this.attrs = {
+      x: LOGO_RECT.x * this.scale,
+      y: LOGO_RECT.y * this.scale,
+      width: LOGO_RECT.w * this.scale,
+      height: LOGO_RECT.h * this.scale
+    }
     this.ready = false;
   }
 
-  calculateDots() {
-    this.dots = {
-      x: this.x + LOGO_RECT.x * this.scale,
-      y: this.y + LOGO_RECT.y * this.scale,
-      // x: this.x + LOGO_RECT.x,
-      // y: this.y + LOGO_RECT.y,
-      w: LOGO_RECT.w * this.scale / this.counters * this.counter,
-      h: LOGO_RECT.h * this.scale,
-    }
+  handleResize(x, y, scale) {
+    super.handleResize(x, y, scale);
+    this.attrs = {
+      x: LOGO_RECT.x * this.scale,
+      y: LOGO_RECT.y * this.scale,
+      width: LOGO_RECT.w * this.scale,
+      height: LOGO_RECT.h * this.scale,
+    };
+  }
+
+  tl = () => {
+    const tl = new TimelineLite();
+    tl.from(this.attrs, 1, { width: 0 });
+    return tl;
   }
 
   animate() {
+    const { x: dx, y: dy } = this;
+    const { x, y, width, height } = this.attrs;
     this.context.fillStyle = 'white';
     this.context.beginPath();
-    this.context.rect(this.dots.x, this.dots.y, this.dots.w, this.dots.h);
+    this.context.rect(dx + x, dy + y, width, height);
     this.context.closePath();
     this.context.fill();
   }
 
-  render(onWindow, bool) {
-    if (bool) {
-      if (onWindow) {
-        this.updateCounters();
-        this.calculateDots();
-        this.animate();
-      } else if (this.counter !== 0 && !this.ready) {
-        this.updateCounters();
-      }
-    }
-  }
-
-  updateCounters() {
-    if (this.counter === this.counters) return this.ready = true;
-    this.counter += 1;
+  render(onWindow) {
+    if (onWindow) {
+      // this.updateCounters();
+      // this.calculateDots();
+      this.animate();
+    };
+    // else if (this.counter !== 0 && !this.ready) {
+    //   this.updateCounters();
+    // }
   }
 
   checkRequest() {
-    return (this.counter !== 0 && !this.ready) ? true : false;
+    return !this.played;
   }
 }
 class LogoImage extends Figure {
   constructor({ parent, image, ...rest }) {
     super(rest);
+    this.played = false;
+    this.attrs = { opacity: 1 };
     this.image = image;
     this.parent = parent;
     this.width = LOGO_IMAGE.width * this.scale;
     this.height = LOGO_IMAGE.height * this.scale;
-    this.counters = 25;
-    this.counter = 0;
-    this.ready = false;
+  }
+
+  tl = (opts) => {
+    const tl = new TimelineLite({ onComplete: () => this.played = true, ...opts });
+    tl.from(this.attrs, 1, { opacity: 0 });
+    return tl;
   }
 
   animate() {
     this.context.save();
-    this.context.globalAlpha = 1 * this.counter / this.counters;
+    this.context.globalAlpha = this.attrs.opacity;
     this.context.drawImage(
       this.image,
       this.x,
@@ -90,21 +179,18 @@ class LogoImage extends Figure {
   render(onWindow) {
     if (onWindow) {
       this.parent.cleared = false;
-      this.updateCounter();
+      // this.updateCounter();
       this.animate();
-    } else if (this.counter !== 0 && !this.ready) {
-      this.updateCounter();
-    }
-  }
-
-  updateCounter() {
-    if (this.counter === this.counters) return this.ready = true;
-    this.counter += 1;
+    };
+    //  else if (this.counter !== 0 && !this.ready) {
+    //   this.updateCounter();
+    // }
   }
 
   checkRequest() {
-    return (this.counter !== 0 && !this.ready) ? true : false;
+    return !this.played;
   }
+
   handleResize(x, y, scale) {
     super.handleResize(x, y, scale);
     this.width = LOGO_IMAGE.width * this.scale;
@@ -112,10 +198,9 @@ class LogoImage extends Figure {
   }
 }
 
-
-
 class FirstBlock {
-  constructor(opts) {
+  constructor({ text, image, ...opts }) {
+    this.text = text;
     this.parent = opts.parent;
     this.context = this.parent.context;
     this.scale = this.parent.scale;
@@ -138,15 +223,35 @@ class FirstBlock {
 
     this.onWindow = false;
 
-    this.image = opts.image;
-
     this.logoImage = new LogoImage({
-      parent: this, image: this.image, scale: this.scale, context: this.context, x: this.x, y: this.y
+      parent: this, image, scale: this.scale, context: this.context, x: this.x, y: this.y
     });
 
     this.rect = new Rect({
       scale: this.scale, context: this.context, x: this.x, y: this.y
     });
+
+    this.more = new MoreRhombus({
+      parent: this, scale: this.scale, context: this.context, x: this.x, y: this.y
+    })
+
+    this.tl = new TimelineLite({ paused: true });
+    this.tl.add(this.logoImage.tl());
+    this.tl.add(this.more.tl(), 'kek');
+    this.tl.add(this.rect.tl(), 'kek');
+    this.tl.add(this.textTl(), 'kek+=1');
+  }
+
+  textTl = () => {
+    const { text } = this;
+    const tl = new TimelineLite();
+    tl.fromTo(text[0], .25, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'opacity');
+    tl.fromTo(text[0], .75, { css: { left: -50 } }, { css: { left: 0 } }, 'opacity');
+    tl.fromTo(text[1], .25, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'opacity');
+    tl.fromTo(text[1], .5, { css: { top: -20 } }, { css: { top: 0 } }, 'opacity');
+    tl.fromTo(text[2], .25, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'opacity');
+    tl.fromTo(text[2], .5, { css: { top: 20 } }, { css: { top: 0 } }, 'opacity');
+    return tl;
   }
 
   /**
@@ -160,8 +265,8 @@ class FirstBlock {
     this.y = this.dy * this.scale - this.currentY;
 
     this.logoImage.updateXY(this.x, this.y);
-    this.rect.updateXY(this.x, this.y)
-
+    this.rect.updateXY(this.x, this.y);
+    this.more.updateXY(this.x, this.y);
     this.checkWindow();
   }
 
@@ -178,6 +283,7 @@ class FirstBlock {
 
     this.logoImage.handleResize(this.x, this.y, this.scale);
     this.rect.handleResize(this.x, this.y, this.scale);
+    this.more.handleResize(this.x, this.y, this.scale);
   }
 
   clearDirt() {
@@ -191,22 +297,24 @@ class FirstBlock {
   }
 
   calculateDirt() {
-    const x = this.x - 4 > 0 ? this.x - 4 : 0;
-    const y = this.y - 4 > 0 ? this.y - 4 : 0;
-    const w = this.x - 4 > 0 ? 600 * this.scale + 8 : 600 * this.scale + 8 + this.x;
-    const h = this.y - 4 > 0 ? 355 * this.scale + 8 : 355 * this.scale + 8 + this.y;
+    const x = this.x > 0 ? this.x : 0;
+    const y = this.y > 0 ? this.y : 0;
+    const w = this.x > 0 ? LOGO.width * this.scale : LOGO.width * this.scale + this.x;
+    const h = this.y > 0 ? LOGO.height * this.scale : LOGO.height * this.scale + this.y;
     this.dirtDots = { x, y, w, h };
   }
 
   checkWindow() {
     if (
-      (this.y > -4 && this.y < this.windowHeight + 4) ||
-      (this.y + this.logoImage.height > -4 &&
-        this.y + this.logoImage.height < this.windowHeight + 4) ||
-      (this.y + this.logoImage.height / 2 > -4 &&
-        this.y + this.logoImage.height / 2 < this.windowHeight)
+      (0 > this.y && window.innerHeight < this.y + LOGO.height * this.scale) ||
+      (0 < this.y && window.innerHeight > this.y + LOGO.height * this.scale) ||
+      (0 < this.y && window.innerHeight > this.y) ||
+      (0 < this.y + LOGO.height * this.scale && window.innerHeight > this.y + LOGO.height * this.scale)
     ) {
       this.onWindow = true;
+      if (this.tl.progress() === 0) {
+        this.tl.play();
+      }
     } else {
       this.onWindow = false;
     }
@@ -215,7 +323,8 @@ class FirstBlock {
   render() {
     if (this.cleared === false) this.clearDirt();
     this.logoImage.render(this.onWindow);
-    this.rect.render(this.onWindow, this.logoImage.counter > this.logoImage.counters / 2);
+    this.rect.render(this.onWindow, this.logoImage.played);
+    this.more.render(this.onWindow);
     this.calculateDirt();
     this.request = this.logoImage.checkRequest() || this.rect.checkRequest();
   }
