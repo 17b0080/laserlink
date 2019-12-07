@@ -63,7 +63,7 @@ class ProductRhombus extends Figure {
 
 
     this.subContext.strokeStyle = this.gradient;
-    this.subContext.lineWidth = 12;
+    this.subContext.lineWidth = 8;
 
     this.hoverTl = new TimelineLite({
       paused: true,
