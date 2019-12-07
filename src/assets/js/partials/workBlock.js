@@ -309,7 +309,6 @@ class WorkBlock {
     paths.forEach((path, i) => {
       const pTl = new TimelineLite();
       const length = path.getTotalLength();
-      // console.log(length)
       const from = { strokeDasharray: length, strokeDashoffset: length };
       const to = { strokeDasharray: length, strokeDashoffset: 0 };
       pTl.fromTo(path, .01, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'same')
