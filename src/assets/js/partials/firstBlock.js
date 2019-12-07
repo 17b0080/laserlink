@@ -48,7 +48,7 @@ class MoreRhombus extends Figure {
   }
 
   animate() {
-    const { width, height, x: dx, y: dy } = this;
+    const { width, height, x: dx, y: dy, scale } = this;
     const { played, x, y, dots } = this.attrs;
 
     this.context.save();
@@ -59,19 +59,23 @@ class MoreRhombus extends Figure {
     this.context.lineTo(dx + x, dy + y + height / 2);
     this.context.closePath();
     this.context.clip();
+    // this.context.fillStyle = 'red';
+    // this.context.fillRect(dx + x, dy + y, width, height);
     if (!played.lines) {
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[2], dots[3]);
-      this.subContext.lineTo(dots[4], dots[5]);
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[6], dots[7]);
-      this.subContext.lineTo(dots[8], dots[9]);
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[2] * scale, dots[3] * scale);
+      this.subContext.lineTo(dots[4] * scale, dots[5] * scale);
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[6] * scale, dots[7] * scale);
+      this.subContext.lineTo(dots[8] * scale, dots[9] * scale);
     } else {
       this.subContext.beginPath();
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[2], dots[3]);
-      this.subContext.lineTo(dots[4], dots[5]);
-      this.subContext.lineTo(dots[6], dots[7]);
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[2] * scale, dots[3] * scale);
+      this.subContext.lineTo(dots[4] * scale, dots[5] * scale);
+      this.subContext.lineTo(dots[6] * scale, dots[7] * scale);
+      this.subContext.lineWidth = 8;
+      this.subContext.strokeStyle = 'white';
       this.subContext.closePath();
     };
     this.subContext.stroke();
@@ -87,6 +91,16 @@ class MoreRhombus extends Figure {
 
   checkRequest() {
     return true;
+  }
+
+  handleResize(x, y, scale) {
+    super.handleResize(x, y, scale);
+    this.width = LOGO_MORE.width * this.scale;
+    this.height = LOGO_MORE.height * this.scale;
+    this.subCanvas.width = LOGO_MORE.width * this.scale;
+    this.subCanvas.height = LOGO_MORE.height * this.scale;
+    this.attrs.x = LOGO_MORE.x * this.scale;
+    this.attrs.y = LOGO_MORE.y * this.scale;
   }
 };
 

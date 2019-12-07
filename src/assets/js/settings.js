@@ -33,7 +33,7 @@ export const LOGO_MORE = {
   width: 132,
   height: 132,
   y: 6 + LOGO_IMAGE.height,
-  x: LOGO_IMAGE.width - 61
+  x: (LOGO_IMAGE.width - 132) / 2
 };
 export const LOGO = {
   width: LOGO_IMAGE.width + LOGO_RECT.w,
