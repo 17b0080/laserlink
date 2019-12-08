@@ -128,20 +128,20 @@ export const TEXT = {
     [835, 387],
     [686, 460],
     [149, 953],
-    [702, 1537],
-    [707, 1677], // 5
-    [130, 2832],
-    [160, 2965],
+    [672, 1537],
+    [691, 1677], // 5
+    [123, 2832],
+    [144, 2965],
     [674, 4127 - 89 + 6],
     [692, 4260],
     [125, 5421], // 10
-    [132, 5626],
+    [144, 5626],
     [127, 6690],
-    [149, 6795],
-    [118, 8032 - PARTNER.height],
-    [136, 8137 - PARTNER.height], // 15
-    [117, 9374 - PARTNER.height - SHOW.height],
-    [132, 9479 - PARTNER.height - SHOW.height],
+    [144, 6795],
+    [125, 8032 - PARTNER.height],
+    [144, 8137 - PARTNER.height], // 15
+    [125, 9374 - PARTNER.height - SHOW.height],
+    [144, 9479 - PARTNER.height - SHOW.height],
   ]
 };
 export const GRADIENT = {
