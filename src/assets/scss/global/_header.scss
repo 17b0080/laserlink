@@ -7,7 +7,6 @@
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  height: rem-calc(44);
   font-weight: 300;
   font-size: 18px;
   text-transform: uppercase;
@@ -16,6 +15,13 @@
 
   @include breakpoint(medium) {
     justify-content: flex-start;
+    width: auto;
+    min-width: rem-calc(700);
+    top: rem-calc(8);
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: rem-calc(20);
+    background: rgba(0, 0, 0, 0.75);
   }
 
   &--opened {
