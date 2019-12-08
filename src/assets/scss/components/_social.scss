@@ -2,7 +2,6 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  color: transparentize($color: $primary-color, $amount: 0.25);
 
   &__phone {
     display: flex;
@@ -17,15 +16,15 @@
 
   &__number {
     display: inline-block;
+    white-space: nowrap;
     margin: 0 rem-calc(5) 0 rem-calc(5);
-    color: transparentize($color: $primary-color, $amount: 0.25);
     
 
     @include breakpoint(medium) {
       display: inline-block;
       margin: 0 rem-calc(10) 0 rem-calc(10);
-      color: transparentize($color: $primary-color, $amount: 0.25);
     }
+
     &--hiden-mobile {
       display: none;
       
@@ -49,9 +48,11 @@
   &__icons {
     display: flex;
     justify-content: space-around;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
 
     @include breakpoint(medium) {
-      margin-top: 0;
+      // margin-top: 0;
     }
   }
 

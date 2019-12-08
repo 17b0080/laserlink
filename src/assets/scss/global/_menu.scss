@@ -28,7 +28,7 @@
     width: auto;
     margin-top: rem-calc(20);
     font-size: rem-calc(18);
-    line-height: 1.17;
+    line-height: rem-calc(20) !important;
     text-align: left;
 
     &--shown {
@@ -67,20 +67,24 @@
 
   @include breakpoint(medium) {
     @include menu-direction(horizontal);
-
-    top: 0;
-    left: 0;
+    position: static;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
-    height: rem-calc(44);
+    // height: rem-calc(44);
+    height: auto;
     font-weight: 400;
     // text-transform: none;
     transform: none;
+    margin-left: rem-calc(16);
+    margin-right: rem-calc(16);
+   
 
     &__item {
       display: flex;
       align-items: center;
+      margin-top: rem-calc(8);
+      margin-bottom: rem-calc(6);
     }
   }
 }
@@ -96,12 +100,12 @@
 
   &--opened {
     // display: block;
-    height: 180px;
+    height: 190px;
   }
 
   @include breakpoint(medium) {
     position: absolute;
-    top: rem-calc(44);
+    top: rem-calc(34);
     background: rgba(0, 0, 0, 0.8);
   }
 
@@ -116,8 +120,6 @@
 
   &__link {
     position: relative;
-    font-size: rem-calc(16);
-    line-height: 1.17;
     text-align: left;
 
     @include breakpoint(medium) {
