@@ -593,7 +593,7 @@ class ProductViewer {
     for (let i = 0; i < this.data[this.index].table.length; i += 1) {
       this.tbody.children[i].innerHTML = `<td class="table__cell">${
         this.data[this.index].table[i]
-      }</td>`;
+        }</td>`;
     }
     const contentHeight = this.content.getBoundingClientRect().height;
     this.content.style.height = '0px';
@@ -694,8 +694,8 @@ class ProductViewer {
       changeTranslateX(
         this.content,
         -this.currentX * 2.5 +
-          this.halfWindowWidth -
-          this.content.getBoundingClientRect().width / 2
+        this.halfWindowWidth -
+        this.content.getBoundingClientRect().width / 2
       );
 
       // КНОПКА
