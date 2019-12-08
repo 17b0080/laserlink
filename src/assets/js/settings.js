@@ -197,5 +197,13 @@ export const LINES = {
     '#DBB24A',
   ]
 };
-
+export const NEON = [
+  { width: 575, height: 100 },
+  { width: 552, height: 98 },
+  { width: 666, height: 210 },
+  { width: 590, height: 200 },
+  { width: 610, height: 100 },
+  { width: 760, height: 110 },
+  { width: 450, height: 100 }
+]
 export const GRADIENT_LINES_TIME = 5;
