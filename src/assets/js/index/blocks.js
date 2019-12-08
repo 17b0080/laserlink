@@ -50,7 +50,6 @@ class Blocks {
     const work = this.works[i];
     work.main.attrs.hovered = true;
     if (work.attrs.animated) {
-      // document.body.style.overflow = 'hidden';
       work.main.attrs.rendered.hover = false;
       work.hoverTl.play();
       this.gradients.gradients[i + 1].hoverTl.play();
@@ -61,7 +60,6 @@ class Blocks {
     const work = this.works[i];
     work.main.attrs.hovered = false;
     if (work.attrs.animated) {
-      // document.body.style.overflow = '';
       work.main.attrs.rendered.hover = false;
       work.hoverTl.reverse();
       this.gradients.gradients[i + 1].hoverTl.reverse();
@@ -69,7 +67,6 @@ class Blocks {
   }
 
   handleMouseOverShow(i, j) {
-    console.log(`show ${i} ${j} hovered`)
     const rhombus = this.showLines.showBlocks[i].rhombuses[j];
     rhombus.attrs.hovered = true;
     if (rhombus.attrs.rendered.image) {
@@ -80,7 +77,6 @@ class Blocks {
   }
 
   handleMouseOutShow(i, j) {
-    console.log(`show ${i} ${j} unhovered`)
     const rhombus = this.showLines.showBlocks[i].rhombuses[j];
     rhombus.attrs.hovered = false;
     if (rhombus.attrs.rendered.image) {
@@ -92,7 +88,6 @@ class Blocks {
 
   handleMouseOverProduct(i, j) {
     const rhombus = this.productLines.productBlocks[i].rhombuses[j];
-    console.log(`product ${i} ${j} hovered`)
     rhombus.attrs.hovered = true;
     if (rhombus.attrs.rendered.image) {
       rhombus.attrs.rendered.hover = false;
@@ -102,7 +97,6 @@ class Blocks {
 
   handleMouseOutProduct(i, j) {
     const rhombus = this.productLines.productBlocks[i].rhombuses[j];
-    console.log(`product ${i} ${j} unhovered`)
     rhombus.attrs.hovered = false;
     if (rhombus.attrs.rendered.image) {
       rhombus.attrs.rendered.hover = false;
