@@ -286,7 +286,6 @@ class ProductBlock {
     this.dirtDots = {
       x: this.x - 4 > 0 ? this.x - 4 : 0,
       y: this.y - 4 > 0 ? this.y - 4 : 0,
-      // w: this.x - 4 > 0 ? this.dots[this.images.length - 1].x + PRODUCT.width * this.scale + 8 : this.dots[this.images.length - 1].x + PRODUCT.width * this.scale + 8,
       w: this.dots[this.images.length - 1].x + PRODUCT.width * this.scale + 8,
       h: this.y - 4 > 0 ? PRODUCT.height * this.scale + 4 : PRODUCT.height * this.scale + 4 + this.y
     };
