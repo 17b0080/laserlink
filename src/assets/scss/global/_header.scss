@@ -16,6 +16,7 @@
   @include breakpoint(medium) {
     justify-content: flex-start;
     width: auto;
+    min-width: rem-calc(700);
     top: rem-calc(8);
     left: 50%;
     transform: translateX(-50%);
