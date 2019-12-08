@@ -217,8 +217,10 @@ class Text {
       a.style.lineHeight = `${height}px`;
     };
     for (let i = 0; i < partnerLines.partnerBlocks.length; i += 1) {
+      console.log('kek par ');
       const block = partnerLines.partnerBlocks[i];
       for (let j = 0; j < block.rhombuses.length; j += 1) {
+        console.log('kek par rh')
         const rhombus = block.rhombuses[j];
         const { x, y, width, height } = rhombus;
         const a = paLA[i];

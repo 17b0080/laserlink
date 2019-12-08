@@ -258,7 +258,7 @@ class PartnerBlock {
     this.y = this.dy * this.scale - this.currentY;
     this.x = this.spacing + this.dx * this.scale - this.currentX;
     this.calculateDots();
-
+    console.log(this.dots);
     for (let i = 0; i < this.rhombuses.length; i += 1) {
       this.rhombuses[i].handleResize(this.dots[i].x, this.dots[i].y, this.scale);
     }
