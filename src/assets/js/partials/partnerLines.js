@@ -7,8 +7,8 @@ import ScrollMagic from 'scrollmagic';
 class PartnerRhombus extends Figure {
   constructor({ image, noise, ...rest }) {
     super(rest);
-    this.width = PARTNER.width;
-    this.height = PARTNER.height;
+    this.width = PARTNER.width * this.scale;
+    this.height = PARTNER.height * this.scale;
     this.hovered = false;
     this.image = image;
     this.noise = noise;
@@ -24,6 +24,7 @@ class PartnerRhombus extends Figure {
     this.counters = 100;
 
     this.attrs = {
+      resized: false,
       rendered: { image: false },
       played: { lines: false, image: false },
       dots: Array.from({ length: 5 }, () => ([PARTNER.width / 2, 0])).flat(),
@@ -33,8 +34,8 @@ class PartnerRhombus extends Figure {
 
 
     this.subCanvas = document.createElement('canvas');
-    this.subCanvas.width = PARTNER.width;
-    this.subCanvas.height = PARTNER.height;
+    this.subCanvas.width = PARTNER.width * this.scale;
+    this.subCanvas.height = PARTNER.height * this.scale;
     this.subContext = this.subCanvas.getContext('2d');
 
 
@@ -93,7 +94,8 @@ class PartnerRhombus extends Figure {
   }
 
   animate() {
-    const { rendered, dots, played, opacity, gradientOffset } = this.attrs;
+    const { resized, rendered, dots, played, opacity, gradientOffset } = this.attrs;
+    const { scale } = this;
 
     this.context.save();
     this.context.beginPath();
@@ -105,21 +107,24 @@ class PartnerRhombus extends Figure {
     this.context.clip();
 
     if (!played.lines) {
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[2], dots[3]);
-      this.subContext.lineTo(dots[4], dots[5]);
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[6], dots[7]);
-      this.subContext.lineTo(dots[8], dots[9]);
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[2] * scale, dots[3] * scale);
+      this.subContext.lineTo(dots[4] * scale, dots[5] * scale);
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[6] * scale, dots[7] * scale);
+      this.subContext.lineTo(dots[8] * scale, dots[9] * scale);
     } else {
       this.subContext.beginPath();
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[2], dots[3]);
-      this.subContext.lineTo(dots[4], dots[5]);
-      this.subContext.lineTo(dots[6], dots[7]);
+      this.subContext.strokeStyle = this.gradient;
+      this.subContext.lineWidth = 8;
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[2] * scale, dots[3] * scale);
+      this.subContext.lineTo(dots[4] * scale, dots[5] * scale);
+      this.subContext.lineTo(dots[6] * scale, dots[7] * scale);
       this.subContext.closePath();
 
-      if (!played.image || !rendered.image) {
+      if (!played.image || !rendered.image || !resized) {
+        if (!resized) this.attrs.resized = true;
         if (played.image) this.attrs.rendered.image = true;
         this.subContext.clearRect(0, 0, this.subCanvas.width, this.subCanvas.height);
         this.subContext.save();
@@ -158,6 +163,14 @@ class PartnerRhombus extends Figure {
 
   checkRequest() {
     return true;
+  }
+
+  handleResize(x, y, scale) {
+    super.handleResize(x, y, scale);
+    this.attrs.resized = false;
+    this.width = this.subCanvas.width = PARTNER.width * scale;
+    this.height = this.subCanvas.height = PARTNER.height * scale;
+    this.subContext.srokeStyle = this.gradient;
   }
 }
 
@@ -229,7 +242,7 @@ class PartnerBlock {
     this.calculateDots();
 
     for (let i = 0; i < this.rhombuses.length; i += 1) {
-      this.rhombuses[i].updateXY(this.dots[i].x, this.dots[i].y);
+      this.rhombuses[i].updateXY(this.dots[i].x, this.dots[i].y, this.scale);
     }
 
     this.checkWindow();
@@ -247,7 +260,7 @@ class PartnerBlock {
     this.calculateDots();
 
     for (let i = 0; i < this.rhombuses.length; i += 1) {
-      this.rhombuses[i].handleResize(this.dots[i].x, this.dots[i].y);
+      this.rhombuses[i].handleResize(this.dots[i].x, this.dots[i].y, this.scale);
     }
   }
 

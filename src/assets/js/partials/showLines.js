@@ -6,12 +6,9 @@ import ScrollMagic from 'scrollmagic';
 class ShowRhombus extends Figure {
   constructor({ image, showMore, ...rest }) {
     super(rest);
-    if (window.srs === undefined) window.srs = [];
-    srs.push(this);
-    this.width = SHOW.width;
-    this.height = SHOW.height;
+    this.width = SHOW.width * this.scale;
+    this.height = SHOW.height * this.scale;
     this.hovered = false;
-    // console.log(images);
     this.image = image;
     this.showMore = showMore;
 
@@ -24,6 +21,7 @@ class ShowRhombus extends Figure {
     this.opacity = 0;
 
     this.attrs = {
+      resized: false,
       rendered: { image: false, hover: true },
       played: { lines: false, image: false, hover: true },
       dots: Array.from({ length: 5 }, () => ([SHOW.width / 2, 0])).flat(),
@@ -34,8 +32,8 @@ class ShowRhombus extends Figure {
     };
 
     this.subCanvas = document.createElement('canvas');
-    this.subCanvas.width = SHOW.width;
-    this.subCanvas.height = SHOW.height;
+    this.subCanvas.width = SHOW.width * this.scale;
+    this.subCanvas.height = SHOW.height * this.scale;
     this.subContext = this.subCanvas.getContext('2d');
 
 
@@ -106,7 +104,8 @@ class ShowRhombus extends Figure {
   }
 
   animate() {
-    const { rendered, dots, played, opacity, hoverOpacity, gradientOffset } = this.attrs;
+    const { resized, rendered, dots, played, opacity, hoverOpacity, gradientOffset } = this.attrs;
+    const { scale } = this;
 
     this.context.save();
     this.context.beginPath();
@@ -118,21 +117,24 @@ class ShowRhombus extends Figure {
     this.context.clip();
 
     if (!played.lines) {
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[2], dots[3]);
-      this.subContext.lineTo(dots[4], dots[5]);
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[6], dots[7]);
-      this.subContext.lineTo(dots[8], dots[9]);
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[2] * scale, dots[3] * scale);
+      this.subContext.lineTo(dots[4] * scale, dots[5] * scale);
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[6] * scale, dots[7] * scale);
+      this.subContext.lineTo(dots[8] * scale, dots[9] * scale);
     } else {
       this.subContext.beginPath();
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[2], dots[3]);
-      this.subContext.lineTo(dots[4], dots[5]);
-      this.subContext.lineTo(dots[6], dots[7]);
+      this.subContext.strokeStyle = this.gradient;
+      this.subContext.lineWidth = 8;
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[2] * scale, dots[3] * scale);
+      this.subContext.lineTo(dots[4] * scale, dots[5] * scale);
+      this.subContext.lineTo(dots[6] * scale, dots[7] * scale);
       this.subContext.closePath();
 
-      if (!played.image || !rendered.image || !played.hover || !rendered.hover) {
+      if (!played.image || !rendered.image || !played.hover || !rendered.hover || !resized) {
+        if (!resized) this.attrs.resize = true;
         if (played.image) this.attrs.rendered.image = true;
         if (rendered.hover) this.attrs.rendered.hover = true;
         this.subContext.clearRect(0, 0, this.subCanvas.width, this.subCanvas.height);
@@ -173,6 +175,13 @@ class ShowRhombus extends Figure {
 
   checkRequest() {
     return true;
+  }
+  handleResize(x, y, scale) {
+    super.handleResize(x, y, scale);
+    this.attrs.resized = false;
+    this.width = this.subCanvas.width = SHOW.width * scale;
+    this.height = this.subCanvas.height = SHOW.height * scale;
+    this.subContext.srokeStyle = this.gradient;
   }
 }
 
@@ -263,7 +272,7 @@ class ShowBlock {
     this.calculateDots();
 
     for (let i = 0; i < this.rhombuses.length; i += 1) {
-      this.rhombuses[i].handleResize(this.dots[i].x, this.dots[i].y);
+      this.rhombuses[i].handleResize(this.dots[i].x, this.dots[i].y, this.scale);
     }
   }
 

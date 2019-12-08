@@ -6,8 +6,8 @@ import ScrollMagic from 'scrollmagic';
 class ProductRhombus extends Figure {
   constructor({ noise, image, showMoreHover, ...rest }) {
     super(rest);
-    this.width = PRODUCT.width;
-    this.height = PRODUCT.height;
+    this.width = PRODUCT.width * this.scale;
+    this.height = PRODUCT.height * this.scale;
     this.hovered = false;
     // console.log(images);
     this.image = image;
@@ -24,8 +24,8 @@ class ProductRhombus extends Figure {
     this.counter = 0;
     this.counters = 100;
 
-
     this.attrs = {
+      resized: true,
       rendered: { image: false, hover: true },
       played: { lines: false, image: false, hover: true },
       dots: Array.from({ length: 5 }, () => ([PRODUCT.width / 2, 0])).flat(),
@@ -35,8 +35,8 @@ class ProductRhombus extends Figure {
     }
 
     this.subCanvas = document.createElement('canvas');
-    this.subCanvas.width = PRODUCT.width;
-    this.subCanvas.height = PRODUCT.height;
+    this.subCanvas.width = PRODUCT.width * this.scale;
+    this.subCanvas.height = PRODUCT.height * this.scale;
     this.subContext = this.subCanvas.getContext('2d');
 
 
@@ -60,7 +60,6 @@ class ProductRhombus extends Figure {
     this.gradient.addColorStop(9 / 11, "green");
     this.gradient.addColorStop(10 / 11, "blue");
     this.gradient.addColorStop(1, "purple");
-
 
     this.subContext.strokeStyle = this.gradient;
     this.subContext.lineWidth = 8;
@@ -107,7 +106,8 @@ class ProductRhombus extends Figure {
   }
 
   animate() {
-    const { hoverOpacity, rendered, dots, played, opacity, gradientOffset } = this.attrs;
+    const { resized, hoverOpacity, rendered, dots, played, opacity, gradientOffset } = this.attrs;
+    const { scale } = this;
 
     this.context.save();
     this.context.beginPath();
@@ -119,21 +119,24 @@ class ProductRhombus extends Figure {
     this.context.clip();
 
     if (!played.lines) {
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[2], dots[3]);
-      this.subContext.lineTo(dots[4], dots[5]);
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[6], dots[7]);
-      this.subContext.lineTo(dots[8], dots[9]);
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[2] * scale, dots[3] * scale);
+      this.subContext.lineTo(dots[4] * scale, dots[5] * scale);
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[6] * scale, dots[7] * scale);
+      this.subContext.lineTo(dots[8] * scale, dots[9] * scale);
     } else {
       this.subContext.beginPath();
-      this.subContext.moveTo(dots[0], dots[1]);
-      this.subContext.lineTo(dots[2], dots[3]);
-      this.subContext.lineTo(dots[4], dots[5]);
-      this.subContext.lineTo(dots[6], dots[7]);
+      this.subContext.strokeStyle = this.gradient;
+      this.subContext.lineWidth = 8;
+      this.subContext.moveTo(dots[0] * scale, dots[1] * scale);
+      this.subContext.lineTo(dots[2] * scale, dots[3] * scale);
+      this.subContext.lineTo(dots[4] * scale, dots[5] * scale);
+      this.subContext.lineTo(dots[6] * scale, dots[7] * scale);
       this.subContext.closePath();
 
-      if (!played.image || !rendered.image || !played.hover || !rendered.hover) {
+      if (!played.image || !rendered.image || !played.hover || !rendered.hover || !resized) {
+        if (!resized) this.attrs.resized = true;
         if (played.image) this.attrs.rendered.image = true;
         if (rendered.hover) this.attrs.rendered.hover = true;
         this.subContext.clearRect(0, 0, this.subCanvas.width, this.subCanvas.height);
@@ -181,6 +184,14 @@ class ProductRhombus extends Figure {
 
   checkRequest() {
     return true;
+  }
+
+  handleResize(x, y, scale) {
+    super.handleResize(x, y, scale);
+    this.attrs.resized = false;
+    this.width = this.subCanvas.width = PRODUCT.width * scale;
+    this.height = this.subCanvas.height = PRODUCT.height * scale;
+    this.subContext.srokeStyle = this.gradient;
   }
 }
 
@@ -270,7 +281,7 @@ class ProductBlock {
     this.calculateDots();
 
     for (let i = 0; i < this.rhombuses.length; i += 1) {
-      this.rhombuses[i].handleResize(this.dots[i].x, this.dots[i].y);
+      this.rhombuses[i].handleResize(this.dots[i].x, this.dots[i].y, this.scale);
     }
   }
 
@@ -386,14 +397,12 @@ class ProductLines {
 
   svgTl = () => {
     const { svg } = this;
-    // svg.style.width = svg.getAttribute('viewBox').split(' ')[2] + 'px';
     const paths = svg.querySelectorAll('path');
     const image = svg.querySelector('image');
     const tl = new TimelineLite();
     paths.forEach((path, i) => {
       const pTl = new TimelineLite();
       const length = path.getTotalLength();
-      // console.log(length)
       const from = { strokeDasharray: length, strokeDashoffset: length };
       const to = { strokeDasharray: length, strokeDashoffset: 0 };
       pTl.fromTo(path, .01, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'same')
