@@ -1,14 +1,10 @@
 /* globals document, window */
 import { PRODUCT, WORK, TEXT } from '../settings';
 
-function translateX(item, x) {
-  item.style.transform = `translateX(${x}px)`;
-}
-
 function changeTranslate(item, x, y) {
   // eslint-disable-next-line no-param-reassign
   item.style.transform = `translate(${x}px, ${y}px)`;
-}
+};
 
 class Text {
   constructor({ projectViewer, productViewer, ...opts }) {
@@ -29,6 +25,14 @@ class Text {
     this.subMenu = document.querySelectorAll('.sub-menu__item');
     this.form = document.querySelector('.contact-form-wrapper');
 
+    this.logoButton = document.createElement('a');
+    this.logoButton.innerHTML = 'Представляем';
+    this.logoButton.setAttribute('class', 'content__button');
+    this.logoButton.addEventListener('click', () => {
+      projectViewer.open(0, 'presentation');
+    })
+    document.querySelector('.content').appendChild(this.logoButton);
+
     this.wA = [];
     for (let i = 0; i < 4; i += 1) {
       const a = document.createElement('a');
@@ -39,7 +43,7 @@ class Text {
   }
 
   init = (blocks, works, partnerLines, showLines, productLines, partnersHeight, commonsHeight) => {
-    const { projectViewer, productViewer } = this;
+    const { logoButton, projectViewer, productViewer } = this;
     this.paLA = [];
     this.sLA = [];
     this.prLA = [];
@@ -123,6 +127,15 @@ class Text {
       TEXT.positions[i][1] * this.scale
     ));
 
+    this.logoButton.style.width = `${132 * this.scale}px`;
+    this.logoButton.style.height = `${132 * this.scale}px`;
+    this.logoButton.style.lineHeight = `${132 * this.scale}px`;
+    changeTranslate(
+      this.logoButton,
+      471 * this.scale,
+      576 * this.scale
+    );
+
   }
 
   updateXY() {
@@ -131,7 +144,7 @@ class Text {
   }
 
   handleResize() {
-    const { works, partnerLines, showLines, productLines, wA, paLA, sLA, prLA } = this;
+    const { blocks, works, partnerLines, showLines, productLines, wA, paLA, sLA, prLA } = this;
     this.scale = this.parent.scale;
     this.spacing = this.parent.spacing;
 
@@ -186,8 +199,14 @@ class Text {
       TEXT.positions[i][1] * this.scale
     ));
 
-
-
+    this.logoButton.style.width = `${132 * this.scale}px`;
+    this.logoButton.style.height = `${132 * this.scale}px`;
+    this.logoButton.style.lineHeight = `${132 * this.scale}px`;
+    changeTranslate(
+      this.logoButton,
+      471 * this.scale,
+      576 * this.scale
+    );
   }
 
   render() {
