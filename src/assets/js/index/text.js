@@ -141,6 +141,11 @@ class Text {
       neonText.style.height = `${height * this.scale}px`;
     });
 
+    [...document.querySelectorAll('.js-text')]
+      .filter((_, i) => [3, 5, 7, 9].indexOf(i) > 0)
+      .forEach(p => {
+        p.style.width = `${600 * this.scale}px`;
+      });
 
     this.initMenu();
   }
@@ -187,6 +192,8 @@ class Text {
         const handleClick = scrollPositions[i + 6];
         a.addEventListener('click', handleClick)
       });
+
+
   }
 
 
@@ -267,6 +274,12 @@ class Text {
       neonText.style.width = `${width * this.scale}px`;
       neonText.style.height = `${height * this.scale}px`;
     });
+
+    [...document.querySelectorAll('.js-text')]
+      .filter((_, i) => [3, 5, 7, 9].indexOf(i) > 0)
+      .forEach(p => {
+        p.style.width = `${500 * this.scale}px`
+      });
   }
 
   render() {
