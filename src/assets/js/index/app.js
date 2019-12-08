@@ -329,6 +329,13 @@ class App extends Object {
       this.productViewer.handleResize();
     }
 
+
+    const partnersHeight = this.blocks.getHeight('partnerLines');
+    const commonsHeight = this.blocks.getHeight('showLines');
+    const productsHeight = this.blocks.getHeight('productLines');
+    if (window.innerWidth >= 990) { document.querySelector('.background').style.height = `${(commonsHeight + partnersHeight + productsHeight + PRODUCT.y) * this.scale}px`; }
+    else document.querySelector('.background').style.height = '100vh';
+
     this.request = true;
   }
 
@@ -348,25 +355,12 @@ class App extends Object {
   }
 
   onBlockReady() {
-    // this.ready();
     if (document.URL.indexOf('down=true') !== -1) {
       if (this.windowWidth < 990) {
-        // scrollTo(
-        //   getCoords(document.querySelector('div.contact-form-wrapper')) - 100
-        // );
         document.querySelector('div.contact-form-wrapper').scrollIntoView({ behavior: 'smooth' })
       }
     }
   }
-
-  ready() {
-    this.readyState += 1;
-    if (this.readyState === 1) {
-
-    }
-  }
-
-
 
   init = async () => {
     const { smController } = this;
@@ -427,8 +421,7 @@ class App extends Object {
     }))
     smController.addScene(this.blocks.scenes());
 
-    // document.body.style.height = `${(commonsHeight + partnersHeight + productsHeight + PRODUCT.y) * this.scale}px`;
-    document.querySelector('.background').style.height = `${(commonsHeight + partnersHeight + productsHeight + PRODUCT.y) * this.scale}px`;
+    if (window.innerWidth >= 990) document.querySelector('.background').style.height = `${(commonsHeight + partnersHeight + productsHeight + PRODUCT.y) * this.scale}px`;
     this.listen();
     this.render(true);
 
