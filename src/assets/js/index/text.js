@@ -1,5 +1,5 @@
 /* globals document, window */
-import { PRODUCT, WORK, TEXT } from '../settings';
+import { PRODUCT, WORK, TEXT, SHOW, PARTNER, NEON } from '../settings';
 
 function changeTranslate(item, x, y) {
   // eslint-disable-next-line no-param-reassign
@@ -120,7 +120,6 @@ class Text {
     this.partnerLines = partnerLines;
     this.productLines = productLines;
 
-
     this.text.forEach((text, i) => changeTranslate(
       text,
       TEXT.positions[i][0] * this.scale,
@@ -136,7 +135,60 @@ class Text {
       576 * this.scale
     );
 
+    [...document.querySelectorAll('.js-neon')].forEach((neonText, i) => {
+      const { width, height } = NEON[i];
+      neonText.style.width = `${width * this.scale}px`;
+      neonText.style.height = `${height * this.scale}px`;
+    });
+
+
+    this.initMenu();
   }
+
+  initMenu() {
+    const scrollPositions = [
+      () => 0,
+      ...WORK.positions.map(([x, y], i) => (e) => {
+        e.preventDefault();
+        if (window.innerWidth >= 990) { window.scrollTo({ behavior: 'smooth', top: y * this.scale }) }
+        else document.querySelectorAll('.show')[i].scrollIntoView({ behavior: 'smooth' });
+      }),
+      (e) => {
+        e.preventDefault();
+        if (window.innerWidth >= 990) { window.scrollTo({ behavior: 'smooth', top: (SHOW.y + this.partnerLines.height) * this.scale }) }
+        else document.querySelectorAll('.show-wrapper')[1].scrollIntoView({ behavior: 'smooth' });
+      },
+      (e) => {
+        e.preventDefault();
+        if (window.innerWidth >= 990) { window.scrollTo({ behavior: 'smooth', top: PARTNER.y * this.scale }) }
+        else document.querySelector('.partners').scrollIntoView({ behavior: 'smooth' });
+      },
+      (e) => {
+        e.preventDefault();
+        if (window.innerWidth >= 990) { window.scrollTo({ behavior: 'smooth', top: (PRODUCT.y + this.partnerLines.height + this.showLines.height) * this.scale }) }
+        else document.querySelector('.products').scrollIntoView({ behavior: 'smooth' });
+      },
+      (e) => {
+        e.preventDefault();
+        document.querySelector('.contact-form-wrapper').scrollIntoView({ behavior: 'smooth' });
+      }
+    ];
+
+    const subMenu = document.querySelector('ul.menu__sub-menu.sub-menu');
+    [...subMenu.children].forEach((child, i) => {
+      const a = child.children[0];
+      const handleClick = scrollPositions[i + 1];
+      a.addEventListener('click', handleClick)
+    });
+    [...document.querySelector('ul.menu').children]
+      .filter((_, i) => i > 1 && i < 5)
+      .forEach((child, i) => {
+        const a = child.children[0];
+        const handleClick = scrollPositions[i + 6];
+        a.addEventListener('click', handleClick)
+      });
+  }
+
 
   updateXY() {
     this.currentX = this.parent.currentX / 10;
@@ -191,8 +243,6 @@ class Text {
       }
     };
 
-
-
     this.text.forEach((text, i) => changeTranslate(
       text,
       TEXT.positions[i][0] * this.scale,
@@ -207,18 +257,29 @@ class Text {
       471 * this.scale,
       576 * this.scale
     );
+
+    if (window.innerWidth <= 990) {
+      this.form.style.transform = '';
+    };
+
+    [...document.querySelectorAll('.js-neon')].forEach((neonText, i) => {
+      const { width, height } = NEON[i];
+      neonText.style.width = `${width * this.scale}px`;
+      neonText.style.height = `${height * this.scale}px`;
+    });
   }
 
   render() {
+    const formY = (this.showLines.height +
+      this.partnerLines.height +
+      this.productLines.height +
+      PRODUCT.y) * this.scale -
+      this.currentY
     changeTranslate(this.content, this.spacing - this.currentX, -this.currentY);
     changeTranslate(
       this.form,
       this.spacing - this.currentX,
-      (this.showLines.height +
-        this.partnerLines.height +
-        this.productLines.height +
-        PRODUCT.y) * this.scale -
-      this.currentY
+      formY > 0 ? formY : 0
     );
   }
 }
