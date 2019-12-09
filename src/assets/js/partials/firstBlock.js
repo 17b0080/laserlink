@@ -79,8 +79,6 @@ class MoreRhombus extends Figure {
       this.subContext.lineTo(dots[2] * scale, dots[3] * scale);
       this.subContext.lineTo(dots[4] * scale, dots[5] * scale);
       this.subContext.lineTo(dots[6] * scale, dots[7] * scale);
-      this.subContext.lineWidth = 8;
-      this.subContext.strokeStyle = 'white';
       this.subContext.closePath();
     };
     this.subContext.stroke();
@@ -100,12 +98,15 @@ class MoreRhombus extends Figure {
 
   handleResize(x, y, scale) {
     super.handleResize(x, y, scale);
+
     this.width = LOGO_MORE.width * this.scale;
     this.height = LOGO_MORE.height * this.scale;
     this.subCanvas.width = LOGO_MORE.width * this.scale;
     this.subCanvas.height = LOGO_MORE.height * this.scale;
     this.attrs.x = LOGO_MORE.x * this.scale;
     this.attrs.y = LOGO_MORE.y * this.scale;
+    this.subContext.lineWidth = 2;
+    this.subContext.strokeStyle = 'white';
   }
 };
 
