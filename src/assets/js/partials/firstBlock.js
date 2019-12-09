@@ -23,7 +23,7 @@ class MoreRhombus extends Figure {
     this.subCanvas.width = LOGO_MORE.width * this.scale;
     this.subCanvas.height = LOGO_MORE.height * this.scale;
     this.subContext = this.subCanvas.getContext('2d');
-    this.subContext.lineWidth = 2;
+    this.subContext.lineWidth = 4;
     this.subContext.strokeStyle = 'white';
 
     this.button = document.querySelector('a.content__button');
@@ -105,7 +105,7 @@ class MoreRhombus extends Figure {
     this.subCanvas.height = LOGO_MORE.height * this.scale;
     this.attrs.x = LOGO_MORE.x * this.scale;
     this.attrs.y = LOGO_MORE.y * this.scale;
-    this.subContext.lineWidth = 2;
+    this.subContext.lineWidth = 4;
     this.subContext.strokeStyle = 'white';
   }
 };
