@@ -62,6 +62,10 @@ body[data-page='index'] {
       letter-spacing: normal;
       margin-bottom: 0;
     }
+    
+    &__headline {
+      width: 700px;
+    }
 
     .text--multi {
       width: auto;
