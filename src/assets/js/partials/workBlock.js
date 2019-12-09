@@ -1,7 +1,7 @@
 /* globals document, window */
 import { TimelineLite, TweenLite } from 'gsap';
 import Figure from './Figure';
-import { WORK, GRADIENT_LINES_TIME } from '../settings';
+import { NEON_CHAR_DELAY, NEON_CHAR_TIME, WORK, GRADIENT_LINES_TIME } from '../settings';
 import ScrollMagic from 'scrollmagic';
 // 1 - большая
 // 2 - снизу
@@ -29,8 +29,6 @@ class WorkRadialGradient extends Figure {
     );
     gradient.forEach((rgb, i) => this.gradient.addColorStop(i / 2, rgb));
 
-    // this.gradient.addColorStop(.5, 'rgb(203, 56, 176, .25)');
-    // this.gradient.addColorStop(1, 'rgb(83, 56, 203, 0)');
     this.subContext.fillStyle = this.gradient;
     // this.subContext.filter = "blur";
     this.subContext.arc(
@@ -327,8 +325,8 @@ class WorkBlock {
       const from = { strokeDasharray: length, strokeDashoffset: length };
       const to = { strokeDasharray: length, strokeDashoffset: 0 };
       pTl.fromTo(path, .01, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'same')
-      pTl.fromTo(path, 1, { css: from }, { css: to }, 'same');
-      tl.add(pTl, `0+=${.25 * i}`)
+      pTl.fromTo(path, NEON_CHAR_TIME, { css: from }, { css: to }, 'same');
+      tl.add(pTl, `0+=${NEON_CHAR_DELAY * i}`)
     });
     tl.fromTo(images, .5, { css: { opacity: 0 } }, { css: { opacity: 1 } });
     return tl;

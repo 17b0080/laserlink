@@ -3,10 +3,10 @@ export const IMAGES = {
   hover: './assets/img/hover.png',
   showMoreHover: './assets/img/showRhombusHoverMore.png',
   works: [
-    "./assets/img/works/01.png",
-    "./assets/img/works/02.png",
-    "./assets/img/works/03.png",
-    "./assets/img/works/04.png"
+    './assets/img/works/01.png',
+    './assets/img/works/02.png',
+    './assets/img/works/03.png',
+    './assets/img/works/04.png'
   ],
   shows: [],
   partners: [],
@@ -26,7 +26,7 @@ export const LOGO_RECT = {
   x: 238,
   y: 188,
   w: 361,
-  h: 55,
+  h: 55
 };
 export const LOGO_IMAGE = { width: 355, height: 355 };
 export const LOGO_MORE = {
@@ -47,50 +47,50 @@ export const WORK = {
     gradients: [
       [
         [
-          'rgb(156, 56, 203, 1)',
-          'rgb(203, 56, 176, .25)',
-          'rgb(83, 56, 203, 0)'
+          'rgb(155, 16, 179, .6)',
+          'rgb(155, 16, 179, .25)',
+          'rgb(155, 16, 179, 0)'
         ],
         [
-          'rgb(156, 56, 203, 1)',
-          'rgb(203, 56, 176, .25)',
-          'rgb(83, 56, 203, 0)'
+          'rgb(16, 122, 179, .6)',
+          'rgb(16, 122, 179, .25)',
+          'rgb(16, 122, 179, 0)'
         ]
       ],
       [
         [
-          'rgb(156, 56, 203, 1)',
-          'rgb(203, 56, 176, .25)',
-          'rgb(83, 56, 203, 0)'
+          'rgb(255, 211, 2003, .6)',
+          'rgb(255, 211, 0, .25)',
+          'rgb(255, 211, 0, 0)'
         ],
         [
-          'rgb(156, 56, 203, 1)',
-          'rgb(203, 56, 176, .25)',
-          'rgb(83, 56, 203, 0)'
+          'rgb(252, 129, 255, .6)',
+          'rgb(252, 129, 255, .25)',
+          'rgb(252, 129, 255, 0)'
         ]
       ],
       [
         [
-          'rgb(156, 56, 203, 1)',
-          'rgb(203, 56, 176, .25)',
-          'rgb(83, 56, 203, 0)'
+          'rgb(97, 227, 85, .6)',
+          'rgb(97, 227, 85, .25)',
+          'rgb(97, 227, 85, 0)'
         ],
         [
-          'rgb(156, 56, 203, 1)',
-          'rgb(203, 56, 176, .25)',
-          'rgb(83, 56, 203, 0)'
+          'rgb(227, 144, 85, .6)',
+          'rgb(227, 144, 85, .25)',
+          'rgb(227, 144, 85, 0)'
         ]
       ],
       [
         [
-          'rgb(156, 56, 203, 1)',
-          'rgb(203, 56, 176, .25)',
-          'rgb(83, 56, 203, 0)'
+          'rgb(219, 74, 188, .6)',
+          'rgb(219, 74, 188, .25)',
+          'rgb(219, 74, 188, 0)'
         ],
         [
-          'rgb(156, 56, 203, 1)',
-          'rgb(203, 56, 176, .25)',
-          'rgb(83, 56, 203, 0)'
+          'rgb(219, 178, 74, .6)',
+          'rgb(219, 178, 74, .25)',
+          'rgb(219, 178, 74, 0)'
         ]
       ]
     ]
@@ -98,8 +98,19 @@ export const WORK = {
   width: 425,
   height: 425,
   lineWidth: 4,
-  positions: [[246, 1426], [713, 2721], [218, 4016], [701, 5311]],
-  types: ['video-mapping', 'laser-show', 'multimedia-show', 'staging-numbers', 'common']
+  positions: [
+    [246, 1426],
+    [713, 2721],
+    [218, 4016],
+    [701, 5311]
+  ],
+  types: [
+    'video-mapping',
+    'laser-show',
+    'multimedia-show',
+    'staging-numbers',
+    'common'
+  ]
 };
 export const PARTNER = {
   y: 6918,
@@ -120,7 +131,7 @@ export const PRODUCT = {
   width: 284,
   height: 284,
   gapY: 45,
-  gapX: 84,
+  gapX: 84
 };
 export const TEXT = {
   positions: [
@@ -141,20 +152,49 @@ export const TEXT = {
     [125, 8032 - PARTNER.height],
     [144, 8137 - PARTNER.height], // 15
     [125, 9374 - PARTNER.height - SHOW.height],
-    [144, 9479 - PARTNER.height - SHOW.height],
+    [144, 9479 - PARTNER.height - SHOW.height]
   ]
 };
 export const GRADIENT = {
-  src: (i) => `./assets/img/Gradients/gradient${i}.png`,
+  src: i => `./assets/img/Gradients/gradient${i}.png`,
   positions: [
-    [[243, -104], [-102, -106], [-64, -3]],
-    [[201, 1099], [-55, 1003], [-373, 1083]],
-    [[761, 2496], [545, 2467], [353, 2635]],
-    [[197, 3696], [-171, 3749], [-315, 3784]],
-    [[720, 5027], [434, 5133], [422, 5331]],
-    [[801, 6619], [748, 6544]],
-    [[812, 8032 - PARTNER.height], [681, 7984 - PARTNER.height]],
-    [[872, 9373 - SHOW.height - PARTNER.height], [696, 9363 - SHOW.height - PARTNER.height]],
+    [
+      [243, -104],
+      [-102, -106],
+      [-64, -3]
+    ],
+    [
+      [201, 1099],
+      [-55, 1003],
+      [-373, 1083]
+    ],
+    [
+      [761, 2496],
+      [545, 2467],
+      [353, 2635]
+    ],
+    [
+      [197, 3696],
+      [-171, 3749],
+      [-315, 3784]
+    ],
+    [
+      [720, 5027],
+      [434, 5133],
+      [422, 5331]
+    ],
+    [
+      [801, 6619],
+      [748, 6544]
+    ],
+    [
+      [812, 8032 - PARTNER.height],
+      [681, 7984 - PARTNER.height]
+    ],
+    [
+      [872, 9373 - SHOW.height - PARTNER.height],
+      [696, 9363 - SHOW.height - PARTNER.height]
+    ]
   ],
   rotations: [
     [0, 90, 180],
@@ -164,7 +204,7 @@ export const GRADIENT = {
     [0, 90, 180],
     [0, 90],
     [0, 90],
-    [0, 90],
+    [0, 90]
   ],
   offsets: {
     '0': [-1000, -1000],
@@ -183,7 +223,12 @@ export const LINES = {
     [364, 4732, 888, 5256],
     [929, 6120, 454, 6595],
     [814, 7424 - PARTNER.height, 318, 7920 - PARTNER.height],
-    [888, 8729 - PARTNER.height - SHOW.height, 353, 9264 - PARTNER.height - SHOW.height]
+    [
+      888,
+      8729 - PARTNER.height - SHOW.height,
+      353,
+      9264 - PARTNER.height - SHOW.height
+    ]
   ],
   strokeStyle: [
     '#F5F4EA',
@@ -194,7 +239,7 @@ export const LINES = {
     '#DB4ABC',
     '#FF1494',
     '#4ADB69',
-    '#DBB24A',
+    '#DBB24A'
   ]
 };
 export const NEON = [
@@ -205,5 +250,8 @@ export const NEON = [
   { width: 610, height: 100 },
   { width: 760, height: 110 },
   { width: 450, height: 100 }
-]
+];
+
+export const NEON_CHAR_TIME = 0.6;
+export const NEON_CHAR_DELAY = 0.15;
 export const GRADIENT_LINES_TIME = 5;
