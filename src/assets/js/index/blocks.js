@@ -106,6 +106,7 @@ class Blocks {
 
   init() {
     this.first = new FirstBlock({
+      gradients: this.gradients,
       text: [
         this.text[0],
         this.text[1],
