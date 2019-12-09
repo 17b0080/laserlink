@@ -69,8 +69,9 @@ class WorkRadialGradient extends Figure {
 }
 
 class WorkRhombus extends Figure {
-  constructor({ parent, image, ...rest }) {
+  constructor({ lColors, parent, image, ...rest }) {
     super(rest);
+    this.lColor = lColors;
     this.parent = parent;
     this.image = image;
     this.width = WORK.width * this.scale;
@@ -100,25 +101,15 @@ class WorkRhombus extends Figure {
 
     this.gradientCanvas = document.createElement('canvas');
     this.gradientCanvas.width = WORK.width * this.scale;
-    this.gradientCanvas.height = 2000 * this.scale;
+    this.gradientCanvas.height = WORK.height * 3 * this.scale;
     this.gradientContext = this.gradientCanvas.getContext('2d');
     this.gradient = this.gradientContext.createLinearGradient(
       this.gradientCanvas.width / 2, 0,
       this.gradientCanvas.width / 2, this.gradientCanvas.height
     );
-    this.gradient.addColorStop(0, "red");
-    this.gradient.addColorStop(1 / 8, "orange");
-    this.gradient.addColorStop(2 / 8, "yellow");
-
-    this.gradient.addColorStop(3 / 8, "green");
-    this.gradient.addColorStop(4 / 8, "blue");
-    this.gradient.addColorStop(5 / 8, "purple");
-
-    this.gradient.addColorStop(6 / 8, "red");
-    this.gradient.addColorStop(7 / 8, "orange");
-    this.gradient.addColorStop(1, "yellow");
-
-
+    this.lColor.forEach((color, i) => {
+      this.gradient.addColorStop(i / this.lColor.length, color)
+    })
     this.subContext.strokeStyle = this.gradient;
     this.subContext.lineWidth = 8;
   }
@@ -133,7 +124,7 @@ class WorkRhombus extends Figure {
     const tl = new TimelineLite({
       onComplete: () => {
         new TimelineLite().to(this.attrs, GRADIENT_LINES_TIME, {
-          gradientOffset: 1500,
+          gradientOffset: this.gradientCanvas.height * 2/3,
           repeat: -1,
         });
       }, ...opts
@@ -243,15 +234,26 @@ class WorkRhombus extends Figure {
     this.attrs.resized = false;
     this.width = this.subCanvas.width = WORK.width * this.scale;
     this.height = this.subCanvas.height = WORK.height * this.scale;
+    this.gradientCanvas.width = WORK.width * this.scale;
+    this.gradientCanvas.height = WORK.height * 3 * this.scale;
+    this.gradient = this.gradientContext.createLinearGradient(
+      this.gradientCanvas.width / 2, 0,
+      this.gradientCanvas.width / 2, this.gradientCanvas.height
+    );
+    this.lColor.forEach((color, i) => {
+      this.gradient.addColorStop(i / this.lColor.length, color)
+    })
     this.subContext.strokeStyle = this.gradient;
     this.subContext.lineWidth = 8;
   }
 };
 
 class WorkBlock {
-  constructor({ radialGradient, text, image, ...opts }) {
+  constructor({ lineColors, radialGradient, text, image, ...opts }) {
     [this.svg, this.text, this.button] = text;
     this.i = opts.i;
+    this.lColors = lineColors;
+    console.log(this.lColors);
     this.rGradient = radialGradient;
     this.gradients = opts.parent.gradients;
     this.parent = opts.parent;
@@ -279,6 +281,7 @@ class WorkBlock {
     this.y = this.dy * this.scale - this.currentY;
 
     this.main = new WorkRhombus({
+      lColors: this.lColors,
       parent: this,
       context: this.context,
       scale: this.scale,

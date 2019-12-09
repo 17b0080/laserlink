@@ -251,7 +251,52 @@ export const NEON = [
   { width: 760, height: 110 },
   { width: 450, height: 100 }
 ];
-
+export const WORK_GRADIENT_COLORS = [
+  [
+    '#9b10b3',
+    '#107ab3',
+    '#28b310',
+    '#ffd300',
+    '#fc81ff',
+    '#652ec7',
+    '#9b10b3',
+    '#107ab3',
+    '#28b310'
+  ],
+  [
+    '#ffd300',
+    '#fc81ff',
+    '#652ec7',
+    '#61e355',
+    '#e39055',
+    '#55a8e3',
+    '#ffd300',
+    '#fc81ff',
+    '#652ec7'
+  ],
+  [
+    '#61e355',
+    '#e39055',
+    '#55a8e3',
+    '#562897',
+    '#db4abc',
+    '#2fb6a4',
+    '#61e355',
+    '#e39055',
+    '#55a8e3'
+  ],
+  [
+    '#562897',
+    '#db4abc',
+    '#2fb6a4',
+    '#db4abc',
+    '#dbb24a',
+    '#4a74db',
+    '#562897',
+    '#db4abc',
+    '#2fb6a4'
+  ]
+];
 export const NEON_CHAR_TIME = 0.6;
 export const NEON_CHAR_DELAY = 0.15;
 export const GRADIENT_LINES_TIME = 5;

@@ -38,25 +38,23 @@ class ShowRhombus extends Figure {
 
 
     this.gradientCanvas = document.createElement('canvas');
-    this.gradientCanvas.width = 500;
-    this.gradientCanvas.height = 2000;
+    this.gradientCanvas.width = SHOW.width * this.scale;
+    this.gradientCanvas.height = SHOW.height * this.scale * 10/3;
     this.gradientContext = this.gradientCanvas.getContext('2d');
     this.gradient = this.gradientContext.createLinearGradient(
       this.gradientCanvas.width / 2, 0,
       this.gradientCanvas.width / 2, this.gradientCanvas.height
     );
     this.gradient.addColorStop(0, "red");
-    this.gradient.addColorStop(1 / 11, "orange");
-    this.gradient.addColorStop(2 / 11, "yellow");
-    this.gradient.addColorStop(3 / 11, "green");
-    this.gradient.addColorStop(4 / 11, "blue");
-    this.gradient.addColorStop(5 / 11, "purple");
-    this.gradient.addColorStop(6 / 11, "red");
-    this.gradient.addColorStop(7 / 11, "orange");
-    this.gradient.addColorStop(8 / 11, "yellow");
-    this.gradient.addColorStop(9 / 11, "green");
-    this.gradient.addColorStop(10 / 11, "blue");
-    this.gradient.addColorStop(1, "purple");
+    this.gradient.addColorStop(1 / 9, "orange");
+    this.gradient.addColorStop(2 / 9, "yellow");
+    this.gradient.addColorStop(3 / 9, "green");
+    this.gradient.addColorStop(4 / 9, "blue");
+    this.gradient.addColorStop(5 / 9, "purple");
+    this.gradient.addColorStop(6 / 9, "red");
+    this.gradient.addColorStop(7 / 9, "orange");
+    this.gradient.addColorStop(8/9, "yellow");
+    this.gradient.addColorStop(1, "green");
 
 
     this.subContext.strokeStyle = this.gradient;
@@ -97,7 +95,7 @@ class ShowRhombus extends Figure {
       }
     });
     tl.to(this.attrs, GRADIENT_LINES_TIME, {
-      gradientOffset: 1500,
+      gradientOffset: SHOW.height * this.scale * 2.2,
       repeat: -1,
     });
     return tl;

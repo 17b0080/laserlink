@@ -4,7 +4,7 @@ import WorkBlock from '../partials/workBlock';
 import ShowLines from '../partials/showLines';
 import PartnerLines from '../partials/partnerLines';
 import ProductLines from '../partials/productLines';
-import { LOGO, WORK, PARTNER, SHOW, PRODUCT } from '../settings';
+import { WORK_GRADIENT_COLORS, LOGO, WORK, PARTNER, SHOW, PRODUCT } from '../settings';
 
 class Blocks {
   constructor({ text, images, ...opts }) {
@@ -135,6 +135,7 @@ class Blocks {
         ],
         gradients: this.gradients,
         i,
+        lineColors: WORK_GRADIENT_COLORS[i],
         parent: this,
         context: this.context,
         dx: WORK.positions[i][0],
