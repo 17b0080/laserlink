@@ -23,7 +23,7 @@ class MoreRhombus extends Figure {
     this.subCanvas.width = LOGO_MORE.width * this.scale;
     this.subCanvas.height = LOGO_MORE.height * this.scale;
     this.subContext = this.subCanvas.getContext('2d');
-    this.subContext.lineWidth = 4;
+    this.subContext.lineWidth = 2;
     this.subContext.strokeStyle = 'white';
 
     this.button = document.querySelector('a.content__button');
@@ -155,6 +155,7 @@ class Rect extends Figure {
       // this.updateCounters();
       // this.calculateDots();
       this.animate();
+
     };
     // else if (this.counter !== 0 && !this.ready) {
     //   this.updateCounters();
@@ -218,7 +219,8 @@ class LogoImage extends Figure {
 }
 
 class FirstBlock {
-  constructor({ text, image, ...opts }) {
+  constructor({ gradients, text, image, ...opts }) {
+    this.gradients = gradients;
     this.text = text;
     this.parent = opts.parent;
     this.context = this.parent.context;
@@ -331,9 +333,8 @@ class FirstBlock {
       (0 < this.y + LOGO.height * this.scale && window.innerHeight > this.y + LOGO.height * this.scale)
     ) {
       this.onWindow = true;
-      if (this.tl.progress() === 0) {
-        this.tl.play();
-      }
+      if (this.tl.progress() === 0) this.tl.play();
+      if (!this.gradients.isTriggered(0)) this.gradients.trigger(0)
     } else {
       this.onWindow = false;
     }
