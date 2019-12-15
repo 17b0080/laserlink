@@ -39,7 +39,7 @@ class ShowRhombus extends Figure {
 
     this.gradientCanvas = document.createElement('canvas');
     this.gradientCanvas.width = SHOW.width * this.scale;
-    this.gradientCanvas.height = SHOW.height * this.scale * 10/3;
+    this.gradientCanvas.height = SHOW.height * this.scale * 10 / 3;
     this.gradientContext = this.gradientCanvas.getContext('2d');
     this.gradient = this.gradientContext.createLinearGradient(
       this.gradientCanvas.width / 2, 0,
@@ -53,7 +53,7 @@ class ShowRhombus extends Figure {
     this.gradient.addColorStop(5 / 9, "purple");
     this.gradient.addColorStop(6 / 9, "red");
     this.gradient.addColorStop(7 / 9, "orange");
-    this.gradient.addColorStop(8/9, "yellow");
+    this.gradient.addColorStop(8 / 9, "yellow");
     this.gradient.addColorStop(1, "green");
 
 
@@ -371,6 +371,8 @@ class ShowLines {
 
     this.linesWithImages = this.getLines();
 
+
+
     if (this.linesWithImages.length > 0) {
       this.height =
         this.linesWithImages.length * this.rhombusHeight +
@@ -444,8 +446,10 @@ class ShowLines {
 
     if (this.linesWithImages.length > 0) {
       this.height =
-        this.linesWithImages.length * this.rhombusHeight * this.scale +
-        (this.linesWithImages.length - 1) * this.textHeight * this.scale;
+        this.linesWithImages.length * this.rhombusHeight +
+        (this.linesWithImages.length - 1) * this.textHeight;
+    } else {
+      this.height = 0;
     }
 
     for (let i = 0; i < this.showBlocks.length; i += 1) {

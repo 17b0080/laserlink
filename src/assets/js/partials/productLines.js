@@ -42,7 +42,7 @@ class ProductRhombus extends Figure {
 
     this.gradientCanvas = document.createElement('canvas');
     this.gradientCanvas.width = PRODUCT.width * this.scale;
-    this.gradientCanvas.height = PRODUCT.height * this.scale * 10/3;
+    this.gradientCanvas.height = PRODUCT.height * this.scale * 10 / 3;
     this.gradientContext = this.gradientCanvas.getContext('2d');
     this.gradient = this.gradientContext.createLinearGradient(
       this.gradientCanvas.width / 2, 0,
@@ -56,7 +56,7 @@ class ProductRhombus extends Figure {
     this.gradient.addColorStop(5 / 9, "purple");
     this.gradient.addColorStop(6 / 9, "red");
     this.gradient.addColorStop(7 / 9, "orange");
-    this.gradient.addColorStop(8/9, "yellow");
+    this.gradient.addColorStop(8 / 9, "yellow");
     this.gradient.addColorStop(1, "green");
 
     this.subContext.strokeStyle = this.gradient;
@@ -417,7 +417,6 @@ class ProductLines {
     tl.fromTo(text, 1, { css: { top: 20 } }, { css: { top: 0 } }, 'text');
     return tl;
   }
-
   scene = () => {
     const { productBlocks, svgTl, textTl } = this;
     const tl = new TimelineLite({ paused: true }).add(svgTl(), 'text').add(textTl(), 'text');
@@ -432,8 +431,6 @@ class ProductLines {
     });
     return scene;
   }
-
-
   updateXY() {
     this.currentX = this.parent.currentX;
     this.currentY = this.parent.currentY;
@@ -442,7 +439,6 @@ class ProductLines {
       this.productBlocks[i].updateXY();
     }
   }
-
   handleResize() {
     this.windowWidth = this.parent.windowWidth;
     this.windowHeight = this.parent.windowHeight;
@@ -453,8 +449,8 @@ class ProductLines {
 
     if (this.linesWithImages.length > 0) {
       this.height =
-        this.linesWithImages.length * this.rhombusHeight * this.scale +
-        (this.linesWithImages.length - 1) * this.textHeight * this.scale;
+        this.linesWithImages.length * this.rhombusHeight +
+        (this.linesWithImages.length - 1) * this.textHeight;
     }
 
     for (let i = 0; i < this.productBlocks.length; i += 1) {
