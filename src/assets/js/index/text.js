@@ -6,6 +6,23 @@ function changeTranslate(item, x, y) {
   item.style.transform = `translate(${x}px, ${y}px)`;
 };
 
+
+const getLineElementsPositions = (es, eW, eH, eGX, eGY, n = 3) => {
+  const result = [];
+  const rows = Math.ceil(es.length / n);
+
+  for (let i = 0; i < rows; i += 1) {
+    const row = es.slice((i * n), (i * n) + n);
+    const m = n - row.length;
+    for (let j = 0; j < row.length; j += 1) {
+      const eX = eGX / 2 + (eW + eGX) * (m / 2 + j);
+      const eY = (eH + eGY) * i;
+      result.push([eX, eY]);
+    };
+  };
+  return result;
+}
+
 class Text {
   constructor({ projectViewer, productViewer, ...opts }) {
     window.text = this;
@@ -43,7 +60,13 @@ class Text {
   }
 
   init = (blocks, works, partnerLines, showLines, productLines, partnersHeight, commonsHeight) => {
-    const { logoButton, projectViewer, productViewer } = this;
+    const { scale, projectViewer, productViewer } = this;
+
+
+    const partnerPositions = getLineElementsPositions(partnerLines.images, PARTNER.width, PARTNER.height, PARTNER.gapX, PARTNER.gapY);
+    const showPositions = getLineElementsPositions(showLines.images, SHOW.width, SHOW.height, SHOW.gapX, SHOW.gapY);
+    const productPositions = getLineElementsPositions(productLines.images, PRODUCT.width, PRODUCT.height, PRODUCT.gapX, PRODUCT.gapY);
+
     this.paLA = [];
     this.sLA = [];
     this.prLA = [];
@@ -65,9 +88,10 @@ class Text {
       const block = partnerLines.partnerBlocks[i];
       for (let j = 0; j < block.rhombuses.length; j += 1) {
         const rhombus = block.rhombuses[j];
-        const { x, y, width, height } = rhombus;
+        const { width, height } = rhombus;
+        const [x, y] = partnerPositions[i * 3 + j];
         const a = document.createElement('a');
-        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.transform = `translate(${x * scale}px, ${(PARTNER.y + y) * scale}px)`;
         a.style.width = `${width}px`;
         a.style.height = `${height}px`;
         a.setAttribute('class', 'content__button');
@@ -75,15 +99,18 @@ class Text {
         this.paLA.push(a);
       }
     };
+
     for (let i = 0; i < showLines.showBlocks.length; i += 1) {
       const block = showLines.showBlocks[i];
       for (let j = 0; j < block.rhombuses.length; j += 1) {
         const rhombus = block.rhombuses[j];
-        const { x, y, width, height } = rhombus;
+        const { width, height } = rhombus;
+        const [x, y] = showPositions[i * 3 + j];
         const a = document.createElement('a');
-        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.transform = `translate(${x * scale}px, ${(SHOW.y + partnerLines.height + y) * scale}px)`;
         a.style.width = `${width}px`;
         a.style.height = `${height}px`;
+        a.style.color = 'red';
         a.setAttribute('class', 'content__button');
         document.querySelector('.content').appendChild(a);
         a.addEventListener('mouseover', () => blocks.handleMouseOverShow(i, j));
@@ -96,9 +123,10 @@ class Text {
       const block = productLines.productBlocks[i];
       for (let j = 0; j < block.rhombuses.length; j += 1) {
         const rhombus = block.rhombuses[j];
-        const { x, y, width, height } = rhombus;
+        const { width, height } = rhombus;
+        const [x, y] = productPositions[i * 3 + j];
         const a = document.createElement('a');
-        a.style.transform = `translate(${x}px, ${y}px)`;
+        a.style.transform = `translate(${(x - PRODUCT.gapX / 2) * scale}px, ${(PRODUCT.y + showLines.height + partnerLines.height + y) * scale}px)`;
         a.style.width = `${width}px`;
         a.style.height = `${height}px`;
         a.setAttribute('class', 'content__button');
@@ -206,7 +234,11 @@ class Text {
     const { blocks, works, partnerLines, showLines, productLines, wA, paLA, sLA, prLA } = this;
     this.scale = this.parent.scale;
     this.spacing = this.parent.spacing;
+    const partnerPositions = getLineElementsPositions(partnerLines.images, PARTNER.width, PARTNER.height, PARTNER.gapX, PARTNER.gapY);
+    const showPositions = getLineElementsPositions(showLines.images, SHOW.width, SHOW.height, SHOW.gapX, SHOW.gapY);
+    const productPositions = getLineElementsPositions(productLines.images, PRODUCT.width, PRODUCT.height, PRODUCT.gapX, PRODUCT.gapY);
 
+    console.log(partnerLines.height);
 
     for (let i = 0; i < works.length; i += 1) {
       const { main: { width, height } } = works[i];
@@ -217,14 +249,13 @@ class Text {
       a.style.lineHeight = `${height}px`;
     };
     for (let i = 0; i < partnerLines.partnerBlocks.length; i += 1) {
-      console.log('kek par ');
       const block = partnerLines.partnerBlocks[i];
       for (let j = 0; j < block.rhombuses.length; j += 1) {
-        console.log('kek par rh')
         const rhombus = block.rhombuses[j];
-        const { x, y, width, height } = rhombus;
-        const a = paLA[i];
-        a.style.transform = `translate(${x}px, ${y}px)`;
+        const { width, height } = rhombus;
+        const [x, y] = partnerPositions[i * 3 + j];
+        const a = paLA[i * 3 + j];
+        a.style.transform = `translate(${x * this.scale}px, ${(PARTNER.y + y) * this.scale}px)`;
         a.style.width = `${width}px`;
         a.style.height = `${height}px`;
       }
@@ -233,20 +264,24 @@ class Text {
       const block = showLines.showBlocks[i];
       for (let j = 0; j < block.rhombuses.length; j += 1) {
         const rhombus = block.rhombuses[j];
-        const { x, y, width, height } = rhombus;
-        const a = sLA[i];
-        a.style.transform = `translate(${x}px, ${y}px)`;
+        const { width, height } = rhombus;
+        const [x, y] = showPositions[i * 3 + j];
+        const a = sLA[i * 3 + j];
+        a.style.transform = `translate(${x * this.scale}px, ${(SHOW.y + partnerLines.height + y) * this.scale}px)`;
         a.style.width = `${width}px`;
         a.style.height = `${height}px`;
       }
     };
+
     for (let i = 0; i < productLines.productBlocks.length; i += 1) {
       const block = productLines.productBlocks[i];
       for (let j = 0; j < block.rhombuses.length; j += 1) {
         const rhombus = block.rhombuses[j];
-        const { x, y, width, height } = rhombus;
-        const a = prLA[i];
-        a.style.transform = `translate(${x}px, ${y}px)`;
+        const { width, height } = rhombus;
+        const [x, y] = productPositions[i * 3 + j];
+        const a = prLA[i * 3 + j];
+
+        a.style.transform = `translate(${(x - PRODUCT.gapX / 2) * this.scale}px, ${(PRODUCT.y + partnerLines.height + showLines.height + y) * this.scale}px)`;
         a.style.width = `${width}px`;
         a.style.height = `${height}px`;
       }
@@ -293,7 +328,7 @@ class Text {
     changeTranslate(this.content, this.spacing - this.currentX, -this.currentY);
     changeTranslate(
       this.form,
-      this.spacing - this.currentX,
+      -this.currentX,
       formY > 0 ? formY : 0
     );
   }
