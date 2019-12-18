@@ -32,7 +32,7 @@ class Text {
   }
 
   applyStyles() {
-    document.body.style.height = `${this.content.clientHeight + 100}px`;
+    document.body.style.height = `${this.content.clientHeight}px`;
   }
 
   render() {
