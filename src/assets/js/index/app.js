@@ -50,10 +50,14 @@ const loadImages = (data) => new Promise((resolve, reject) => {
           image.src = subItem;
           result[i][j] = image;
         } else {
-          const image = new Image();
-          image.addEventListener('load', handleImageLoad);
-          image.src = subItem.image;
-          result[i][j].image = image;
+          if (item instanceof String || typeof item === 'string') {
+            const image = new Image();
+            image.addEventListener('load', handleImageLoad);
+            image.src = subItem.image;
+            result[i][j].image = image;
+          } else {
+            n -= 1;
+          };
         }
       })
     }
@@ -410,6 +414,8 @@ class App extends Object {
       this.blocks.productLines,
       partnersHeight, commonsHeight, productsHeight
     );
+    this.projectViewer.init({ partnersHeight, commonsHeight, productsHeight });
+    this.productViewer.init({ partnersHeight, commonsHeight, productsHeight });
 
     const ttt = new TimelineLite({ paused: true });
     ttt.fromTo(this.text.text[3], .5, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'text');

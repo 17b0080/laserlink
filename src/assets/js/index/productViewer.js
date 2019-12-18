@@ -1,4 +1,5 @@
 /* globals document */
+import { PRODUCT } from '../settings';
 function getWidthAndHeight(width, height, dW, dH) {
   let scale = 1;
   let w = width;
@@ -545,6 +546,10 @@ class ProductViewer {
     this.order = false;
   }
 
+  init(data) {
+    Object.keys(data).forEach(key => this[key] = data[key]);
+  }
+
   handleResize() {
     this.windowWidth = this.parent.windowWidth;
     this.halfWindowWidth = this.parent.halfWindowWidth;
@@ -625,18 +630,12 @@ class ProductViewer {
       this.closed = true;
       this.productWrapper.style.visibility = 'hidden';
     } else if (this.order) {
+      const { partnersHeight, commonsHeight, productsHeight, scale } = this;
       this.productWrapper.style.visibility = 'hidden';
       this.closed = true;
       this.order = false;
       window.scrollTo({
-        top:
-          (4593 +
-            this.parent.blocks.showLines.height +
-            892 +
-            this.parent.blocks.productLines.height +
-            883 +
-            this.parent.blocks.partnerLines.height) *
-          this.scale,
+        top: (PRODUCT.y + partnersHeight + commonsHeight + productsHeight) * scale,
         behavior: 'smooth'
       });
     } else {

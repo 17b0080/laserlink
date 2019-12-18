@@ -1,4 +1,5 @@
 /* globals document, window */
+import { PRODUCT } from '../settings';
 function getWidthAndHeight(width, height, dW, dH) {
   let scale = 1;
   let w = width;
@@ -564,7 +565,7 @@ class ProjectViewer {
     // Получим все блоки, с которыми будут производиться операции
     this.projectWrapper = document.querySelector('.project-viewer');
     this.content = document.querySelector('.project-viewer__content');
-    this.title = document.querySelector('.project-viewer__content__title');
+    this.title = document.querySelector('.project-viewer__content__header');
     this.text = document.querySelector('.project-viewer__content__text');
     this.arrowLeft = document.querySelector(
       '.project-viewer__arrow-placeholder.arrow-placeholder--left'
@@ -636,6 +637,10 @@ class ProjectViewer {
     this.next = false;
     this.prev = false;
     this.order = false;
+  }
+
+  init(data) {
+    Object.keys(data).forEach(key => this[key] = data[key]);
   }
 
   handleResize() {
@@ -756,20 +761,14 @@ class ProjectViewer {
       this.closed = true;
       this.projectWrapper.style.visibility = 'hidden';
     } else if (this.order) {
+      const { partnersHeight, commonsHeight, productsHeight, scale } = this;
       this.projectWrapper.style.visibility = 'hidden';
       this.closed = true;
       this.order = false;
       window.scrollTo({
-        top:
-          (4593 +
-            this.parent.blocks.showLines.height +
-            840 +
-            this.parent.blocks.productLines.height +
-            880 +
-            this.parent.blocks.partnerLines.height) *
-          this.scale,
+        top: (PRODUCT.y + partnersHeight + commonsHeight + productsHeight) * scale,
         behavior: 'smooth'
-      });
+      })
     } else {
       this.next = false;
       this.prev = false;
@@ -780,7 +779,6 @@ class ProjectViewer {
   close() {
     if (!this.closed) {
       document.body.style.overflow = '';
-      // this.projectWrapper.classList.add('project-viewer--closed');
       this.background.close();
       this.videoRhombus.close();
       this.rhombus.close();
@@ -879,10 +877,3 @@ class ProjectViewer {
 }
 
 export default ProjectViewer;
-
-/**
- *
- * open -> fillBackground, openLoaderGif, load -> onloadend -> closeLoaderGif, openBackground, openRhombus -> onOpenRhombusEnd -> openVideoRhombus
- *
- *
- */
