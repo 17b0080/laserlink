@@ -564,7 +564,7 @@ class ProjectViewer {
     // Получим все блоки, с которыми будут производиться операции
     this.projectWrapper = document.querySelector('.project-viewer');
     this.content = document.querySelector('.project-viewer__content');
-    this.header = document.querySelector('.project-viewer__content__header');
+    this.title = document.querySelector('.project-viewer__content__title');
     this.text = document.querySelector('.project-viewer__content__text');
     this.arrowLeft = document.querySelector(
       '.project-viewer__arrow-placeholder.arrow-placeholder--left'
@@ -697,7 +697,7 @@ class ProjectViewer {
   onOpened() {
     this.content.style.visibility = 'hidden';
     this.content.style.height = '';
-    this.header.innerHTML = this.data[this.index].header;
+    this.title.innerHTML = this.data[this.index].title;
     this.text.innerHTML = this.data[this.index].text;
     const contentHeight = this.content.getBoundingClientRect().height;
     this.content.style.height = '0px';
@@ -725,7 +725,7 @@ class ProjectViewer {
         if (type === 'presentation') {
           this.data = [{
             background_boolean: false,
-            header: "video mapping 1",
+            title: "video mapping 1",
             text: "text",
             video: "./assets/video/presentation.mp4"
           }]

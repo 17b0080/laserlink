@@ -592,7 +592,7 @@ class ProductViewer {
     this.text.innerHTML = this.data[this.index].text;
     for (let i = 0; i < this.data[this.index].table.length; i += 1) {
       this.tbody.children[i].innerHTML = `<td class="table__cell">${
-        this.data[this.index].table[i]
+        this.data[this.index].table[i].text
         }</td>`;
     }
     const contentHeight = this.content.getBoundingClientRect().height;
