@@ -730,8 +730,8 @@ class ProjectViewer {
         if (type === 'presentation') {
           this.data = [{
             background_boolean: false,
-            title: "video mapping 1",
-            text: "text",
+            title: "РАБОТА В ОФИСЕ",
+            text: "",
             video: "./assets/video/presentation.mp4"
           }]
         } else if (type === 'video-mapping') {
