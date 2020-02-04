@@ -17,6 +17,13 @@ import { TweenLite } from 'gsap';
 
 const DEFAULT_WIDTH = 1366;
 
+async function getData(url) {
+  const res = await fetch(`api/${url}`);
+  const data = await res.json();
+  return data;
+};
+
+
 const loadImages = (data) => new Promise((resolve, reject) => {
   let n = 0;
   let m = 0;
@@ -215,72 +222,17 @@ class App extends Object {
     this.clientY = window.pageYOffset;
     this.currentY = this.clientY;
 
-    // this.logoImageSrc = './assets/img/logo-desktop.png';
-
-    // this.hoverImageSrc = './assets/img/hover.png';
-
-    // this.workImagesSrc = JSON.parse(
-    //   document.querySelector('.js-work-images').getAttribute('data-src')
-    // );
-
-    // this.showImagesSrc = JSON.parse(
+    // IMAGES.shows = JSON.parse(
     //   document.querySelector('.js-show-images').getAttribute('data-src')
     // );
-
-    // this.showMoreHoverSrc = './assets/img/showRhombusHoverMore.png';
-
-    // this.partnerImagesSrc = JSON.parse(
+    // IMAGES.partners = JSON.parse(
     //   document.querySelector('.js-partner-images').getAttribute('data-src')
     // );
-
-    // this.productImagesSrc = JSON.parse(
+    // IMAGES.products = JSON.parse(
     //   document.querySelector('.js-product-images').getAttribute('data-src')
     // );
 
-    IMAGES.shows = JSON.parse(
-      document.querySelector('.js-show-images').getAttribute('data-src')
-    );
-    IMAGES.partners = JSON.parse(
-      document.querySelector('.js-partner-images').getAttribute('data-src')
-    );
-    IMAGES.products = JSON.parse(
-      document.querySelector('.js-product-images').getAttribute('data-src')
-    );
 
-    /*
-    1. Видеомаппинг             Video mapping       video-mapping
-    2. Лазерное шоу             Laser show          laser-show
-    3. Мультимедийное шоу       Multimedia show     multimedia-show
-    4. Постановочные номера     Staging numbers     staging-numbers
-    5. Общее                    Сommon              commin
-    */
-    this.videoMappingData = JSON.parse(
-      document
-        .querySelector('.js-project-data--video-mapping')
-        .getAttribute('data')
-    );
-    this.laserShowData = JSON.parse(
-      document
-        .querySelector('.js-project-data--laser-show')
-        .getAttribute('data')
-    );
-    this.multimediaShowData = JSON.parse(
-      document
-        .querySelector('.js-project-data--multimedia-show')
-        .getAttribute('data')
-    );
-    this.stagingNumbersData = JSON.parse(
-      document
-        .querySelector('.js-project-data--staging-numbers')
-        .getAttribute('data')
-    );
-    this.commonData = JSON.parse(
-      document.querySelector('.js-project-data--common').getAttribute('data')
-    );
-
-    this.productData = JSON.parse(
-      document.querySelector('.js-product-data').getAttribute('data')
-    );
 
 
     this.smController = new ScrollMagic.Controller();
@@ -367,6 +319,29 @@ class App extends Object {
   }
 
   init = async () => {
+    const partnersData = await getData('partners');
+    const showsData = await getData('works');
+    const productsData = await getData('products');
+    IMAGES.partners = partnersData.map(({ image }) => image);
+    IMAGES.shows = showsData.map(({ image }) => image);
+    IMAGES.products = productsData.map(({ image }) => image);
+
+    /*
+    1. Видеомаппинг             Video mapping       video-mapping
+    2. Лазерное шоу             Laser show          laser-show
+    3. Мультимедийное шоу       Multimedia show     multimedia-show
+    4. Постановочные номера     Staging numbers     staging-numbers
+    5. Общее                    Сommon              common
+    */
+    this.videoMappingData = showsData.filter(({ work_type }) => work_type === 'video-mapping')
+    this.laserShowData = showsData.filter(({ work_type }) => work_type === 'laser-show')
+    this.multimediaShowData = showsData.filter(({ work_type }) => work_type === 'multimedia-show')
+    this.stagingNumbersData = showsData.filter(({ work_type }) => work_type === 'staging-numbers')
+    this.commonData = showsData.filter(({ work_type }) => work_type === 'common')
+
+    this.productData = productsData;
+
+
     const { smController } = this;
     const [logo, hover, showMoreHover, works, shows, partners, products, gradients] = await loadImages([
       IMAGES.logo,
@@ -378,6 +353,9 @@ class App extends Object {
       IMAGES.products,
       IMAGES.gradients
     ]);
+
+
+
 
     // Получим значение скалирования
     this.recalculateScale();

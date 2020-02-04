@@ -198,9 +198,8 @@ function server(done) {
     {
       server: PATHS.dist,
       port: PORT,
-      notify: false
+      notify: false,
     },
-
     done
   );
 }
