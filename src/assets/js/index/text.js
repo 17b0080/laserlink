@@ -24,7 +24,7 @@ const getLineElementsPositions = (es, eW, eH, eGX, eGY, n = 3) => {
 }
 
 class Text {
-  constructor({ projectViewer, productViewer, ...opts }) {
+  constructor({ projectViewer, productViewer, sT, pT, ...opts }) {
     window.text = this;
 
     this.parent = opts.parent;
@@ -56,6 +56,21 @@ class Text {
       a.innerHTML = 'ПОДРОБНЕЕ';
       document.querySelector('.content').appendChild(a);
       this.wA.push(a);
+    };
+    this.sT = [];
+    for (let i = 0; i < sT.length; i += 1) {
+      const span = document.createElement('span');
+      span.classList.add('content__text', 'js-common-title');
+      span.innerHTML = sT[i];
+      this.sT.push(span);
+    };
+    this.pT = [];
+    for (let i = 0; i < pT.length; i += 1) {
+      const span = document.createElement('span');
+      span.classList.add('content__text', 'js-product-title');
+      span.innerHTML = pT[i];
+      console.log(pT[i]);
+      this.pT.push(span);
     };
   }
 
@@ -99,7 +114,6 @@ class Text {
         this.paLA.push(a);
       }
     };
-
     for (let i = 0; i < showLines.showBlocks.length; i += 1) {
       const block = showLines.showBlocks[i];
       for (let j = 0; j < block.rhombuses.length; j += 1) {
@@ -107,16 +121,20 @@ class Text {
         const { width, height } = rhombus;
         const [x, y] = showPositions[i * 3 + j];
         const a = document.createElement('a');
+        const title = this.sT[i*3+j];
+        title.style.transform = `translate(${x * scale}px, ${(SHOW.height + SHOW.y + partnerLines.height + y) * scale}px)`;
         a.style.transform = `translate(${x * scale}px, ${(SHOW.y + partnerLines.height + y) * scale}px)`;
-        a.style.width = `${width}px`;
+        title.style.width = a.style.width = `${width}px`;
         a.style.height = `${height}px`;
-        a.style.color = 'red';
+        title.style.height = `${SHOW.gapY * scale}px`;
         a.setAttribute('class', 'content__button');
         document.querySelector('.content').appendChild(a);
+        document.querySelector('.content').appendChild(title);
         a.addEventListener('mouseover', () => blocks.handleMouseOverShow(i, j));
         a.addEventListener('mouseout', () => blocks.handleMouseOutShow(i, j));
-        a.addEventListener('click', () => projectViewer.open(i + j, 'common'));
+        a.addEventListener('click', () => projectViewer.open(i * 3 + j, 'common'));
         this.sLA.push(a);
+        
       }
     };
     for (let i = 0; i < productLines.productBlocks.length; i += 1) {
@@ -133,7 +151,7 @@ class Text {
         document.querySelector('.content').appendChild(a);
         a.addEventListener('mouseover', () => blocks.handleMouseOverProduct(i, j));
         a.addEventListener('mouseout', () => blocks.handleMouseOutProduct(i, j));
-        a.addEventListener('click', () => productViewer.open(i + j));
+        a.addEventListener('click', () => productViewer.open(i * 3 + j));
         this.prLA.push(a);
       }
     };
