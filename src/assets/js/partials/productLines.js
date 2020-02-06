@@ -4,8 +4,9 @@ import { TimelineLite } from 'gsap';
 import ScrollMagic from 'scrollmagic';
 
 class ProductRhombus extends Figure {
-  constructor({ noise, image, showMoreHover, ...rest }) {
+  constructor({ pT, noise, image, showMoreHover, ...rest }) {
     super(rest);
+    this.pT = pT;
     this.width = PRODUCT.width * this.scale;
     this.height = PRODUCT.height * this.scale;
     this.hovered = false;
@@ -85,6 +86,10 @@ class ProductRhombus extends Figure {
       0, PRODUCT.height / 2,
       PRODUCT.width / 2, PRODUCT.height,
     ]);
+    tl.add(new TimelineLite()
+      .fromTo(this.pT, .3, { css: { top: 20 } }, { css: { top: 0 } }, 'same')
+      .fromTo(this.pT, .3, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'same')
+    );
     tl.add(() => this.attrs.played.lines = true)
     tl.from(this.attrs, 1, {
       opacity: 0,
@@ -195,6 +200,7 @@ class ProductRhombus extends Figure {
 
 class ProductBlock {
   constructor(opts) {
+    this.pT = opts.pT;
     this.triggered = false;
     this.gradients = opts.gradients;
     this.parent = opts.parent;
@@ -235,6 +241,7 @@ class ProductBlock {
 
     for (let i = 0; i < this.images.length; i += 1) {
       const pr = new ProductRhombus({
+        pT: this.pT[i],
         parent: this,
         context: this.context,
         scale: this.scale,
@@ -484,13 +491,16 @@ class ProductLines {
 
   getProductBlocks() {
     const productBlocks = [];
+    const productTitles = [...document.querySelectorAll('.js-product-title')];
     for (let i = 0; i < this.linesWithImages.length; i += 1) {
+      const pT = productTitles.slice(i*3, (i+1)*3);
       const dx =
         1024 -
         this.linesWithImages[i].length * this.rhombusWidth -
         (this.linesWithImages[i].length - 1) * this.spaceBetweenRhombuses;
       productBlocks.push(
         new ProductBlock({
+          pT,
           gradients: this.gradients,
           gradientIndex: this.gradientIndex,
           parent: this.parent,

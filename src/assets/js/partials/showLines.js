@@ -1,11 +1,12 @@
 import Figure from './Figure';
 import { SHOW, GRADIENT_LINES_TIME } from '../settings';
-import { TimelineLite } from 'gsap';
+import { TimelineLite, TweenLite } from 'gsap';
 import ScrollMagic from 'scrollmagic';
 
 class ShowRhombus extends Figure {
-  constructor({ image, showMore, ...rest }) {
+  constructor({ sT, image, showMore, ...rest }) {
     super(rest);
+    this.sT = sT;
     this.width = SHOW.width * this.scale;
     this.height = SHOW.height * this.scale;
     this.hovered = false;
@@ -83,6 +84,10 @@ class ShowRhombus extends Figure {
       0, SHOW.height / 2,
       SHOW.width / 2, SHOW.height,
     ]);
+    tl.add(new TimelineLite()
+      .fromTo(this.sT, .3, { css: { top: 20 } }, { css: { top: 0 } }, 'same')
+      .fromTo(this.sT, .3, { css: { opacity: 0 } }, { css: { opacity: 1 } }, 'same')
+    );
     tl.add(() => this.attrs.played.lines = true)
     tl.from(this.attrs, 1, {
       opacity: 0,
@@ -185,6 +190,8 @@ class ShowRhombus extends Figure {
 
 class ShowBlock {
   constructor(opts) {
+    this.sT = opts.sT;
+    console.log('sb st', this.sT);
     this.triggered = false;
     this.gradients = opts.gradients;
     this.parent = opts.parent;
@@ -227,6 +234,7 @@ class ShowBlock {
 
     for (let i = 0; i < this.images.length; i += 1) {
       const sr = new ShowRhombus({
+        sT: this.sT[i],
         parent: this,
         context: this.context,
         scale: this.scale,
@@ -483,13 +491,19 @@ class ShowLines {
 
   getShowBlocks() {
     const showBlocks = [];
+    const showTitles = [...document.querySelectorAll('.js-common-title')];
+    console.log('sl st', showTitles);
+
     for (let i = 0; i < this.linesWithImages.length; i += 1) {
+      const sT = showTitles.slice(i*3, (i+1)*3);
+      console.log(i, sT);
       const dx =
         1024 -
         this.linesWithImages[i].length * this.rhombusWidth -
         (this.linesWithImages[i].length - 1) * this.spaceBetweenRhombuses;
       showBlocks.push(
         new ShowBlock({
+          sT,
           gradients: this.gradients,
           parent: this.parent,
           context: this.context,
