@@ -62,15 +62,18 @@ class Text {
       const span = document.createElement('span');
       span.classList.add('content__text', 'js-common-title');
       span.innerHTML = sT[i];
+      span.style.textAlign = 'center';
       this.sT.push(span);
+      document.querySelector('.content').appendChild(span);
     };
     this.pT = [];
     for (let i = 0; i < pT.length; i += 1) {
       const span = document.createElement('span');
       span.classList.add('content__text', 'js-product-title');
       span.innerHTML = pT[i];
-      console.log(pT[i]);
+      span.style.textAlign = 'center';
       this.pT.push(span);
+      document.querySelector('.content').appendChild(span);
     };
   }
 
@@ -125,11 +128,11 @@ class Text {
         title.style.transform = `translate(${x * scale}px, ${(SHOW.height + SHOW.y + partnerLines.height + y) * scale}px)`;
         a.style.transform = `translate(${x * scale}px, ${(SHOW.y + partnerLines.height + y) * scale}px)`;
         title.style.width = a.style.width = `${width}px`;
+        title.style.lineHeight = `${SHOW.gapY * scale}px`;
         a.style.height = `${height}px`;
         title.style.height = `${SHOW.gapY * scale}px`;
         a.setAttribute('class', 'content__button');
         document.querySelector('.content').appendChild(a);
-        document.querySelector('.content').appendChild(title);
         a.addEventListener('mouseover', () => blocks.handleMouseOverShow(i, j));
         a.addEventListener('mouseout', () => blocks.handleMouseOutShow(i, j));
         a.addEventListener('click', () => projectViewer.open(i * 3 + j, 'common'));
@@ -144,6 +147,11 @@ class Text {
         const { width, height } = rhombus;
         const [x, y] = productPositions[i * 3 + j];
         const a = document.createElement('a');
+        const title = this.pT[i*3+j];
+        title.style.transform = `translate(${(x - PRODUCT.gapX / 2) * scale}px, ${(PRODUCT.height + PRODUCT.y + showLines.height + partnerLines.height + y) * scale}px)`;
+        title.style.width = `${width}px`;
+        title.style.lineHeight = `${PRODUCT.gapY * scale}px`;
+        title.style.height = `${PRODUCT.gapY}px`;
         a.style.transform = `translate(${(x - PRODUCT.gapX / 2) * scale}px, ${(PRODUCT.y + showLines.height + partnerLines.height + y) * scale}px)`;
         a.style.width = `${width}px`;
         a.style.height = `${height}px`;
@@ -249,14 +257,12 @@ class Text {
   }
 
   handleResize() {
-    const { blocks, works, partnerLines, showLines, productLines, wA, paLA, sLA, prLA } = this;
+    const { works, partnerLines, showLines, productLines, wA, paLA, sLA, prLA } = this;
     this.scale = this.parent.scale;
     this.spacing = this.parent.spacing;
     const partnerPositions = getLineElementsPositions(partnerLines.images, PARTNER.width, PARTNER.height, PARTNER.gapX, PARTNER.gapY);
     const showPositions = getLineElementsPositions(showLines.images, SHOW.width, SHOW.height, SHOW.gapX, SHOW.gapY);
     const productPositions = getLineElementsPositions(productLines.images, PRODUCT.width, PRODUCT.height, PRODUCT.gapX, PRODUCT.gapY);
-
-    console.log(partnerLines.height);
 
     for (let i = 0; i < works.length; i += 1) {
       const { main: { width, height } } = works[i];
@@ -276,11 +282,13 @@ class Text {
         a.style.transform = `translate(${x * this.scale}px, ${(PARTNER.y + y) * this.scale}px)`;
         a.style.width = `${width}px`;
         a.style.height = `${height}px`;
+        
       }
     };
     for (let i = 0; i < showLines.showBlocks.length; i += 1) {
       const block = showLines.showBlocks[i];
       for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const title = this.sT[i * 3 + j];
         const rhombus = block.rhombuses[j];
         const { width, height } = rhombus;
         const [x, y] = showPositions[i * 3 + j];
@@ -288,12 +296,16 @@ class Text {
         a.style.transform = `translate(${x * this.scale}px, ${(SHOW.y + partnerLines.height + y) * this.scale}px)`;
         a.style.width = `${width}px`;
         a.style.height = `${height}px`;
+        title.style.transform = `translate(${x * this.scale}px, ${(SHOW.height + SHOW.y + partnerLines.height + y) * this.scale}px)`;
+        title.style.width = `${width}px`;
+        title.style.lineHeight = title.style.height = `${SHOW.gapY * this.scale}px`;
       }
     };
 
     for (let i = 0; i < productLines.productBlocks.length; i += 1) {
       const block = productLines.productBlocks[i];
       for (let j = 0; j < block.rhombuses.length; j += 1) {
+        const title = this.pT[i * 3 + j];
         const rhombus = block.rhombuses[j];
         const { width, height } = rhombus;
         const [x, y] = productPositions[i * 3 + j];
@@ -302,6 +314,9 @@ class Text {
         a.style.transform = `translate(${(x - PRODUCT.gapX / 2) * this.scale}px, ${(PRODUCT.y + partnerLines.height + showLines.height + y) * this.scale}px)`;
         a.style.width = `${width}px`;
         a.style.height = `${height}px`;
+        title.style.transform = `translate(${(x - PRODUCT.gapX / 2) * this.scale}px, ${(PRODUCT.height + PRODUCT.y + partnerLines.height + showLines.height + y) * this.scale}px)`;
+        title.style.width = `${width}px`;
+        title.style.lineHeight = title.style.height = `${PRODUCT.gapY * this.scale}px`;
       }
     };
 
