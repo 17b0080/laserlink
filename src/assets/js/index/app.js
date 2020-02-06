@@ -10,16 +10,13 @@ import TextTriggers from './textTrigger';
 import Input from './Input';
 import InputSwitcher from './InputSwitcher';
 import StateSwitcher from './stateSwitcher';
-import rewardViewer from './rewards';
 import {
     IMAGES,
     TEXT,
-    PRODUCT
+    PRODUCT,
+    WORK
 } from '../settings';
 import ScrollMagic from 'scrollmagic';
-import {
-    TweenLite
-} from 'gsap';
 
 const DEFAULT_WIDTH = 1366;
 
@@ -75,44 +72,15 @@ const loadImages = (data) => new Promise((resolve, reject) => {
             })
         }
     })
-})
-
-
-function getCoords(elem) {
-    // (1)
-    const box = elem.getBoundingClientRect();
-
-    const {
-        body
-    } = document;
-    const docEl = document.documentElement;
-
-    // (2)
-    const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-
-    // (3)
-    const clientTop = docEl.clientTop || body.clientTop || 0;
-
-    // (4)
-    const top = box.top + scrollTop - clientTop;
-
-    return top;
-}
-
-function scrollTo(top) {
-    window.scrollTo({
-        top,
-        behavior: 'smooth'
-    });
-}
+});
 
 function get(str) {
     return document.querySelector(str);
-}
+};
 
 function getChildren(item, i) {
     return item.children[i];
-}
+};
 
 // Кросс-браузерная анимация
 if (!window.requestAnimationFrame) {
@@ -230,21 +198,8 @@ class App extends Object {
         this.clientY = window.pageYOffset;
         this.currentY = this.clientY;
 
-        // IMAGES.shows = JSON.parse(
-        //   document.querySelector('.js-show-images').getAttribute('data-src')
-        // );
-        // IMAGES.partners = JSON.parse(
-        //   document.querySelector('.js-partner-images').getAttribute('data-src')
-        // );
-        // IMAGES.products = JSON.parse(
-        //   document.querySelector('.js-product-images').getAttribute('data-src')
-        // );
-
-
-
-
         this.smController = new ScrollMagic.Controller();
-        this.init();
+        if (window.innerWidth >= 990) { this.init(); } else this.initMobile();
     }
 
     recalculateScale() {
@@ -494,6 +449,47 @@ class App extends Object {
         this.gradients.trigger(0);
         this.loader.classList.add('loader-wrapper--closed');
 
+    }
+
+    initMobile = () => {
+        const scrollPositions = [
+            () => 0,
+            ...WORK.positions.map((_, i) => (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.show')[i].scrollIntoView({ behavior: 'smooth' });
+            }),
+            (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.show-wrapper')[1].scrollIntoView({ behavior: 'smooth' });
+            },
+            (e) => {
+                e.preventDefault();
+                document.querySelector('.partners').scrollIntoView({ behavior: 'smooth' });
+            },
+            (e) => {
+                e.preventDefault();
+                document.querySelector('.products').scrollIntoView({ behavior: 'smooth' });
+            },
+            (e) => {
+                e.preventDefault();
+                document.querySelector('.contact-form-wrapper').scrollIntoView({ behavior: 'smooth' });
+            }
+        ];
+
+        const subMenu = document.querySelector('ul.menu__sub-menu.sub-menu');
+        [...subMenu.children].forEach((child, i) => {
+            const a = child.children[0];
+            const handleClick = scrollPositions[i + 1];
+            a.addEventListener('click', handleClick)
+        });
+        [...document.querySelector('ul.menu').children]
+            .filter((_, i) => i > 1 && i < 5)
+            .forEach((child, i) => {
+            const a = child.children[0];
+            const handleClick = scrollPositions[i + 6];
+            a.addEventListener('click', handleClick)
+            });
+        this.loader.classList.add('loader-wrapper--closed');
     }
 
     updateXY() {
